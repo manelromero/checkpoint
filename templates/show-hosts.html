@@ -8,7 +8,7 @@
         {% if messages %}
             {% for message in messages %}
             <div class="flash">
-                <div class="flash-modal">{{ message }}</div>
+                <div class="flash-message">{{ message }}</div>
             </div>
             {% endfor %}
         {% endif %}
@@ -39,7 +39,6 @@
                 <div class="cell small-cell center">
                     <a href="{{ url_for('deleteHost', host_uid=host.uid) }}">
                         <img src="{{ url_for('static', filename='img/garbage.svg') }}" class="icon" alt="Delete">
-
                     </a>
                 </div>
             </div>

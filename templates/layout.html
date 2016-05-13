@@ -11,8 +11,34 @@
 </head>
 <body>
 
+	<header>
+		<nav>
+			<div class="nav-data">
+		        <a href="{{ url_for('publish') }}" class="publish negative">Publish</a>
+			    <div class="publish-num">
+			    {% if changes %}
+			    	{{ changes }}
+			    {% else %}
+			    	0
+			    {% endif %}
+			    </div>
+			    <a href="{{ url_for('discard') }}" class="publish negative">Discard</a>
+			</div>
+			<div class="login">
+				{% if user %}
+				<div class="user">{{ user }}</div>
+				{% else %}
+				<a href="{{ url_for('register') }}" class="negative">Login</a>
+				{% endif %}
+			</div>
+		</nav>
+	</header>
+
 	<div class="container">
 		{% block content %}{% endblock %}
 	</div>
+
+	<footer></footer>
+
 </body>
 </html>

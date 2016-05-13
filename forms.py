@@ -14,7 +14,7 @@ class HostForm(Form):
         validators.InputRequired(message =
             'You have to introduce an IP address'
             ),
-        validators.Length( max = 15,
-            message='The IP address cannot be longer than 15 characters'
+        validators.IPAddress(ipv4 = True, ipv6 = False,
+            message='You have to introduce a valid IP address'
             )
         ])

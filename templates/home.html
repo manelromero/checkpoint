@@ -6,7 +6,7 @@
     {% if messages %}
         {% for message in messages %}
         <div class="flash">
-            <div class="flash-modal">{{ message }}</div>
+            <div class="flash-message">{{ message }}</div>
         </div>
         {% endfor %}
     {% endif %}
@@ -14,7 +14,8 @@
 
     <h2>User actions</h2>
     <div class="home-link">
-        <a href="{{ url_for('register') }}" class="underline">Login</a>
+        <a href="{{ url_for('register') }}" class="titol-enllac">Login</a> |
+        <a href="{{ url_for('logout') }}" class="titol-enllac">Logout</a>
     </div>
     <p>Session: {% if sid %}<span style="color:red">{{ sid }}</span>{% endif %}</p>
     <div>Actions pending: {% if changes %}{{ changes }}{% endif %}</div>
@@ -25,13 +26,13 @@
 
     <h2>Hosts actions</h2>
     <div class="home-link">
-        <a href="{{ url_for('showHosts') }}" class="underline">Show Hosts</a>
+        <a href="{{ url_for('showHosts') }}">Show Hosts</a>
     </div>
     <div class="home-link">
-    	<a href="{{ url_for('addHost') }}" class="underline">Add Host</a>
+    	<a href="{{ url_for('addHost') }}">Add Host</a>
     </div>
     <div class="home-link">
-        <a href="#" id="smartview" class="underline">Smartview</a>
+        <a href="#" id="smartview">Smartview</a>
     </div>
 
 

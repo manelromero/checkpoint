@@ -1,5 +1,7 @@
 $(document).ready(function() {
 
+	$('.flash').delay(2000).slideUp(300);
+
 	$('.row').mouseover(function() {
 		$(this).css('background-color', 'rgba(191, 0, 0, 0.05');
 	});
@@ -9,7 +11,7 @@ $(document).ready(function() {
 	});
 
 	$('.flash').click(function() {
-		$(this).hide();
+		$(this).slideUp(500);
 	});
 
 });

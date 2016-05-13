@@ -15,6 +15,15 @@ body {
 	font: 400 1rem 'Open Sans', sans-serif;
 }
 
+header {
+	position: fixed;
+	display: flex;
+	align-items: center;
+	width: 100%;
+	height: 50px;
+	background-color: #333;
+}
+
 h2 {
 	font: 600 1.6rem/3rem 'Open Sans', sans-serif;
 }
@@ -28,12 +37,28 @@ p {
 	color: #333;
 }
 
+footer {
+	float: left;
+	margin-top: 50px;
+	height: 500px;
+	width: 100%;
+	background-color: #efefef;
+}
+
 a {
 	text-decoration: none;
 	color: #333;
 }
 
 a:hover {
+	text-decoration: underline;
+}
+
+.negative {
+	color: #fff;
+}
+
+.negative:hover {
 	text-decoration: underline;
 }
 
@@ -62,6 +87,41 @@ input:focus {
 	outline: 0;
 }
 
+nav {
+	margin: auto;
+	width: 800px; /* temp */
+	max-width: 800px;
+	font: 600 1rem 'Open Sans', sans-serif;
+	color: #fff;
+}
+
+.nav-data {
+	width: 80%;
+	float: left;
+}
+
+.publish {
+	float: left;
+}
+
+.publish-num {
+	float: left;
+	margin: 0 1rem;
+	padding: 0 0.5rem;
+	background-color: #cac714;
+	border-radius: 5px;
+	color: #000;
+}
+
+.login {
+	width: 20%;
+	float: right;
+	text-align: right;
+}
+
+.user {
+	color: #cac714;
+}
 .error {
 	color: #ff0000;
 	position: relative;
@@ -104,44 +164,23 @@ input:focus {
 
 .container {
 	margin: auto;
-	max-width: 700px;
-	padding-top: 80px;
+	max-width: 800px;
+	padding-top: 110px;
 }
 
 .flash {
 	width: 100vw;
-	height: 100vh;
 	position: absolute;
-	top: 0;
+	top: 50px;
 	left: 0;
-	background-color: rgba(51, 51, 51, 0.9);
+	text-align: center;
+	background-color: rgba(191, 0, 0, 0.2);
 	z-index: 5;
 }
 
-.flash-modal {
-	width: 300px;
-	height: 100px;
-	position: absolute;
-	left: calc((100vw - 200px) / 2);
-	top: 100px;
-	background-color: #fff;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
-	font: 400 1.2rem/2rem 'Open Sans', sans-serif;
-	color: #000;
-	padding: 1rem;
-	z-index: 10;
-}
-
-.flash-modal::after {
-	content: 'x';
-	position: absolute;
-	top: 0;
-	right: 10px;
-	opacity: .5;
-}
-
-.flash-modal:hover:after {
-	opacity: 1;
+.flash-message {
+	font: 400 1rem/3rem 'Open Sans', sans-serif;
+	color: #bf0000;
 }
 
 .table {
@@ -194,10 +233,11 @@ input:focus {
 
 button,
 input[type=submit] {
-	min-width: 100px;
 	float: left;
-	margin-top: 1rem;
-	margin-right: 1rem;
+	clear: right;
+	min-width: 100px;
+	margin: 1rem;
+	margin-left: 0;
     background-color: #fff;
     color: #bf0000;
 	font: 600 1rem 'Open Sans', sans-serif;
@@ -220,4 +260,5 @@ input[type=submit]:focus {
     background-color: #ff1919;
     color: #fff;
 }
+
 

@@ -2,9 +2,9 @@ import requests, json
 from time import strftime
 from datetime import datetime
 from flask import Flask, request, render_template, redirect, url_for, flash
-from forms import HostForm
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from models import Host
+from forms import HostForm
 import jinja2
 
 
@@ -16,18 +16,36 @@ app.config.from_object('config')
 
 
 sid = ''
+user = ''
 changes = 0
 
 @app.route('/')
 def home():
-    return render_template('home.html', sid=sid, changes=changes)
+    return render_template('home.html', sid=sid, changes=changes, user=user)
 
 
+# login
 @app.route('/login')
 def register():
-    global sid
+    global sid, user
     sid = login(app.config['USER'], app.config['PASSWORD'])
-    flash('User registered!')
+    data = {}
+    call = api_call('show-session', data, sid)
+    user = call['user-name']
+    flash('User logged in!')
+    return redirect(url_for('home'))
+
+
+#logout
+@app.route('/logout')
+def logout():
+    global sid, user
+    data = {}
+    call = api_call('logout', data, sid)
+    if call['message'] == 'OK':
+        sid = ''
+        user = ''
+    flash('User logged out!')
     return redirect(url_for('home'))
 
 
@@ -46,7 +64,7 @@ def addHost():
         changes += 1
         return redirect(url_for('showHosts'))
     else:
-        return render_template('new-host.html', form=form)
+        return render_template('new-host.html', user=user, form=form, changes=changes)
 
 
 # show hosts
@@ -65,36 +83,33 @@ def showHosts():
             'last_modify_time': call['meta-info']['last-modify-time']['posix']
             }
         hosts.append(host)
-    return render_template('show-hosts.html', hosts=hosts, changes=changes)
+    return render_template('show-hosts.html', user=user, hosts=hosts, changes=changes)
 
 
 # edit host
 @app.route('/edit-host/<host_uid>', methods=['GET', 'POST'])
 def editHost(host_uid):
-    hosts = []
-    data = {}
-    call = api_call('show-hosts', data, sid)
-    for object in call['objects']:
-        data = {'uid': object['uid']}
-        call = api_call('show-host', data, sid)
-        host = {
-            'uid': call['uid'],
-            'name': call['name'],
-            'ip_address': call['ipv4-address']
-            }
-        hosts.append(host)
-    if request.method == 'POST' and form.validate():
+    data = {'uid': host_uid}
+    call = api_call('show-host', data, sid)
+    host = {
+        'uid': call['uid'],
+        'name': call['name'],
+        'ip_address': call['ipv4-address']
+        }
+    form = HostForm(request.form)
+    if request.method == 'POST':
+        print '\nForm errors: ', form.errors, form.validate()
         data = {
-            'name': form.name.data,
+            'uid': host['uid'],
             'ip-address': form.ip_address.data
             }
-        call = api_call('add-host', data, sid)
-        flash('Host added!')
+        call = api_call('set-host', data, sid)
+        flash('Host edited!')
         global changes
         changes += 1
         return redirect(url_for('showHosts'))
     else:
-        return render_template('edit-host.html', form=form)
+        return render_template('edit-host.html', user=user, form=form, host=host, changes=changes)
 
 
 # delete host
@@ -114,7 +129,7 @@ def deleteHost(host_uid):
         changes += 1
         return redirect(url_for('showHosts'))
     else:
-        return render_template('delete-host.html', host=host)
+        return render_template('delete-host.html', user=user, host=host, changes=changes)
 
 
 # publish

@@ -2,22 +2,17 @@
 {% block content %}
 
 <h1>Hosts</h1>
-<h2>Create new Host</h2>
+<h2>Edit Host</h2>
 
 <div class="wrapper-host">
 
-	<form action="{{ url_for('editHost') }}" method="POST">
+	<form action="{{ url_for('editHost', host_uid=host.uid) }}" method="POST">
 
 		<ul>
 
-			<li>{{ form.name.label }} {{ form.name(size=10) }}</li>
-			{% if form.name.errors %}
-				{% for error in form.name.errors %}
-					<span class="error">{{ error }}</span>
-				{% endfor %}
-			{% endif %}
+			<li>You are editing host <span class="red">{{ host.name }}</span></li>
 
-			<li>{{ form.ip_address.label }} {{ form.ip_address(size=15) }}</li>
+			<li>{{ form.ip_address.label }} {{ form.ip_address(size=15, placeholder=host.ip_address) }}</li>
 			{% if form.ip_address.errors %}
 				{% for error in form.ip_address.errors %}
 					<span class="error">{{ error }}</span>
