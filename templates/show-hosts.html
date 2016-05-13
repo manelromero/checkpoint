@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>Hosts</h1>
+
+    <div class="wrapper-hosts">
+    <!-- get flash messages -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="flash">
+                <div class="flash-modal">{{ message }}</div>
+            </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+        {% if hosts %}
+        <div class="table-header">
+            <div class="header-row">
+                <div class="cell medium-cell">Name</div>
+                <div class="cell medium-cell">IP address</div>
+                <div class="cell big-cell">Last modified</div>
+                <div class="cell small-cell center">Edit</div>
+                <div class="cell small-cell center">Delete</div>
+            </div>
+        </div>
+
+        <div class="table">
+            {% for host in hosts %}
+            <div class="row">
+                <div class="cell medium-cell">{{ host.name }}</div>
+                <div class="cell medium-cell">{{ host.ip_address }}</div>
+                <div class="cell big-cell">{{ host.last_modify_time|datetimeformat }}</div>
+                <div class="cell small-cell center">
+                    <a href="{{ url_for('editHost', host_uid=host.uid) }}">
+                        <img src="{{ url_for('static', filename='img/edit.svg') }}" class="icon" alt="Edit">
+                    </a>
+                </div>
+                <div class="cell small-cell center">
+                    <a href="{{ url_for('deleteHost', host_uid=host.uid) }}">
+                        <img src="{{ url_for('static', filename='img/garbage.svg') }}" class="icon" alt="Delete">
+
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <a href="{{ url_for('addHost') }}"><button>Add Host</button></a>
+        <a href="{{ url_for('home') }}"><button>Back</button></a>
+    </div>
+{% endblock %}

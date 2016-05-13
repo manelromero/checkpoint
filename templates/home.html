@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<!-- get flash messages -->
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+        <div class="flash">
+            <div class="flash-modal">{{ message }}</div>
+        </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+    <h2>User actions</h2>
+    <div class="home-link">
+        <a href="{{ url_for('register') }}" class="underline">Login</a>
+    </div>
+    <p>Session: {% if sid %}<span style="color:red">{{ sid }}</span>{% endif %}</p>
+    <div>Actions pending: {% if changes %}{{ changes }}{% endif %}</div>
+    <div class="home-link">
+        <a href="{{ url_for('publish') }}" class="titol-enllac">Publish</a> |
+        <a href="{{ url_for('discard') }}" class="titol-enllac">Discard</a>
+    </div>
+
+    <h2>Hosts actions</h2>
+    <div class="home-link">
+        <a href="{{ url_for('showHosts') }}" class="underline">Show Hosts</a>
+    </div>
+    <div class="home-link">
+    	<a href="{{ url_for('addHost') }}" class="underline">Add Host</a>
+    </div>
+    <div class="home-link">
+        <a href="#" id="smartview" class="underline">Smartview</a>
+    </div>
+
+
+
+{% endblock %}
