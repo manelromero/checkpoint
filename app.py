@@ -1,56 +1,82 @@
 import requests, json
 from time import strftime
 from datetime import datetime
-from flask import Flask, request, render_template, redirect, url_for, flash
+from flask import Flask, request, render_template, redirect, url_for, flash, session
+from flask_login import LoginManager, login_user, login_required, UserMixin
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
-from models import Host
+from models import User, Host
 from forms import HostForm
 import jinja2
 
-
+# to avoid request warning of using verify=false
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 
 app = Flask(__name__)
 app.config.from_object('config')
 
+# initiate the login manager
+login_manager = LoginManager()
+login_manager.init_app(app)
 
-sid = ''
-user = ''
-changes = 0
 
+# login manager
+@login_manager.user_loader
+def load_user(user_id):
+    user = User(uid=session['sid'], username=session['username'])
+    return User.get(user)
+
+
+# home
 @app.route('/')
 def home():
-    return render_template('home.html', sid=sid, changes=changes, user=user)
+    return render_template('home.html')
 
 
 # login
 @app.route('/login')
-def register():
-    global sid, user
-    sid = login(app.config['USER'], app.config['PASSWORD'])
-    data = {}
-    call = api_call('show-session', data, sid)
-    user = call['user-name']
-    flash('User logged in!')
-    return redirect(url_for('home'))
+def login():
+    if 'logged_in' in session:
+        return 'Already logged!'
+    try:
+        session['sid'] = register(app.config['USER'], app.config['PASSWORD'])
+        data = {}
+        call = api_call('show-session', data, session['sid'])
+        session['username'] = call['user-name']
+        user = User(uid=session['sid'], username=session['username'])
+        session['logged_in'] = True
+        session['changes'] = 0
+        login_user(user)
+        flash('User logged in!')
+        return redirect(url_for('home'))
+    except Exception,e: print str(e)
 
 
-#logout
+# login page
+@app.route('/login_page')
+def login_page():
+    return 'Login page'
+
+
+# logout
 @app.route('/logout')
+@login_required
 def logout():
-    global sid, user
     data = {}
-    call = api_call('logout', data, sid)
+
+    # session.clear()
+
+    call = api_call('logout', data, session['sid'])
     if call['message'] == 'OK':
-        sid = ''
-        user = ''
-    flash('User logged out!')
+        session.clear()
+        flash('User logged out!')
+        return redirect(url_for('home'))
     return redirect(url_for('home'))
 
 
 # add host
 @app.route('/add-host', methods=['GET', 'POST'])
+@login_required
 def addHost():
     form = HostForm(request.form)
     if request.method == 'POST' and form.validate():
@@ -58,24 +84,24 @@ def addHost():
             'name': form.name.data,
             'ip-address': form.ip_address.data
             }
-        call = api_call('add-host', data, sid)
+        call = api_call('add-host', data, session['sid'])
         flash('Host added!')
-        global changes
-        changes += 1
+        session['changes'] += 1
         return redirect(url_for('showHosts'))
     else:
-        return render_template('new-host.html', user=user, form=form, changes=changes)
+        return render_template('new-host.html', form=form)
 
 
 # show hosts
 @app.route('/show-hosts', methods=['GET', 'POST'])
+@login_required
 def showHosts():
     hosts = []
     data = {}
-    call = api_call('show-hosts', data, sid)
+    call = api_call('show-hosts', data, session['sid'])
     for object in call['objects']:
         data = {'uid': object['uid']}
-        call = api_call('show-host', data, sid)
+        call = api_call('show-host', data, session['sid'])
         host = {
             'uid': call['uid'],
             'name': call['name'],
@@ -83,14 +109,15 @@ def showHosts():
             'last_modify_time': call['meta-info']['last-modify-time']['posix']
             }
         hosts.append(host)
-    return render_template('show-hosts.html', user=user, hosts=hosts, changes=changes)
+    return render_template('show-hosts.html', hosts=hosts)
 
 
 # edit host
 @app.route('/edit-host/<host_uid>', methods=['GET', 'POST'])
+@login_required
 def editHost(host_uid):
     data = {'uid': host_uid}
-    call = api_call('show-host', data, sid)
+    call = api_call('show-host', data, session['sid'])
     host = {
         'uid': call['uid'],
         'name': call['name'],
@@ -98,59 +125,57 @@ def editHost(host_uid):
         }
     form = HostForm(request.form)
     if request.method == 'POST':
-        print '\nForm errors: ', form.errors, form.validate()
         data = {
             'uid': host['uid'],
             'ip-address': form.ip_address.data
             }
-        call = api_call('set-host', data, sid)
+        call = api_call('set-host', data, session['sid'])
         flash('Host edited!')
-        global changes
-        changes += 1
+        session['changes'] += 1
         return redirect(url_for('showHosts'))
     else:
-        return render_template('edit-host.html', user=user, form=form, host=host, changes=changes)
+        return render_template('edit-host.html', form=form, host=host)
 
 
 # delete host
 @app.route('/delete-host/<host_uid>', methods=['GET', 'POST'])
+@login_required
 def deleteHost(host_uid):
     data = {'uid': host_uid}
-    call = api_call('show-host', data, sid)
+    call = api_call('show-host', data, session['sid'])
     host = {
         'uid': call['uid'],
         'name': call['name'],
         'ip_address': call['ipv4-address']
         }
     if request.method == 'POST':
-        call = api_call('delete-host', data, sid)
+        call = api_call('delete-host', data, session['sid'])
         flash('Host deleted')
-        global changes
-        changes += 1
+        session['changes'] += 1
         return redirect(url_for('showHosts'))
     else:
-        return render_template('delete-host.html', user=user, host=host, changes=changes)
+        return render_template('delete-host.html', host=host)
 
 
 # publish
 @app.route('/publish')
+@login_required
 def publish():
     data = {}
-    call = api_call('publish', data, sid)
+    call = api_call('publish', data, session['sid'])
     flash('Changes published!')
-    global changes
-    changes = 0
+    session['changes'] = 0
     return redirect(url_for('home'))
 
 
 # discard
 @app.route('/discard')
+@login_required
 def discard():
     data = {}
-    call = api_call('discard', data, sid)
+    call = api_call('discard', data, session['sid'])
     flash('Changes discarded!')
-    global changes
-    changes = 0
+    session['changes'] = 0
     return redirect(url_for('home'))
 
 
@@ -165,7 +190,7 @@ def smartview():
     return r
 
 
-def login(user, password):
+def register(user, password):
     payload = {'user': user, 'password': password}
     response = api_call('login', payload, '')
     return response['sid']
@@ -180,6 +205,10 @@ def api_call(command, json_payload, sid):
         request_headers = {'Content-Type': 'application/json', 'X-chkp-sid': sid}
     r = requests.post(url, data=json.dumps(json_payload), headers=request_headers, verify=False)
     return r.json()
+
+
+def redirect_url(default='home'):
+    return request.args.get('next') or request.referrer or url_for(default)
 
 
 def datetimeformat(value, format='%d/%m/%Y %H:%M'):

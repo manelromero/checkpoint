@@ -14,10 +14,10 @@
 
     <h2>User actions</h2>
     <div class="home-link">
-        <a href="{{ url_for('register') }}" class="titol-enllac">Login</a> |
+        <a href="{{ url_for('login') }}" class="titol-enllac">Login</a> |
         <a href="{{ url_for('logout') }}" class="titol-enllac">Logout</a>
     </div>
-    <p>Session: {% if sid %}<span style="color:red">{{ sid }}</span>{% endif %}</p>
+    <p>Session: <span style="color:red">{{ session.sid }}</span></p>
     <div>Actions pending: {% if changes %}{{ changes }}{% endif %}</div>
     <div class="home-link">
         <a href="{{ url_for('publish') }}" class="titol-enllac">Publish</a> |
