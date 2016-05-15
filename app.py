@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import requests, json
 from time import strftime
 from datetime import datetime
@@ -5,7 +7,7 @@ from flask import Flask, request, render_template, redirect, url_for, flash, ses
 from flask_login import LoginManager, login_user, login_required, UserMixin
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from models import User, Host
-from forms import HostForm
+from forms import HostForm, ApplicationSiteForm
 import jinja2
 
 # to avoid request warning of using verify=false
@@ -33,23 +35,27 @@ def home():
     return render_template('home.html')
 
 
+@app.route('/clear')
+def sessionClear():
+    session.clear()
+    return redirect(url_for('home'))
+
+
 # login
 @app.route('/login')
 def login():
     if 'logged_in' in session:
         return 'Already logged!'
-    try:
-        session['sid'] = register(app.config['USER'], app.config['PASSWORD'])
-        data = {}
-        call = api_call('show-session', data, session['sid'])
-        session['username'] = call['user-name']
-        user = User(uid=session['sid'], username=session['username'])
-        session['logged_in'] = True
-        session['changes'] = 0
-        login_user(user)
-        flash('User logged in!')
-        return redirect(url_for('home'))
-    except Exception,e: print str(e)
+    session['sid'] = register(app.config['USER'], app.config['PASSWORD'])
+    data = {}
+    call = api_call('show-session', data, session['sid'])
+    session['username'] = call['user-name']
+    user = User(uid=session['sid'], username=session['username'])
+    session['logged_in'] = True
+    session['changes'] = 0
+    login_user(user)
+    flash('Usuari registrat!')
+    return redirect(url_for('home'))
 
 
 # login page
@@ -63,17 +69,37 @@ def login_page():
 @login_required
 def logout():
     data = {}
-
-    # session.clear()
-
     call = api_call('logout', data, session['sid'])
     if call['message'] == 'OK':
         session.clear()
-        flash('User logged out!')
+        flash('User desconnectat!')
         return redirect(url_for('home'))
     return redirect(url_for('home'))
 
 
+# publish
+@app.route('/publish')
+@login_required
+def publish():
+    data = {}
+    call = api_call('publish', data, session['sid'])
+    flash('Canvis publicats!')
+    session['changes'] = 0
+    return redirect(url_for('home'))
+
+
+# discard
+@app.route('/discard')
+@login_required
+def discard():
+    data = {}
+    call = api_call('discard', data, session['sid'])
+    flash('Canvis descartats!')
+    session['changes'] = 0
+    return redirect(url_for('home'))
+
+
+# HOST CRUD
 # add host
 @app.route('/add-host', methods=['GET', 'POST'])
 @login_required
@@ -85,7 +111,7 @@ def addHost():
             'ip-address': form.ip_address.data
             }
         call = api_call('add-host', data, session['sid'])
-        flash('Host added!')
+        flash('Host afegit!')
         session['changes'] += 1
         return redirect(url_for('showHosts'))
     else:
@@ -130,7 +156,7 @@ def editHost(host_uid):
             'ip-address': form.ip_address.data
             }
         call = api_call('set-host', data, session['sid'])
-        flash('Host edited!')
+        flash('Host editat!')
         session['changes'] += 1
         return redirect(url_for('showHosts'))
     else:
@@ -150,59 +176,86 @@ def deleteHost(host_uid):
         }
     if request.method == 'POST':
         call = api_call('delete-host', data, session['sid'])
-        flash('Host deleted')
+        flash('Host esborrat')
         session['changes'] += 1
         return redirect(url_for('showHosts'))
     else:
         return render_template('delete-host.html', host=host)
 
 
-# publish
-@app.route('/publish')
+# APPLICATION SITE CRUD
+# add application site
+@app.route('/add-application-site', methods=['GET', 'POST'])
 @login_required
-def publish():
-    data = {}
-    call = api_call('publish', data, session['sid'])
-    flash('Changes published!')
-    session['changes'] = 0
-    return redirect(url_for('home'))
+def addApplicationSite():
+    form = ApplicationSiteForm(request.form)
+    if request.method == 'POST' and form.validate():
+        data = {
+            'name': form.name.data,
+            'url-list': form.url_list.data,
+            'description': form.description.data
+            }
+        call = api_call('add-application-site', data, session['sid'])
+        flash('Aplicació afegida!')
+        session['changes'] += 1
+        return redirect(url_for('showApplicationSites'))
+    else:
+        return render_template('new-application-site.html', form=form)
 
 
-# discard
-@app.route('/discard')
+# show application sites
+@app.route('/show-application-sites', methods=['GET', 'POST'])
 @login_required
-def discard():
+def showApplicationSites():
+    apps = []
     data = {}
-    call = api_call('discard', data, session['sid'])
-    flash('Changes discarded!')
-    session['changes'] = 0
-    return redirect(url_for('home'))
+    call = api_call('show-application-sites', data, session['sid'])
+    for object in call['objects']:
+        data = {'uid': object['uid']}
+        call = api_call('show-application-site', data, session['sid'])
+
+        print '\n\n\n'
+        print 'Call: ', call
+        print '\n\n\n'
+
+        app = {
+            'uid': call['uid'],
+            'name': call['name'],
+            'url_list': call['url-list'],
+            'description': call['description']
+            }
+        apps.append(app)
+    return render_template('show-application-sites.html', apps=apps)
 
 
-@app.route('/smartview')
-def smartview():
-    url = 'https://192.168.1.10/smartview'
-    data = {
-        'user': app.config['USER'],
-        'password': app.config['PASSWORD']
-    }
-    r = requests.get(url, verify=False)
-    return r
+# edit application site
+@app.route('/edit-application-site', methods=['GET', 'POST'])
+@login_required
+def editApplicationSites():
+    return 'edit'
 
 
+# delete application site
+@app.route('/delete-application-site', methods=['GET', 'POST'])
+@login_required
+def deleteApplicationSites():
+    return 'delete'
+
+
+# OTHER FUNCTIONS
 def register(user, password):
     payload = {'user': user, 'password': password}
-    response = api_call('login', payload, '')
-    return response['sid']
+    call = api_call('login', payload, '')
+    return call['sid']
 
 
 def api_call(command, json_payload, sid):
     url = 'https://' + app.config['SERVER'] + ':' + app.config['PORT'] + \
         '/web_api/' + command
-    if sid == '':
-        request_headers = {'Content-Type': 'application/json'}
+    if 'sid' in session:
+        request_headers = {'Content-Type': 'application/json', 'X-chkp-sid': session['sid']}
     else:
-        request_headers = {'Content-Type': 'application/json', 'X-chkp-sid': sid}
+        request_headers = {'Content-Type': 'application/json'}
     r = requests.post(url, data=json.dumps(json_payload), headers=request_headers, verify=False)
     return r.json()
 

@@ -159,7 +159,7 @@ nav {
 	margin: auto;
 }
 
-.wrapper-hosts {
+.wrapper-object {
 	max-width: 1200px;
 }
 
@@ -223,7 +223,7 @@ nav {
 }
 
 .small-cell {
-	width: 80px;
+	width: 100px;
 }
 
 .cell {

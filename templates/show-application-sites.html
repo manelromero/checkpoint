@@ -14,30 +14,28 @@
         {% endif %}
     {% endwith %}
 
-        {% if hosts %}
+        {% if apps %}
         <div class="table-header">
             <div class="header-row">
                 <div class="cell medium-cell">Nom</div>
-                <div class="cell medium-cell">Adreça IP</div>
-                <div class="cell big-cell">Última modificació</div>
-                <div class="cell small-cell center">Editar</div>
-                <div class="cell small-cell center">Esborrar</div>
+                <div class="cell big-cell">Llista URLs</div>
+                <div class="cell big-cell">Descripció</div>
             </div>
         </div>
 
         <div class="table">
-            {% for host in hosts %}
+            {% for app in apps %}
             <div class="row">
-                <div class="cell medium-cell">{{ host.name }}</div>
-                <div class="cell medium-cell">{{ host.ip_address }}</div>
-                <div class="cell big-cell">{{ host.last_modify_time|datetimeformat }}</div>
+                <div class="cell medium-cell">{{ app.name }}</div>
+                <div class="cell big-cell">{{ app.url_list }}</div>
+                <div class="cell big-cell">{{ app.description }}</div>
                 <div class="cell small-cell center">
-                    <a href="{{ url_for('editHost', host_uid=host.uid) }}">
+                    <a href="{{ url_for('editApplicationSite', app_uid=app.uid) }}">
                         <img src="{{ url_for('static', filename='img/edit.svg') }}" class="icon" alt="Edit">
                     </a>
                 </div>
                 <div class="cell small-cell center">
-                    <a href="{{ url_for('deleteHost', host_uid=host.uid) }}">
+                    <a href="{{ url_for('deleteApplicationSite', app_uid=app.uid) }}">
                         <img src="{{ url_for('static', filename='img/garbage.svg') }}" class="icon" alt="Delete">
                     </a>
                 </div>
@@ -46,7 +44,7 @@
         </div>
         {% endif %}
 
-        <a href="{{ url_for('addHost') }}"><button>Afegir Host</button></a>
+        <a href="{{ url_for('addApplicationSite') }}"><button>Afegir Aplicació</button></a>
         <a href="{{ url_for('home') }}"><button>Tornar</button></a>
     </div>
 {% endblock %}

@@ -2,15 +2,15 @@
 {% block content %}
 
 <h1>Hosts</h1>
-<h2>Edit Host</h2>
+<h2>Editar Host</h2>
 
-<div class="wrapper-host">
+<div class="wrapper-object">
 
 	<form action="{{ url_for('editHost', host_uid=host.uid) }}" method="POST">
 
 		<ul>
 
-			<li>You are editing host <span class="red">{{ host.name }}</span></li>
+			<li>Esteu editant el host <span class="red">{{ host.name }}</span></li>
 
 			<li>{{ form.ip_address.label }} {{ form.ip_address(size=15, placeholder=host.ip_address) }}</li>
 			{% if form.ip_address.errors %}
@@ -20,11 +20,11 @@
 			{% endif %}
 
 		</ul>
-		<input type="submit" value="Send">
+		<input type="submit" value="Enviar">
 
 	</form>
 
-    <a href="{{ url_for('showHosts') }}"><button>Back</button></a>
+    <a href="{{ url_for('showHosts') }}"><button>Tornar</button></a>
 
 </div>
 

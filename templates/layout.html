@@ -14,7 +14,7 @@
 	<header>
 		<nav>
 			<div class="nav-data">
-		        <a href="{{ url_for('publish') }}" class="publish negative">Publish</a>
+		        <a href="{{ url_for('publish') }}" class="publish negative">Publicar</a>
 			    <div class="publish-num">
 			    {% if session.changes %}
 			    	{{ session.changes }}
@@ -22,7 +22,7 @@
 			    	0
 			    {% endif %}
 			    </div>
-			    <a href="{{ url_for('discard') }}" class="publish negative">Discard</a>
+			    <a href="{{ url_for('discard') }}" class="publish negative">Descartar</a>
 			</div>
 			<div class="login">
 				{% if session.username %}

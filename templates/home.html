@@ -12,27 +12,33 @@
     {% endif %}
 {% endwith %}
 
-    <h2>User actions</h2>
-    <div class="home-link">
+    <h2>Accions d'Usuari</h2>
+    <div>
         <a href="{{ url_for('login') }}" class="titol-enllac">Login</a> |
         <a href="{{ url_for('logout') }}" class="titol-enllac">Logout</a>
     </div>
-    <p>Session: <span style="color:red">{{ session.sid }}</span></p>
-    <div>Actions pending: {% if changes %}{{ changes }}{% endif %}</div>
-    <div class="home-link">
-        <a href="{{ url_for('publish') }}" class="titol-enllac">Publish</a> |
-        <a href="{{ url_for('discard') }}" class="titol-enllac">Discard</a>
+    <p>Sessió: <span style="color:red">{{ session.sid }}</span></p>
+    <div><a href="{{ url_for('sessionClear') }}" class="titol-enllac">session.clear()</a></div>
+    <div>Accions pendents: {% if session.changes %}{{ session.changes }}{% else %}0{% endif %}</div>
+    <div>
+        <a href="{{ url_for('publish') }}" class="titol-enllac">Publicar</a> |
+        <a href="{{ url_for('discard') }}" class="titol-enllac">Descartar</a>
     </div>
 
-    <h2>Hosts actions</h2>
-    <div class="home-link">
-        <a href="{{ url_for('showHosts') }}">Show Hosts</a>
+    <h2>Accions de Hosts</h2>
+    <div>
+        <a href="{{ url_for('showHosts') }}">Mostrar Hosts</a>
     </div>
-    <div class="home-link">
-    	<a href="{{ url_for('addHost') }}">Add Host</a>
+    <div>
+        <a href="{{ url_for('addHost') }}">Afegir Host</a>
     </div>
-    <div class="home-link">
-        <a href="#" id="smartview">Smartview</a>
+
+    <h2>Accions d'Aplicacions</h2>
+    <div>
+        <a href="{{ url_for('showApplicationSites') }}">Mostrar Aplicacions</a>
+    </div>
+    <div>
+        <a href="{{ url_for('addApplicationSite') }}">Afegir Aplicació</a>
     </div>
 
 

@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h1>Aplicacions</h1>
+<h2>Crear Aplicació</h2>
+
+<div class="wrapper-object">
+
+	<form action="{{ url_for('addApplicationSite') }}" method="POST">
+
+		<ul>
+
+			<li>{{ form.name.label }} {{ form.name(size=20) }}</li>
+			{% if form.name.errors %}
+				{% for error in form.name.errors %}
+					<span class="error">{{ error }}</span>
+				{% endfor %}
+			{% endif %}
+
+			<li>{{ form.url_list.label }} {{ form.url_list(size=20) }}</li>
+			{% if form.url_list.errors %}
+				{% for error in form.url_list.errors %}
+					<span class="error">{{ error }}</span>
+				{% endfor %}
+			{% endif %}
+
+			<li>{{ form.description.label }} {{ form.description(size=25) }}</li>
+			{% if form.description.errors %}
+				{% for error in form.description.errors %}
+					<span class="error">{{ error }}</span>
+				{% endfor %}
+			{% endif %}
+
+		</ul>
+		<input type="submit" value="Enviar">
+
+	</form>
+
+    <a href="{{ url_for('showApplicationSites') }}"><button>Tornar</button></a>
+
+</div>
+
+{% endblock %}
