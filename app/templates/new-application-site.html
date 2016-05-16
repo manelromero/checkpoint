@@ -17,13 +17,6 @@
 				{% endfor %}
 			{% endif %}
 
-			<li>{{ form.url_list.label }} {{ form.url_list(size=20) }}</li>
-			{% if form.url_list.errors %}
-				{% for error in form.url_list.errors %}
-					<span class="error">{{ error }}</span>
-				{% endfor %}
-			{% endif %}
-
 			<li>{{ form.description.label }} {{ form.description(size=25) }}</li>
 			{% if form.description.errors %}
 				{% for error in form.description.errors %}

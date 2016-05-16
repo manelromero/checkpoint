@@ -12,7 +12,7 @@
     {% endif %}
 {% endwith %}
 
-    <h2>Accions d'Usuari</h2>
+    <h2>Usuari</h2>
     <div>
         <a href="{{ url_for('login') }}" class="titol-enllac">Login</a> |
         <a href="{{ url_for('logout') }}" class="titol-enllac">Logout</a>
@@ -25,22 +25,37 @@
         <a href="{{ url_for('discard') }}" class="titol-enllac">Descartar</a>
     </div>
 
-    <h2>Accions de Hosts</h2>
+    <h2>Xarxes</h2>
     <div>
-        <a href="{{ url_for('showHosts') }}">Mostrar Hosts</a>
+        <a href="{{ url_for('showHosts') }}">Mostrar xarxes</a>
     </div>
     <div>
-        <a href="{{ url_for('addHost') }}">Afegir Host</a>
-    </div>
-
-    <h2>Accions d'Aplicacions</h2>
-    <div>
-        <a href="{{ url_for('showApplicationSites') }}">Mostrar Aplicacions</a>
-    </div>
-    <div>
-        <a href="{{ url_for('addApplicationSite') }}">Afegir Aplicació</a>
+        <a href="{{ url_for('addHost') }}">Afegir xarxa</a>
     </div>
 
+    <h2>Grups</h2>
+    <div>
+        <a href="{{ url_for('showApplicationSites') }}">Mostrar grups</a>
+    </div>
+    <div>
+        <a href="{{ url_for('addApplicationSite') }}">Afegir grup</a>
+    </div>
+
+    <h2>Aplicacions</h2>
+    <div>
+        <a href="{{ url_for('showApplicationSites') }}">Mostrar aplicacions</a>
+    </div>
+    <div>
+        <a href="{{ url_for('addApplicationSite') }}">Afegir aplicació</a>
+    </div>
+
+    <h2>Hosts</h2>
+    <div>
+        <a href="{{ url_for('showHosts') }}">Mostrar hosts</a>
+    </div>
+    <div>
+        <a href="{{ url_for('addHost') }}">Afegir host</a>
+    </div>
 
 
 {% endblock %}

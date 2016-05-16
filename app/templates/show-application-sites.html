@@ -18,7 +18,6 @@
         <div class="table-header">
             <div class="header-row">
                 <div class="cell medium-cell">Nom</div>
-                <div class="cell big-cell">Llista URLs</div>
                 <div class="cell big-cell">Descripció</div>
             </div>
         </div>
@@ -27,7 +26,6 @@
             {% for app in apps %}
             <div class="row">
                 <div class="cell medium-cell">{{ app.name }}</div>
-                <div class="cell big-cell">{{ app.url_list }}</div>
                 <div class="cell big-cell">{{ app.description }}</div>
                 <div class="cell small-cell center">
                     <a href="{{ url_for('editApplicationSite', app_uid=app.uid) }}">
