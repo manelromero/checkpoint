@@ -1,0 +1,37 @@
+{% block object %}
+
+{% if sample %}
+<div class="clear">
+    <ul>
+    {% for key1, value1 in sample.items() %}
+        <li class="tree-first">
+            {{ key1 }}:
+            {% if value1 is mapping %}
+            {% for key2, value2 in value1.items() %}
+            <ul>
+                <li class="tree-second">
+                    {{ key2 }}:
+                    {% if value2 is mapping %}
+                    {% for key3, value3 in value2.items() %}
+                    <ul>
+                        <li class="tree-third">
+                        {{ key3 }}:<span class="value"> {{ value3 }}</span>
+                        </li>
+                    </ul>
+                    {% endfor %}
+                    {% else %}
+                    <span class="value"> {{ value2 }}</span>
+                    {% endif %}
+                </li>
+            </ul>
+            {% endfor %}
+            {% else %}
+            <span class="value"> {{ value1 }}</span>
+            {% endif %}
+        </li>
+    {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+{% endblock %}

@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
+
     <h1>Hosts</h1>
 
     <div class="wrapper-object">
@@ -48,5 +49,11 @@
 
         <a href="{{ url_for('addHost') }}"><button>Afegir Host</button></a>
         <a href="{{ url_for('home') }}"><button>Tornar</button></a>
+
+    {% include "sample-object.html" %}
+    {% block object %}{% endblock %}
+
+
     </div>
+
 {% endblock %}

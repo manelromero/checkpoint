@@ -233,6 +233,10 @@ nav {
 	min-width: 50px;
 }
 
+.clear {
+	clear: left;
+}
+
 button,
 input[type=submit] {
 	float: left;
@@ -264,4 +268,18 @@ input[type=submit]:focus {
     color: #fff;
 }
 
+.tree-first,
+.tree-second,
+.tree-third {
+	font: 400 0.9rem 'Open Sans', sans-serif;
+	margin-bottom: 0;
+}
 
+.tree-second,
+.tree-third {
+	padding-left: 2rem;
+}
+
+.value {
+	color: #bf0000;
+}

@@ -125,7 +125,7 @@ def showHosts():
             'last_modify_time': call['meta-info']['last-modify-time']['posix']
             }
         hosts.append(host)
-    return render_template('show-hosts.html', hosts=hosts)
+    return render_template('show-hosts.html', hosts=hosts, sample=call)
 
 
 # edit host
@@ -208,7 +208,7 @@ def showApplicationSites():
             'description': call['description']
             }
         apps.append(app)
-    return render_template('show-application-sites.html', apps=apps)
+    return render_template('show-application-sites.html', apps=apps, sample=call)
 
 
 # edit application site
