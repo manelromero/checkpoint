@@ -1,5 +1,4 @@
 class User():
-    """ User class """
     def __init__(self, uid, username):
         self.uid = uid,
         self.username = username
@@ -21,8 +20,26 @@ class User():
 
 
 class Host():
-    """ Host class """
-    def __init__(self, uid, name, ip_address):
+    def __init__(self, uid=None, name=None, ipv4_address=None):
         self.uid = uid,
         self.name = name,
-        self.ip_address = ip_address
+        self.ipv4_address = ipv4_address
+
+
+class ApplicationSite():
+    def __init__(self, uid=None, name=None, description=None):
+        self.uid = uid,
+        self.name = name,
+        self.description = description
+
+
+class Network():
+    def __init__(self, uid=None, name=None):
+        self.uid = uid,
+        self.name = name,
+
+
+class Group():
+    def __init__(self, uid=None, name=None):
+        self.uid = uid,
+        self.name = name,

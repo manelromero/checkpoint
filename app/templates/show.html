@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h1>{{ object }}</h1>
+
+<div class="wrapper-object">
+<!-- get flash messages -->
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+        <div class="flash">
+            <div class="flash-message">{{ message }}</div>
+        </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+    {% if objects %}
+    <div class="table-header">
+        <div class="header-row">
+            {% for object in objects[:1] %}
+            {% for key, value in object.__dict__.items() %}
+            <div class="cell medium-cell">{{ key }}</div>
+            {% endfor %}
+            {% endfor %}
+            <div class="cell small-cell">Edit</div>
+            <div class="cell small-cell">Delete</div>
+        </div>
+    </div>
+
+    <div class="table">
+        {% for object in objects %}
+        <div class="row">
+            {% for key, value in object.__dict__.items() %}
+            <div class="cell medium-cell">{{ value }}</div>
+            {% endfor %}
+            <div class="cell small-cell center">
+                <a href="{{ url_for('editHost', host_uid=object.uid) }}">
+                    <img src="{{ url_for('static', filename='img/edit.svg') }}" class="icon" alt="Edit">
+                </a>
+            </div>
+            <div class="cell small-cell center">
+                <a href="{{ url_for('deleteHost', host_uid=object.uid) }}">
+                    <img src="{{ url_for('static', filename='img/garbage.svg') }}" class="icon" alt="Delete">
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <a href="{{ url_for('add', action='', className='') }}"><button>Afegir</button></a>
+    <a href="{{ url_for('home') }}"><button>Tornar</button></a>
+
+{% include "sample-object.html" %}
+{% block object %}{% endblock %}
+
+
+</div>
+
+{% endblock %}

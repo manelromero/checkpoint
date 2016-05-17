@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h1>{{ className + 's'}}</h1>
+<h2>Crear {{ className }}</h2>
+
+<div class="wrapper-object">
+
+	{% if form %}
+	<form action="{{ url_for('add', action=action, className=className) }}" method="POST">
+
+		<ul>
+			{% for element in form %}
+			<li>{{ element.label }} {{ element }}</li>
+			{% if element.errors %}
+				{% for error in element.errors %}
+					<span class="error">{{ error }}</span>
+				{% endfor %}
+			{% endif %}
+			{% endfor %}
+		</ul>
+		<input type="submit" value="Enviar">
+
+	</form>
+
+    <a href="{{ url_for('show', action='show-'+action[4:]+'s', className=className) }}"><button>Tornar</button></a>
+    {% endif %}
+
+</div>
+
+{% endblock %}

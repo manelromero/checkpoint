@@ -27,34 +27,34 @@
 
     <h2>Xarxes</h2>
     <div>
-        <a href="{{ url_for('showHosts') }}">Mostrar xarxes</a>
+        <a href="{{ url_for('show', action='show-networks', className='Network' ) }}">Mostrar xarxes</a>
     </div>
     <div>
-        <a href="{{ url_for('addHost') }}">Afegir xarxa</a>
+        <a href="{{ url_for('add', action='add-network', className='Network') }}">Afegir xarxa</a>
     </div>
 
     <h2>Grups</h2>
     <div>
-        <a href="{{ url_for('showApplicationSites') }}">Mostrar grups</a>
+        <a href="{{ url_for('show', action='show-groups', className='Group') }}">Mostrar grups</a>
     </div>
     <div>
-        <a href="{{ url_for('addApplicationSite') }}">Afegir grup</a>
+        <a href="{{ url_for('add', action='add-group', className='Group') }}">Afegir grup</a>
     </div>
 
     <h2>Aplicacions</h2>
     <div>
-        <a href="{{ url_for('showApplicationSites') }}">Mostrar aplicacions</a>
+        <a href="{{ url_for('show', action='show-application-sites', className='ApplicationSite') }}">Mostrar aplicacions</a>
     </div>
     <div>
-        <a href="{{ url_for('addApplicationSite') }}">Afegir aplicació</a>
+        <a href="{{ url_for('add', action='add-application-site', className='ApplicationSite') }}">Afegir aplicació</a>
     </div>
 
     <h2>Hosts</h2>
     <div>
-        <a href="{{ url_for('showHosts') }}">Mostrar hosts</a>
+        <a href="{{ url_for('show', action='show-hosts', className='Host') }}">Mostrar hosts</a>
     </div>
     <div>
-        <a href="{{ url_for('addHost') }}">Afegir host</a>
+        <a href="{{ url_for('add', action='add-host', className='Host') }}">Afegir host</a>
     </div>
 
 

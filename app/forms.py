@@ -14,14 +14,14 @@ class HostForm(Form):
             )
         ])
 
-    ip_address = StringField(u'Adreça IP', [
+    ipv4_address = StringField(u'Adreça IPv4', [
         validators.InputRequired(
-            message=u"Heu d'introduir una adreça IP"
+            message=u"Heu d'introduir una adreça IPv4"
             ),
         validators.IPAddress(
             ipv4=True,
             ipv6=False,
-            message=u"Heu d'introduir una adreça IP vàlida"
+            message=u"Heu d'introduir una adreça IPv4 vàlida"
             )
         ])
 

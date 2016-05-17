@@ -6,11 +6,11 @@ from flask import session
 
 def register(user, password):
     payload = {'user': user, 'password': password}
-    call = api_call('login', payload, '')
+    call = apiCall('login', payload, '')
     return call['sid']
 
 
-def api_call(command, json_payload, sid):
+def apiCall(command, json_payload, sid):
     url = 'https://' + app.config['SERVER'] + ':' + app.config['PORT'] + \
         '/web_api/' + command
     if 'sid' in session:
@@ -26,6 +26,7 @@ def api_call(command, json_payload, sid):
         headers=request_headers,
         verify=app.config['VERIFY']
         )
+    print '\nRESPONSE: ', r.status_code
     return r.json()
 
 
