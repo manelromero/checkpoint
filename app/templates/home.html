@@ -13,17 +13,17 @@
 {% endwith %}
 
     <h2>Usuari</h2>
-    <div>
+<!--     <div>
         <a href="{{ url_for('login') }}" class="titol-enllac">Login</a> |
         <a href="{{ url_for('logout') }}" class="titol-enllac">Logout</a>
-    </div>
+    </div> -->
     <p>Sessió: <span style="color:red">{{ session.sid }}</span></p>
     <div><a href="{{ url_for('sessionClear') }}" class="titol-enllac">session.clear()</a></div>
-    <div>Accions pendents: {% if session.changes %}{{ session.changes }}{% else %}0{% endif %}</div>
+<!--     <div>Accions pendents: {% if session.changes %}{{ session.changes }}{% else %}0{% endif %}</div>
     <div>
         <a href="{{ url_for('publish') }}" class="titol-enllac">Publicar</a> |
         <a href="{{ url_for('discard') }}" class="titol-enllac">Descartar</a>
-    </div>
+    </div> -->
 
     <h2>Xarxes</h2>
     <div>

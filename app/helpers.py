@@ -1,4 +1,6 @@
 from . import app
+from models import *
+from forms import *
 import requests
 import json
 from flask import session
@@ -26,8 +28,18 @@ def apiCall(command, json_payload, sid):
         headers=request_headers,
         verify=app.config['VERIFY']
         )
-    print '\nRESPONSE: ', r.status_code
+    print '\n\nRESPONSE => ', r.json(), '\n\n'
     return r.json()
+
+
+def instantiateObject(className):
+    object_to_instantiate = globals()[className]
+    return object_to_instantiate()
+
+
+def instantiateForm(className, request):
+    form_to_instantiate = globals()[className+'Form']
+    return form_to_instantiate(request)
 
 
 def redirect_url(default='home'):

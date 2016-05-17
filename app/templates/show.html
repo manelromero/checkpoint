@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<h1>{{ object }}</h1>
+<h1>{{ className }}</h1>
 
 <div class="wrapper-object">
 <!-- get flash messages -->
@@ -20,11 +20,11 @@
         <div class="header-row">
             {% for object in objects[:1] %}
             {% for key, value in object.__dict__.items() %}
-            <div class="cell medium-cell">{{ key }}</div>
+            <div class="cell big-cell">{{ key }}</div>
             {% endfor %}
             {% endfor %}
-            <div class="cell small-cell">Edit</div>
-            <div class="cell small-cell">Delete</div>
+            <div class="cell small-cell center">Edit</div>
+            <div class="cell small-cell center">Delete</div>
         </div>
     </div>
 
@@ -32,15 +32,15 @@
         {% for object in objects %}
         <div class="row">
             {% for key, value in object.__dict__.items() %}
-            <div class="cell medium-cell">{{ value }}</div>
+            <div class="cell big-cell">{{ value }}</div>
             {% endfor %}
             <div class="cell small-cell center">
-                <a href="{{ url_for('editHost', host_uid=object.uid) }}">
+                <a href="{{ url_for('edit', className=className, action='set'+action[4:-1], object_uid=object.uid) }}">
                     <img src="{{ url_for('static', filename='img/edit.svg') }}" class="icon" alt="Edit">
                 </a>
             </div>
             <div class="cell small-cell center">
-                <a href="{{ url_for('deleteHost', host_uid=object.uid) }}">
+                <a href="{{ url_for('delete', className=className, action='delete'+action[4:-1], object_uid=object.uid) }}">
                     <img src="{{ url_for('static', filename='img/garbage.svg') }}" class="icon" alt="Delete">
                 </a>
             </div>
@@ -49,7 +49,7 @@
     </div>
     {% endif %}
 
-    <a href="{{ url_for('add', action='', className='') }}"><button>Afegir</button></a>
+    <a href="{{ url_for('add', action=addAction, className=className) }}"><button>Afegir</button></a>
     <a href="{{ url_for('home') }}"><button>Tornar</button></a>
 
 {% include "sample-object.html" %}

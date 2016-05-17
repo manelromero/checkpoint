@@ -90,8 +90,7 @@ nav {
 	justify-content: center;
 	height: 50px;
 	margin: auto;
-	width: 800px; /* temp */
-	max-width: 800px;
+	max-width: 1200px;
 	font: 600 1rem 'Open Sans', sans-serif;
 	color: #fff;
 }
@@ -166,7 +165,7 @@ nav {
 
 .container {
 	margin: auto;
-	max-width: 800px;
+	max-width: 1200px;
 	padding-top: 110px;
 }
 
