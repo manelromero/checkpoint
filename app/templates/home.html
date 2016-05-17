@@ -3,59 +3,15 @@
 
 <!-- get flash messages -->
 {% with messages = get_flashed_messages() %}
-    {% if messages %}
-        {% for message in messages %}
-        <div class="flash">
-            <div class="flash-message">{{ message }}</div>
-        </div>
-        {% endfor %}
-    {% endif %}
+{% if messages %}
+{% for message in messages %}
+<div class="flash">
+    <div class="flash-message">{{ message }}</div>
+</div>
+{% endfor %}
+{% endif %}
 {% endwith %}
 
-    <h2>Usuari</h2>
-<!--     <div>
-        <a href="{{ url_for('login') }}" class="titol-enllac">Login</a> |
-        <a href="{{ url_for('logout') }}" class="titol-enllac">Logout</a>
-    </div> -->
-    <p>Sessió: <span style="color:red">{{ session.sid }}</span></p>
-    <div><a href="{{ url_for('sessionClear') }}" class="titol-enllac">session.clear()</a></div>
-<!--     <div>Accions pendents: {% if session.changes %}{{ session.changes }}{% else %}0{% endif %}</div>
-    <div>
-        <a href="{{ url_for('publish') }}" class="titol-enllac">Publicar</a> |
-        <a href="{{ url_for('discard') }}" class="titol-enllac">Descartar</a>
-    </div> -->
-
-    <h2>Xarxes</h2>
-    <div>
-        <a href="{{ url_for('show', action='show-networks', className='Network' ) }}">Mostrar xarxes</a>
-    </div>
-    <div>
-        <a href="{{ url_for('add', action='add-network', className='Network') }}">Afegir xarxa</a>
-    </div>
-
-    <h2>Grups</h2>
-    <div>
-        <a href="{{ url_for('show', action='show-groups', className='Group') }}">Mostrar grups</a>
-    </div>
-    <div>
-        <a href="{{ url_for('add', action='add-group', className='Group') }}">Afegir grup</a>
-    </div>
-
-    <h2>Aplicacions</h2>
-    <div>
-        <a href="{{ url_for('show', action='show-application-sites', className='ApplicationSite') }}">Mostrar aplicacions</a>
-    </div>
-    <div>
-        <a href="{{ url_for('add', action='add-application-site', className='ApplicationSite') }}">Afegir aplicació</a>
-    </div>
-
-    <h2>Hosts</h2>
-    <div>
-        <a href="{{ url_for('show', action='show-hosts', className='Host') }}">Mostrar hosts</a>
-    </div>
-    <div>
-        <a href="{{ url_for('add', action='add-host', className='Host') }}">Afegir host</a>
-    </div>
-
+<div class="special">HOME</div>
 
 {% endblock %}

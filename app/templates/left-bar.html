@@ -1,0 +1,48 @@
+{% block bar %}
+
+<h3>Usuari</h3>
+<div>
+    <a href="{{ url_for('sessionClear') }}">session.clear()</a>
+</div>
+
+<h3>Regles</h3>
+<div>
+    <a href="{{ url_for('show', action='show-access-rule', className='AccessRule' ) }}">Mostrar regles</a>
+</div>
+<div>
+    <a href="{{ url_for('add', action='add-access-rule', className='AccessRule') }}">Afegir regla</a>
+</div>
+
+<h3>Xarxes</h3>
+<div>
+    <a href="{{ url_for('show', action='show-networks', className='Network' ) }}">Mostrar xarxes</a>
+</div>
+<div>
+    <a href="{{ url_for('add', action='add-network', className='Network') }}">Afegir xarxa</a>
+</div>
+
+<h3>Grups</h3>
+<div>
+    <a href="{{ url_for('show', action='show-groups', className='Group') }}">Mostrar grups</a>
+</div>
+<div>
+    <a href="{{ url_for('add', action='add-group', className='Group') }}">Afegir grup</a>
+</div>
+
+<h3>Aplicacions</h3>
+<div>
+    <a href="{{ url_for('show', action='show-application-sites', className='ApplicationSite') }}">Mostrar aplicacions</a>
+</div>
+<div>
+    <a href="{{ url_for('add', action='add-application-site', className='ApplicationSite') }}">Afegir aplicació</a>
+</div>
+
+<h3>Hosts</h3>
+<div>
+    <a href="{{ url_for('show', action='show-hosts', className='Host') }}">Mostrar hosts</a>
+</div>
+<div>
+    <a href="{{ url_for('add', action='add-host', className='Host') }}">Afegir host</a>
+</div>
+
+{% endblock %}

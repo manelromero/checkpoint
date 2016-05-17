@@ -49,7 +49,7 @@
     </div>
     {% endif %}
 
-    <a href="{{ url_for('add', action=addAction, className=className) }}"><button>Afegir</button></a>
+    <a href="{{ url_for('add', action='add'+action[4:-1], className=className) }}"><button>Afegir</button></a>
     <a href="{{ url_for('home') }}"><button>Tornar</button></a>
 
 {% include "sample-object.html" %}

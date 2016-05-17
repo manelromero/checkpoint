@@ -1,6 +1,52 @@
 # -*- coding: utf-8 -*-
 
-from wtforms import Form, StringField, validators
+from wtforms import Form, StringField, IntegerField, validators
+
+
+class GroupForm(Form):
+    name = StringField('Nom', [
+        validators.InputRequired(
+            message="Heu d'introduir un nom"
+            ),
+        validators.Length(
+            max=15,
+            message=u'El nom no pot tenir més de 10 caràcters'
+            )
+        ])
+
+
+class NetworkForm(Form):
+    name = StringField('Nom', [
+        validators.InputRequired(
+            message="Heu d'introduir un nom"
+            ),
+        validators.Length(
+            max=15,
+            message=u'El nom no pot tenir més de 10 caràcters'
+            )
+        ])
+
+    subnet4 = StringField('Subnet', [
+        validators.InputRequired(
+            message=u"Heu d'introduir una adreça IPv4"
+            ),
+        validators.IPAddress(
+            ipv4=True,
+            ipv6=False,
+            message=u"Heu d'introduir una adreça IPv4 vàlida"
+            )
+        ])
+
+    mask_length4 = IntegerField(u'Longitud màscara', [
+        validators.InputRequired(
+            message=u"Heu d'introduir un número"
+            ),
+        validators.NumberRange(
+            min=1,
+            max=100,
+            message=u"Heu d'introduir un número entre 1 i 100"
+            )
+        ])
 
 
 class HostForm(Form):
@@ -10,7 +56,7 @@ class HostForm(Form):
             ),
         validators.Length(
             max=10,
-            message='El nom no pot tenir més de 10 caràcters'
+            message=u'El nom no pot tenir més de 10 caràcters'
             )
         ])
 

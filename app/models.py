@@ -19,6 +19,20 @@ class User():
         return self
 
 
+class Network():
+    def __init__(self, uid=None, name=None, subnet4=None, mask_length4=None):
+        self.uid = uid,
+        self.name = name,
+        self.subnet4 = subnet4,
+        self.mask_length4 = mask_length4
+
+
+class Group():
+    def __init__(self, uid=None, name=None):
+        self.uid = uid,
+        self.name = name,
+
+
 class Host():
     def __init__(self, uid=None, name=None, ipv4_address=None):
         self.uid = uid,
@@ -31,15 +45,3 @@ class ApplicationSite():
         self.uid = uid,
         self.name = name,
         self.description = description
-
-
-class Network():
-    def __init__(self, uid=None, name=None):
-        self.uid = uid,
-        self.name = name,
-
-
-class Group():
-    def __init__(self, uid=None, name=None):
-        self.uid = uid,
-        self.name = name,

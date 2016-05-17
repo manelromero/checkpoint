@@ -2,7 +2,7 @@
 
 from . import app
 from helpers import *
-from flask import request, render_template, redirect, url_for, flash, session
+from flask import request, render_template, redirect, url_for, flash, session, abort
 from flask_login import LoginManager, login_user, login_required
 
 
@@ -24,6 +24,12 @@ def home():
     return render_template('home.html')
 
 
+# login page
+@app.route('/login_page')
+def login_page():
+    return 'Login page'
+
+
 @app.route('/clear')
 def sessionClear():
     session.clear()
@@ -34,8 +40,6 @@ def sessionClear():
 # login
 @app.route('/login')
 def login():
-    if 'logged_in' in session:
-        return 'Already logged!'
     session['sid'] = register(app.config['USER'], app.config['PASSWORD'])
     call = apiCall('show-session', {}, session['sid'])
     session['username'] = call['user-name']
@@ -46,11 +50,6 @@ def login():
     flash('Usuari registrat!')
     return redirect(url_for('home'))
 
-
-# login page
-@app.route('/login_page')
-def login_page():
-    return 'Login page'
 
 
 # logout
@@ -138,7 +137,7 @@ def show(className, action):
         )
 
 
-# edit
+# Edit
 @app.route('/edit/<className>/<action>/<object_uid>', methods=['GET', 'POST'])
 @login_required
 def edit(className, action, object_uid):
@@ -170,7 +169,7 @@ def edit(className, action, object_uid):
             )
 
 
-# delete
+# Delete
 @app.route(
     '/delete/<className>/<action>/<object_uid>',
     methods=['GET', 'POST']
@@ -198,3 +197,10 @@ def delete(className, action, object_uid):
             action=action,
             className=className
             )
+
+
+@app.errorhandler(401)
+def custom_401(error):
+    return render_template('401.html')
+
+

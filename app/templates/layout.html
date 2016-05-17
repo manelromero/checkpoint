@@ -17,10 +17,18 @@
 	</header>
 
 	<div class="container">
-		{% block content %}{% endblock %}
+		<div class="left-bar">
+			{% include "left-bar.html" %}
+			{% block bar %}{% endblock %}
+		</div>
+		<div class="wrapper">
+			{% block content %}{% endblock %}
+		</div>
 	</div>
 
-	<footer></footer>
+	<footer>
+		<p>Sessió: <span style="color:red">{{ session.sid }}</span></p>
+	</footer>
 
 </body>
 </html>
