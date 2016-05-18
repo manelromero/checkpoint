@@ -1,17 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<!-- get flash messages -->
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-{% for message in messages %}
-<div class="flash">
-    <div class="flash-message">{{ message }}</div>
-</div>
-{% endfor %}
-{% endif %}
-{% endwith %}
-
 <div class="special">HOME</div>
 
 {% endblock %}

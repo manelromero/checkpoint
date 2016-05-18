@@ -28,7 +28,8 @@ def apiCall(command, json_payload, sid):
         headers=request_headers,
         verify=app.config['VERIFY']
         )
-    print '\n\nRESPONSE => ', r.json(), '\n\n'
+    if r.status_code != 200:
+        print '\nMESSAGE =>', r.json(), '\n'
     return r.json()
 
 
@@ -40,6 +41,21 @@ def instantiateObject(className):
 def instantiateForm(className, request):
     form_to_instantiate = globals()[className+'Form']
     return form_to_instantiate(request)
+
+
+def orderList(list):
+    # list.sort(key=lambda x: x.name, reverse=True)
+    newList = []
+    order = list[0].order()
+    for object in list:
+        newObject = {}
+        for element in order:
+            for attr, value in object.__dict__.items():
+                if attr == element:
+                    newObject[attr] = value
+        newList.append(newObject)
+
+    return newList
 
 
 def redirect_url(default='home'):

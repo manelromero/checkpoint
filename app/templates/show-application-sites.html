@@ -1,26 +1,18 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<h1>{{ className }}</h1>
+<h1>Aplicacions</h1>
 
 <div class="wrapper-object">
-<!-- get flash messages -->
-{% with messages = get_flashed_messages() %}
-    {% if messages %}
-        {% for message in messages %}
-        <div class="flash">
-            <div class="flash-message">{{ message }}</div>
-        </div>
-        {% endfor %}
-    {% endif %}
-{% endwith %}
 
     {% if objects %}
     <div class="table-header">
         <div class="header-row">
             {% for object in objects[:1] %}
-            {% for key, value in object.__dict__.items() %}
+            {% for key, value in object.items() %}
+            {% if key != 'uid' %}
             <div class="cell big-cell">{{ key }}</div>
+            {% endif %}
             {% endfor %}
             {% endfor %}
             <div class="cell small-cell center">Editar</div>
@@ -31,16 +23,18 @@
     <div class="table">
         {% for object in objects %}
         <div class="row">
-            {% for key, value in object.__dict__.items() %}
+            {% for key, value in object.items() %}
+            {% if key != 'uid' %}
             <div class="cell big-cell">{{ value }}</div>
+            {% endif %}
             {% endfor %}
             <div class="cell small-cell center">
-                <a href="{{ url_for('edit', className=className, action='set'+action[4:-1], object_uid=object.uid) }}">
+                <a href="{{ url_for('setApplicationSite', object_uid=object.uid) }}">
                     <img src="{{ url_for('static', filename='img/edit.svg') }}" class="icon" alt="Edit">
                 </a>
             </div>
             <div class="cell small-cell center">
-                <a href="{{ url_for('delete', className=className, action='delete'+action[4:-1], object_uid=object.uid) }}">
+                <a href="{{ url_for('deleteApplicationSite', object_uid=object.uid) }}">
                     <img src="{{ url_for('static', filename='img/garbage.svg') }}" class="icon" alt="Delete">
                 </a>
             </div>
@@ -49,7 +43,7 @@
     </div>
     {% endif %}
 
-    <a href="{{ url_for('add', action='add'+action[4:-1], className=className) }}"><button>Afegir</button></a>
+    <a href="{{ url_for('addApplicationSite') }}"><button>Afegir</button></a>
     <a href="{{ url_for('home') }}"><button>Tornar</button></a>
 
 {% include "sample-object.html" %}

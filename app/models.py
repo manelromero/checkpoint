@@ -26,11 +26,17 @@ class Network():
         self.subnet4 = subnet4,
         self.mask_length4 = mask_length4
 
+    def order(self):
+        return ['name', 'subnet4', 'mask_length4']
+
 
 class Group():
     def __init__(self, uid=None, name=None):
         self.uid = uid,
         self.name = name,
+
+    def order(self):
+        return ['name']
 
 
 class Host():
@@ -39,9 +45,16 @@ class Host():
         self.name = name,
         self.ipv4_address = ipv4_address
 
+    def order(self):
+        return ['name', 'ipv4_address']
+
 
 class ApplicationSite():
     def __init__(self, uid=None, name=None, description=None):
         self.uid = uid,
         self.name = name,
         self.description = description
+
+    def order(self):
+        return ['name', 'description']
+

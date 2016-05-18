@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h1>Aplicacions</h1>
+<h2>Esborrar aplicació</h2>
+
+<form action="{{ url_for('deleteApplicationSite', object_uid=object.uid) }}" method="POST">
+	<ul>
+		<li>Voleu esborrar la següent aplicació?</li>
+
+		{% for key, value in object.items() %}
+        {% if key != 'uid' %}
+		<li>{{ key }}: <span class="red">{{ value }}</span></li>
+		{% endif %}
+		{% endfor %}
+
+	</ul>
+	<input type="submit" value="Si">
+</form>
+<a href="{{ url_for('showApplicationSites') }}"><button>No</button></a>
+
+{% endblock %}

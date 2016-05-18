@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="error-message">
+	Canvis pendents: {{ session['changes'] }}
+</div>
+<div class="error-message">
+	Abans de sortir heu de <a href="{{ url_for('publish') }}">publicar</a> o <a href="{{ url_for('discard') }}">descartar</a> els canvis.
+</div>
+
+{% endblock %}

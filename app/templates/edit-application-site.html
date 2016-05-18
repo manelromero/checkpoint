@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h1>Aplicacions</h1>
+<h2>Editar aplicació</h2>
+
+<div class="wrapper-object">
+
+	{% if form %}
+	<form action="{{ url_for('setApplicationSite', object_uid=object.uid) }}" method="POST">
+
+		<ul>
+			<li>Esteu editant l'aplicació <span class="red">{{ object.Nom }}</span></li>
+			{% for element in form %}
+			<li>{{ element.label }}</li>
+			<li>{{ element (size=30)}}</li>
+			{% if element.errors %}
+				{% for error in element.errors %}
+					<span class="error">{{ error }}</span>
+				{% endfor %}
+			{% endif %}
+			{% endfor %}
+
+		</ul>
+		<input type="submit" value="Enviar">
+
+	</form>
+	{% endif %}
+
+    <a href="{{ url_for('showApplicationSites') }}"><button>Tornar</button></a>
+
+</div>
+
+{% endblock %}

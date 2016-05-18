@@ -3,48 +3,34 @@
 from wtforms import Form, StringField, IntegerField, validators
 
 
-class GroupForm(Form):
+class ApplicationSiteForm(Form):
     name = StringField('Nom', [
         validators.InputRequired(
             message="Heu d'introduir un nom"
             ),
         validators.Length(
-            max=15,
-            message=u'El nom no pot tenir més de 10 caràcters'
+            max=20,
+            message=u'El nom no pot tenir més de 20 lletres'
             )
         ])
 
-
-class NetworkForm(Form):
-    name = StringField('Nom', [
+    url_list = StringField("Llista d'URLs", [
         validators.InputRequired(
-            message="Heu d'introduir un nom"
+            message="Heu d'introduir una URL"
             ),
         validators.Length(
-            max=15,
-            message=u'El nom no pot tenir més de 10 caràcters'
+            max=30,
+            message=u"La llista d'URLs no pot tenir més de 30 lletres"
             )
         ])
 
-    subnet4 = StringField('Subnet', [
+    description = StringField(u'Descripció', [
         validators.InputRequired(
-            message=u"Heu d'introduir una adreça IPv4"
+            message=u"Heu d'introduir una descripció"
             ),
-        validators.IPAddress(
-            ipv4=True,
-            ipv6=False,
-            message=u"Heu d'introduir una adreça IPv4 vàlida"
-            )
-        ])
-
-    mask_length4 = IntegerField(u'Longitud màscara', [
-        validators.InputRequired(
-            message=u"Heu d'introduir un número"
-            ),
-        validators.NumberRange(
-            min=1,
-            max=100,
-            message=u"Heu d'introduir un número entre 1 i 100"
+        validators.Length(
+            max=25,
+            message=u'La descripció no pot tenir més de 25 caràcters'
             )
         ])
 
@@ -72,23 +58,47 @@ class HostForm(Form):
         ])
 
 
-class ApplicationSiteForm(Form):
+class NetworkForm(Form):
     name = StringField('Nom', [
         validators.InputRequired(
             message="Heu d'introduir un nom"
             ),
         validators.Length(
-            max=20,
-            message=u'El nom no pot tenir més de 20 lletres'
+            max=15,
+            message=u'El nom no pot tenir més de 10 caràcters'
             )
         ])
 
-    description = StringField(u'Descripció', [
+    subnet4 = StringField('Subnet IPv4', [
         validators.InputRequired(
-            message=u"Heu d'introduir una descripció"
+            message=u"Heu d'introduir una adreça IPv4"
+            ),
+        validators.IPAddress(
+            ipv4=True,
+            ipv6=False,
+            message=u"Heu d'introduir una adreça IPv4 vàlida"
+            )
+        ])
+
+    subnet_mask = StringField(u'Màscara de xarxa', [
+        validators.InputRequired(
+            message=u"Heu d'introduir una adreça IPv4"
+            ),
+        validators.IPAddress(
+            ipv4=True,
+            ipv6=False,
+            message=u"Heu d'introduir una adreça IPv4 vàlida"
+            )
+        ])
+
+
+class GroupForm(Form):
+    name = StringField('Nom', [
+        validators.InputRequired(
+            message="Heu d'introduir un nom"
             ),
         validators.Length(
-            max=25,
-            message=u'La descripció no pot tenir més de 25 caràcters'
+            max=15,
+            message=u'El nom no pot tenir més de 10 caràcters'
             )
         ])
