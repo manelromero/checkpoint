@@ -2,7 +2,8 @@
 
 from . import app
 from helpers import *
-from flask import request, render_template, redirect, url_for, flash, session, abort
+from flask import request, render_template, redirect, url_for, flash, session,\
+    abort
 from flask_login import LoginManager, login_user, login_required
 
 
@@ -49,7 +50,6 @@ def login():
     login_user(user)
     flash('Usuari registrat!')
     return redirect(url_for('home'))
-
 
 
 # logout
@@ -134,7 +134,11 @@ def showApplicationSites():
             u'Descripció': call['description']
         }
         objects.append(object)
-    return render_template('show-application-sites.html', objects=objects, sample=call)
+    return render_template(
+        'show-application-sites.html',
+        objects=objects,
+        sample=call
+        )
 
 
 # Edit application
@@ -363,13 +367,204 @@ def deleteNetwork(object_uid):
         return render_template('delete-network.html', object=object)
 
 
+###############
+# CRUD GROUPS #
+###############
+
+# Add group
+@app.route('/add-group', methods=['GET', 'POST'])
+@login_required
+def addGroup():
+    form = GroupForm(request.form)
+    if request.method == 'POST' and form.validate():
+        data = {
+            'name': form.name.data,
+            }
+        call = apiCall('add-group', data, session['sid'])
+        flash('Grup afegit!')
+        session['changes'] += 1
+        return redirect(url_for('showGroups'))
+    else:
+        return render_template('new-group.html', form=form)
+
+
+# Show groups
+@app.route('/show-groups')
+@login_required
+def showGroups():
+    objects = []
+    data = {}
+    call = apiCall('show-groups', data, session['sid'])
+    for element in call['objects']:
+        data = {'uid': element['uid']}
+        call = apiCall('show-group', data, session['sid'])
+        object = {
+            'uid': call['uid'],
+            'Nom': call['name'],
+            }
+        objects.append(object)
+    return render_template('show-groups.html', objects=objects, sample=call)
+
+
+# Edit group
+@app.route('/set-group/<object_uid>', methods=['GET', 'POST'])
+@login_required
+def setGroup(object_uid):
+    data = {'uid': object_uid}
+    call = apiCall('show-group', data, session['sid'])
+    form = GroupForm(request.form)
+    object = {
+        'uid': object_uid,
+        'Nom': call['name'],
+        }
+    if request.method == 'POST' and form.validate():
+        data = {
+            'uid': object_uid,
+            'new-name': form.name.data,
+            }
+        call = apiCall('set-group', data, session['sid'])
+        flash('Grup editat!')
+        session['changes'] += 1
+        return redirect(url_for('showGroups'))
+    else:
+        return render_template('edit-group.html', object=object, form=form)
+
+
+# Delete group
+@app.route('/delete-group/<object_uid>', methods=['GET', 'POST'])
+@login_required
+def deleteGroup(object_uid):
+    data = {'uid': object_uid}
+    call = apiCall('show-group', data, session['sid'])
+    object = {
+        'uid': object_uid,
+        'Nom': call['name'],
+        }
+    if request.method == 'POST':
+        call = apiCall('delete-group', data, session['sid'])
+        flash('Grup esborrat!')
+        session['changes'] += 1
+        return redirect(url_for('showGroups'))
+    else:
+        return render_template('delete-group.html', object=object)
+
+
+##############
+# CRUD RULES #
+##############
+
+# Add rule
+@app.route('/add-rule', methods=['GET', 'POST'])
+@login_required
+def addAccessRule():
+    form = AccessRuleForm(request.form)
+
+    # call hosts
+    objects = []
+    data = {}
+    call = apiCall('show-hosts', data, session['sid'])
+    for element in call['objects']:
+        objects.append((element['uid'], element['name']))
+    form.source.choices = objects
+
+    if request.method == 'POST' and form.validate():
+        data = {
+            'layer': app.config['LAYER'],
+            'position': 'top',
+            'action': 'Accept',
+            'enabled': True,
+            'name': form.name.data,
+            'source': form.source.data
+            }
+        call = apiCall('add-access-rule', data, session['sid'])
+        flash('Regla afegida!')
+        session['changes'] += 1
+        return redirect(url_for('showAccessRules'))
+    else:
+        return render_template('new-access-rule.html', form=form)
+
+
+# Show rules
+@app.route('/show-access-rulebase')
+@login_required
+def showAccessRules():
+    objects = []
+    data = {'name': app.config['LAYER']}
+    call = apiCall('show-access-rulebase', data, session['sid'])
+    for element in call['rulebase']:
+        data = {
+            'uid': element['uid'],
+            'layer': app.config['LAYER']
+            }
+        call = apiCall('show-access-rule', data, session['sid'])
+        object = {
+            'uid': call['uid'],
+            'Nom': call['name'],
+            'Origen': call['source'][0]['name'],
+            }
+        objects.append(object)
+    return render_template(
+        'show-access-rules.html',
+        objects=objects,
+        sample=call
+        )
+
+
+# Edit rule
+@app.route('/set-rule/<object_uid>', methods=['GET', 'POST'])
+@login_required
+def setAccessRule(object_uid):
+    data = {
+        'uid': object_uid,
+        'layer': app.config['LAYER']
+        }
+    call = apiCall('show-access-rule', data, session['sid'])
+    form = GroupForm(request.form)
+    object = {
+        'uid': object_uid,
+        'Nom': call['name'],
+        }
+    if request.method == 'POST' and form.validate():
+        data = {
+            'uid': object_uid,
+            'layer': app.config['LAYER']
+            }
+        call = apiCall('set-access-rule', data, session['sid'])
+        flash('Regla editada!')
+        session['changes'] += 1
+        return redirect(url_for('showAccessRules'))
+    else:
+        return render_template(
+            'edit-access-rule.html',
+            object=object,
+            form=form
+            )
+
+
+# Delete rule
+@app.route('/delete-rule/<object_uid>', methods=['GET', 'POST'])
+@login_required
+def deleteAccessRule(object_uid):
+    data = {
+        'uid': object_uid,
+        'layer': app.config['LAYER']
+        }
+    call = apiCall('show-access-rule', data, session['sid'])
+    object = {
+        'uid': object_uid,
+        'Nom': call['name']
+        }
+    if request.method == 'POST':
+        call = apiCall('delete-access-rule', data, session['sid'])
+        flash('Regla esborrada!')
+        session['changes'] += 1
+        return redirect(url_for('showAccessRules'))
+    else:
+        return render_template('delete-access-rule.html', object=object)
+
+
 ####################
 # Errors
 @app.errorhandler(401)
 def custom_401(error):
     return render_template('401.html')
-
-
-
-
-

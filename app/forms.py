@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from wtforms import Form, StringField, IntegerField, validators
+from wtforms import Form, StringField, IntegerField, SelectField, validators
 
 
 class ApplicationSiteForm(Form):
@@ -102,3 +102,22 @@ class GroupForm(Form):
             message=u'El nom no pot tenir més de 10 caràcters'
             )
         ])
+
+
+class AccessRuleForm(Form):
+    name = StringField('Nom', [
+        validators.InputRequired(
+            message="Heu d'introduir un nom"
+            ),
+        validators.Length(
+            max=15,
+            message=u'El nom no pot tenir més de 10 caràcters'
+            )
+        ])
+
+    source = SelectField('Origen', [
+        validators.InputRequired(
+            message=u'Heu de seleccionar una opció'
+            )
+        ])
+

@@ -119,6 +119,21 @@ input:focus {
 	outline: 0;
 }
 
+select {
+	padding: 0.2rem 0.5rem;
+	padding-right: 3rem;
+	font: 400 1.3rem 'Open Sans', sans-serif;
+	border: 1px solid #999;
+	margin-bottom: 1rem;
+	background: url('../img/down_arrow.png') no-repeat right #ddd;
+	border-radius: 0;
+	-webkit-appearance: none;
+}
+
+select:focus {
+	outline: 0;
+}
+
 nav {
 	width: 100%;
 	padding: 0 0.5rem;

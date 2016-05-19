@@ -1,17 +1,18 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<h1>{{ className + 's'}}</h1>
-<h2>Crear {{ className }}</h2>
+<h1>Grups</h1>
+<h2>Crear grup</h2>
 
 <div class="wrapper-object">
 
 	{% if form %}
-	<form action="{{ url_for('add', action=action, className=className) }}" method="POST">
+	<form action="{{ url_for('addGroup') }}" method="POST">
 
 		<ul>
 			{% for element in form %}
-			<li>{{ element.label }} {{ element }}</li>
+			<li>{{ element.label }}</li>
+			<li>{{ element (size=30) }}</li>
 			{% if element.errors %}
 				{% for error in element.errors %}
 					<span class="error">{{ error }}</span>
@@ -22,9 +23,9 @@
 		<input type="submit" value="Enviar">
 
 	</form>
-
-    <a href="{{ url_for('show', action='show-'+action[4:]+'s', className=className) }}"><button>Tornar</button></a>
     {% endif %}
+
+    <a href="{{ url_for('showGroups') }}"><button>Tornar</button></a>
 
 </div>
 

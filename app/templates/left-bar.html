@@ -41,21 +41,22 @@
         <a href="{{ url_for('addNetwork') }}">Afegir xarxa</a>
     </div>
 
-    <h3>Regles</h3>
-    <div>
-        <a href="{{ url_for('showApplicationSites') }}">Mostrar aplicacions</a>
-    </div>
-    <div>
-        <a href="{{ url_for('addApplicationSite') }}">Afegir aplicació</a>
-    </div>
-
     <h3>Grups</h3>
     <div>
-        <a href="{{ url_for('showApplicationSites') }}">Mostrar aplicacions</a>
+        <a href="{{ url_for('showGroups') }}">Mostrar grups</a>
     </div>
     <div>
-        <a href="{{ url_for('addApplicationSite') }}">Afegir aplicació</a>
+        <a href="{{ url_for('addGroup') }}">Afegir grup</a>
     </div>
+
+    <h3>Regles</h3>
+    <div>
+        <a href="{{ url_for('showAccessRules') }}">Mostrar regles</a>
+    </div>
+    <div>
+        <a href="{{ url_for('addAccessRule') }}">Afegir regla</a>
+    </div>
+
 </div>
 
 {% endblock %}
