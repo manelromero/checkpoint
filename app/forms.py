@@ -121,3 +121,32 @@ class AccessRuleForm(Form):
             )
         ])
 
+    service = SelectField(u'Aplicació', [
+        validators.InputRequired(
+            message=u'Heu de seleccionar una opció'
+            )
+        ])
+
+class ApplicationSiteGroup(Form):
+    name = StringField('Nom', [
+        validators.InputRequired(
+            message="Heu d'introduir un nom"
+            ),
+        validators.Length(
+            max=15,
+            message=u'El nom no pot tenir més de 10 caràcters'
+            )
+        ])
+
+    creation_time = SelectField('Creat', [
+        validators.InputRequired(
+            message=u'Heu de seleccionar una opció'
+            )
+        ])
+
+    last_modify_time = SelectField('Modificat', [
+        validators.InputRequired(
+            message=u'Heu de seleccionar una opció'
+            )
+        ])
+

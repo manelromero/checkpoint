@@ -15,8 +15,13 @@ login_manager.init_app(app)
 # login manager
 @login_manager.user_loader
 def load_user(user_id):
-    user = User(uid=session['sid'], username=session['username'])
-    return User.get(user)
+    call = apiCall('show-session', {}, session['sid'])
+    try:
+        call['errors']
+        print '\nERROR =>', call['errors']
+    except:
+        user = User(uid=session['sid'], username=session['username'])
+        return User.get(user)
 
 
 # home
@@ -108,7 +113,8 @@ def addApplicationSite():
             'name': form.name.data,
             'url-list': form.url_list.data,
             'description': form.description.data,
-            'primary-category': 'Custom_Application_Site'
+            'primary-category': 'Custom_Application_Site',
+            'groups': app.config['DEFAULT_APP_GROUP']
         }
         call = apiCall('add-application-site', data, session['sid'])
         flash('Aplicacio afegida!')
@@ -116,29 +122,6 @@ def addApplicationSite():
         return redirect(url_for('showApplicationSites'))
     else:
         return render_template('new-application-site.html', form=form)
-
-
-# Show applications
-@app.route('/show-application-sites')
-@login_required
-def showApplicationSites():
-    objects = []
-    data = {'limit': 10}
-    call = apiCall('show-application-sites', data, session['sid'])
-    for element in call['objects']:
-        data = {'uid': element['uid']}
-        call = apiCall('show-application-site', data, session['sid'])
-        object = {
-            'uid': call['uid'],
-            'Nom': call['name'],
-            u'Descripció': call['description']
-        }
-        objects.append(object)
-    return render_template(
-        'show-application-sites.html',
-        objects=objects,
-        sample=call
-        )
 
 
 # Edit application
@@ -462,10 +445,22 @@ def addAccessRule():
     # call hosts
     objects = []
     data = {}
-    call = apiCall('show-hosts', data, session['sid'])
+    call = apiCall('show-groups', data, session['sid'])
     for element in call['objects']:
         objects.append((element['uid'], element['name']))
+
+    # add options
     form.source.choices = objects
+
+    # call hosts
+    objects = []
+    data = {}
+    call = apiCall('show-application-site-groups', data, session['sid'])
+    for element in call['objects']:
+        objects.append((element['uid'], element['name']))
+
+    # add options
+    form.service.choices = objects
 
     if request.method == 'POST' and form.validate():
         data = {
@@ -474,7 +469,8 @@ def addAccessRule():
             'action': 'Accept',
             'enabled': True,
             'name': form.name.data,
-            'source': form.source.data
+            'source': form.source.data,
+            'service': form.service.data
             }
         call = apiCall('add-access-rule', data, session['sid'])
         flash('Regla afegida!')
@@ -501,6 +497,7 @@ def showAccessRules():
             'uid': call['uid'],
             'Nom': call['name'],
             'Origen': call['source'][0]['name'],
+            u'Destinació': call['destination'][0]['name'],
             }
         objects.append(object)
     return render_template(
@@ -514,12 +511,34 @@ def showAccessRules():
 @app.route('/set-rule/<object_uid>', methods=['GET', 'POST'])
 @login_required
 def setAccessRule(object_uid):
+    form = AccessRuleForm(request.form)
+
+    # call hosts
+    objects = []
+    data = {}
+    call = apiCall('show-hosts', data, session['sid'])
+    for element in call['objects']:
+        objects.append((element['uid'], element['name']))
+
+    # call networks
+    call = apiCall('show-networks', data, session['sid'])
+    for element in call['objects']:
+        objects.append((element['uid'], element['name']))
+
+    # call groups
+    call = apiCall('show-groups', data, session['sid'])
+    for element in call['objects']:
+        objects.append((element['uid'], element['name']))
+
+    # add options
+    form.source.choices = objects
+    form.destination.choices = objects
+
     data = {
         'uid': object_uid,
         'layer': app.config['LAYER']
         }
     call = apiCall('show-access-rule', data, session['sid'])
-    form = GroupForm(request.form)
     object = {
         'uid': object_uid,
         'Nom': call['name'],
@@ -527,7 +546,10 @@ def setAccessRule(object_uid):
     if request.method == 'POST' and form.validate():
         data = {
             'uid': object_uid,
-            'layer': app.config['LAYER']
+            'layer': app.config['LAYER'],
+            'new-name': form.name.data,
+            'source': form.source.data,
+            'destination': form.destination.data
             }
         call = apiCall('set-access-rule', data, session['sid'])
         flash('Regla editada!')
@@ -568,3 +590,84 @@ def deleteAccessRule(object_uid):
 @app.errorhandler(401)
 def custom_401(error):
     return render_template('401.html')
+
+
+
+###################
+# CRUD APP GROUPS #
+###################
+
+# Show app groups
+@app.route('/show-application-site-groups')
+@login_required
+def showApplicationSiteGroups():
+    objects = []
+    call = apiCall('show-application-site-groups', {}, session['sid'])
+    order = 0
+    for element in call['objects']:
+        data = {'uid': element['uid']}
+        call = apiCall('show-application-site-group', data, session['sid'])
+        object = {
+            'order': order,
+            'uid': call['uid'],
+            'Nom': call['name'],
+            'Creat': call['meta-info']['creation-time']['posix'],
+            'Modificat': call['meta-info']['last-modify-time']['posix']
+        }
+        objects.append(object)
+        order += 1
+    return render_template(
+        'show-application-site-groups.html',
+        objects=objects
+        )
+
+# Show applications
+@app.route('/show-application-site-group-members/<group_id>')
+@login_required
+def showApplicationSiteGroupMembers(group_id):
+    objects = []
+    data = {'uid': group_id, 'details-level': 'full'}
+    call = apiCall('show-application-site-group', data, session['sid'])
+    for element in call['members']:
+        object = {
+            'members': element['url-list'][0]
+        }
+        objects.append(object)
+    return render_template(
+        'show-application-site-group-members.html',
+        objects=objects,
+        )
+
+
+
+
+# @app.route('/show-application-site-groups')
+# @login_required
+# def showApplicationSiteGroups():
+#     objects = []
+#     members = []
+#     call = apiCall('show-application-site-groups', {}, session['sid'])
+#     for element in call['objects']:
+#         data = {'uid': element['uid']}
+#         call = apiCall('show-application-site-group', data, session['sid'])
+#         object = {
+#             'uid': call['uid'],
+#             'Nom': call['name'],
+#         }
+#         for elem in call['members']:
+#             data = {'uid': elem['uid']}
+#             call = apiCall('show-application-site', data, session['sid'])
+#             member = {
+#                 'url_list': call['url-list']
+#                 }
+#             members.append(member)
+#         object['members'] = members
+#         members = []
+#         objects.append(object)
+#     return render_template(
+#         'show-application-site-groups.html',
+#         objects=objects,
+#         members=members,
+#         sample=call
+#         )
+

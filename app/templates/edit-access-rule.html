@@ -2,14 +2,16 @@
 {% block content %}
 
 <h1>Regles</h1>
-<h2>Crear regla</h2>
+<h2>Editar regla</h2>
 
 <div class="wrapper-object">
 
 	{% if form %}
-	<form action="{{ url_for('addAccessRule') }}" method="POST">
+	<form action="{{ url_for('setAccessRule', object_uid=object.uid) }}" method="POST">
 
 		<ul>
+			<li>Esteu editant el host <span class="red">{{ object.Nom }}</span></li>
+
 			<li>{{ form.name.label }}</li>
 			<li>{{ form.name (size=30) }}</li>
 			{% if form.name.errors %}
@@ -26,10 +28,10 @@
 				{% endfor %}
 			{% endif %}
 
-			<li>{{ form.service.label }}</li>
-			<li>{{ form.service (size=1) }}</li>
-			{% if form.service.errors %}
-				{% for error in form.service.errors %}
+			<li>{{ form.destination.label }}</li>
+			<li>{{ form.destination (size=1) }}</li>
+			{% if form.destination.errors %}
+				{% for error in form.destination.errors %}
 					<span class="error">{{ error }}</span>
 				{% endfor %}
 			{% endif %}
@@ -37,7 +39,7 @@
 		<input type="submit" value="Enviar">
 
 	</form>
-    {% endif %}
+	{% endif %}
 
     <a href="{{ url_for('showAccessRules') }}"><button>Tornar</button></a>
 

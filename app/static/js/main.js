@@ -13,4 +13,17 @@ $(document).ready(function() {
 		$(this).css('background-color', '#fff');
 	});
 
+    $('.app-group').click(function() {
+    	var uid = $(this).data('uid');
+    	$.ajax({
+    		url: $SCRIPT_ROOT + '/show-application-site-group-members/' + uid,
+    		async: false,
+    		success: function(data) {
+    			$('[data-group=' + uid + ']').html(data);
+    		}
+    	});
+    	$('[data-group=' + uid + ']').slideToggle(300)
+
+    });
+
 });

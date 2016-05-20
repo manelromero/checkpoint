@@ -1,20 +1,16 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<h1>Aplicacions</h1>
+<h1>App Grups</h1>
 
 <div class="wrapper-object">
 
     {% if objects %}
     <div class="table-header">
         <div class="header-row">
-            {% for object in objects[:1] %}
-            {% for key, value in object.items() %}
-            {% if key != 'uid' %}
-            <div class="cell big-cell">{{ key }}</div>
-            {% endif %}
-            {% endfor %}
-            {% endfor %}
+            <div class="cell big-cell">Nom</div>
+            <div class="cell medium-cell">Creat</div>
+            <div class="cell medium-cell">Modificat</div>
             <div class="cell small-cell center">Editar</div>
             <div class="cell small-cell center">Esborrar</div>
         </div>
@@ -22,12 +18,10 @@
 
     <div class="table">
         {% for object in objects %}
-        <div class="row">
-            {% for key, value in object.items() %}
-            {% if key != 'uid' %}
-            <div class="cell big-cell">{{ value }}</div>
-            {% endif %}
-            {% endfor %}
+        <div class="row app-group" data-uid={{ object.uid }}>
+            <div class="cell big-cell">{{ object.Nom }}</div>
+            <div class="cell medium-cell">{{ object.Creat|datetimeformat }}</div>
+            <div class="cell medium-cell">{{ object.Modificat|datetimeformat }}</div>
             <div class="cell small-cell center">
                 <a href="{{ url_for('setApplicationSite', object_uid=object.uid) }}">
                     <img src="{{ url_for('static', filename='img/edit.svg') }}" class="icon" alt="Edit">
@@ -37,8 +31,9 @@
                 <a href="{{ url_for('deleteApplicationSite', object_uid=object.uid) }}">
                     <img src="{{ url_for('static', filename='img/garbage.svg') }}" class="icon" alt="Delete">
                 </a>
-            </div>
+            </div>            
         </div>
+        <div class="members" data-group={{ object.uid }}></div>
         {% endfor %}
     </div>
     {% endif %}
@@ -48,7 +43,6 @@
 
 {% include "sample-object.html" %}
 {% block object %}{% endblock %}
-
 
 </div>
 

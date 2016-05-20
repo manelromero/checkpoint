@@ -17,44 +17,23 @@
         <a href="{{ url_for('sessionClear') }}">session.clear()</a>
     </div>
 
-    <h3>Aplicacions</h3>
+    <h3>Accions</h3>
     <div>
-        <a href="{{ url_for('showApplicationSites') }}">Mostrar aplicacions</a>
+        <a href="{{ url_for('showHosts') }}">Permetre accés</a>
     </div>
     <div>
-        <a href="{{ url_for('addApplicationSite') }}">Afegir aplicació</a>
-    </div>
-
-    <h3>Hosts</h3>
-    <div>
-        <a href="{{ url_for('showHosts') }}">Mostrar hosts</a>
+        <a href="{{ url_for('showHosts') }}">Bloquejar host</a>
     </div>
     <div>
-        <a href="{{ url_for('addHost') }}">Afegir host</a>
+        <a href="{{ url_for('showHosts') }}">Gestionar grups</a>
+    </div>
+    <div>
+        <a href="{{ url_for('showHosts') }}">Gestionar grups d'URLs</a>
     </div>
 
-    <h3>Xarxes</h3>
+    <h3>Extra</h3>
     <div>
-        <a href="{{ url_for('showNetworks') }}">Mostrar xarxes</a>
-    </div>
-    <div>
-        <a href="{{ url_for('addNetwork') }}">Afegir xarxa</a>
-    </div>
-
-    <h3>Grups</h3>
-    <div>
-        <a href="{{ url_for('showGroups') }}">Mostrar grups</a>
-    </div>
-    <div>
-        <a href="{{ url_for('addGroup') }}">Afegir grup</a>
-    </div>
-
-    <h3>Regles</h3>
-    <div>
-        <a href="{{ url_for('showAccessRules') }}">Mostrar regles</a>
-    </div>
-    <div>
-        <a href="{{ url_for('addAccessRule') }}">Afegir regla</a>
+        <a href="{{ url_for('showApplicationSiteGroups') }}">App Groups</a>
     </div>
 
 </div>
