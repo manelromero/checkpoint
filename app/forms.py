@@ -2,6 +2,17 @@
 
 from wtforms import Form, StringField, IntegerField, SelectField, validators
 
+class ApplicationSiteGroupForm(Form):
+    name = StringField('Nom', [
+        validators.InputRequired(
+            message="Heu d'introduir un nom"
+            ),
+        validators.Length(
+            max=15,
+            message=u'El nom no pot tenir més de 10 caràcters'
+            )
+        ])
+
 
 class ApplicationSiteForm(Form):
     name = StringField('Nom', [
@@ -14,13 +25,13 @@ class ApplicationSiteForm(Form):
             )
         ])
 
-    url_list = StringField("Llista d'URLs", [
+    url_list = StringField(u'URL', [
         validators.InputRequired(
-            message="Heu d'introduir una URL"
+            message=u"Heu d'introduir una descripció"
             ),
         validators.Length(
-            max=30,
-            message=u"La llista d'URLs no pot tenir més de 30 lletres"
+            max=25,
+            message=u'La descripció no pot tenir més de 25 caràcters'
             )
         ])
 
@@ -126,27 +137,3 @@ class AccessRuleForm(Form):
             message=u'Heu de seleccionar una opció'
             )
         ])
-
-class ApplicationSiteGroup(Form):
-    name = StringField('Nom', [
-        validators.InputRequired(
-            message="Heu d'introduir un nom"
-            ),
-        validators.Length(
-            max=15,
-            message=u'El nom no pot tenir més de 10 caràcters'
-            )
-        ])
-
-    creation_time = SelectField('Creat', [
-        validators.InputRequired(
-            message=u'Heu de seleccionar una opció'
-            )
-        ])
-
-    last_modify_time = SelectField('Modificat', [
-        validators.InputRequired(
-            message=u'Heu de seleccionar una opció'
-            )
-        ])
-

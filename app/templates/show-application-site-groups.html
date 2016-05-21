@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<h1>App Grups</h1>
+<h1>Grups d'aplicacions</h1>
 
 <div class="wrapper-object">
 
@@ -28,21 +28,18 @@
                 </a>
             </div>
             <div class="cell small-cell center">
-                <a href="{{ url_for('deleteApplicationSite', object_uid=object.uid) }}">
+                <a href="{{ url_for('deleteApplicationSiteGroup', object_uid=object.uid) }}">
                     <img src="{{ url_for('static', filename='img/garbage.svg') }}" class="icon" alt="Delete">
                 </a>
-            </div>            
+            </div>
         </div>
         <div class="members" data-group={{ object.uid }}></div>
         {% endfor %}
     </div>
     {% endif %}
 
-    <a href="{{ url_for('addApplicationSite') }}"><button>Afegir</button></a>
+    <a href="{{ url_for('addApplicationSiteGroup') }}"><button>Afegir</button></a>
     <a href="{{ url_for('home') }}"><button>Tornar</button></a>
-
-{% include "sample-object.html" %}
-{% block object %}{% endblock %}
 
 </div>
 

@@ -72,17 +72,25 @@ def logout():
 
 
 # publish
-@app.route('/publish')
+@app.route('/publish/<after_publish>')
 @login_required
-def publish():
+def publish(after_publish):
     if session['changes'] == 0:
-        flash('No hi ha canvis')
         return redirect(url_for('home'))
     data = {}
     call = apiCall('publish', data, session['sid'])
-    flash('Canvis publicats!')
-    session['changes'] = 0
-    return redirect(url_for('home'))
+    print '\n\nPUBLISH ANSWER:', call
+    if call['task-id']:
+        session['changes'] = 0
+        return render_template(
+            'publish-correct.html',
+            after_publish=after_publish
+            )
+    else:
+        return render_template(
+            'publish-error.html',
+            after_publish=after_publish
+            )
 
 
 # discard
@@ -97,78 +105,6 @@ def discard():
     flash('Canvis descartats!')
     session['changes'] = 0
     return redirect(url_for('home'))
-
-
-#####################
-# CRUD APPLICATIONS #
-#####################
-
-# Add application
-@app.route('/add-application-site', methods=['GET', 'POST'])
-@login_required
-def addApplicationSite():
-    form = ApplicationSiteForm(request.form)
-    if request.method == 'POST' and form.validate():
-        data = {
-            'name': form.name.data,
-            'url-list': form.url_list.data,
-            'description': form.description.data,
-            'primary-category': 'Custom_Application_Site',
-            'groups': app.config['DEFAULT_APP_GROUP']
-        }
-        call = apiCall('add-application-site', data, session['sid'])
-        flash('Aplicacio afegida!')
-        session['changes'] += 1
-        return redirect(url_for('showApplicationSites'))
-    else:
-        return render_template('new-application-site.html', form=form)
-
-
-# Edit application
-@app.route('/set-application-site/<object_uid>', methods=['GET', 'POST'])
-@login_required
-def setApplicationSite(object_uid):
-    data = {'uid': object_uid}
-    call = apiCall('show-application-site', data, session['sid'])
-    form = ApplicationSiteForm(request.form)
-    object = {
-        'uid': object_uid,
-        'Nom': call['name'],
-        u'Descripció': call['description']
-        }
-    if request.method == 'POST' and form.validate():
-        data = {'uid': object_uid}
-        call = apiCall('set-application-site', data, session['sid'])
-        flash(u'Aplicació modificada!')
-        session['changes'] += 1
-        return redirect(url_for('showApplicationSites'))
-    else:
-        return render_template(
-            'edit-application-site.html',
-            object=object,
-            form=form
-            )
-
-
-# Delete application
-@app.route('/delete-application-site/<object_uid>', methods=['GET', 'POST'])
-@login_required
-def deleteApplicationSite(object_uid):
-    data = {'uid': object_uid}
-    call = apiCall('show-application-site', data, session['sid'])
-    object = {
-        'uid': call['uid'],
-        'Nom': call['name'],
-        u'Descripció': call['description']
-        }
-    if request.method == 'POST':
-        print 'DATA =>', data
-        call = apiCall('delete-application-site', data, session['sid'])
-        flash('Element esborrat')
-        session['changes'] += 1
-        return redirect(url_for('showApplicationSites'))
-    else:
-        return render_template('delete-application-site.html', object=object)
 
 
 ##############
@@ -350,88 +286,6 @@ def deleteNetwork(object_uid):
         return render_template('delete-network.html', object=object)
 
 
-###############
-# CRUD GROUPS #
-###############
-
-# Add group
-@app.route('/add-group', methods=['GET', 'POST'])
-@login_required
-def addGroup():
-    form = GroupForm(request.form)
-    if request.method == 'POST' and form.validate():
-        data = {
-            'name': form.name.data,
-            }
-        call = apiCall('add-group', data, session['sid'])
-        flash('Grup afegit!')
-        session['changes'] += 1
-        return redirect(url_for('showGroups'))
-    else:
-        return render_template('new-group.html', form=form)
-
-
-# Show groups
-@app.route('/show-groups')
-@login_required
-def showGroups():
-    objects = []
-    data = {}
-    call = apiCall('show-groups', data, session['sid'])
-    for element in call['objects']:
-        data = {'uid': element['uid']}
-        call = apiCall('show-group', data, session['sid'])
-        object = {
-            'uid': call['uid'],
-            'Nom': call['name'],
-            }
-        objects.append(object)
-    return render_template('show-groups.html', objects=objects, sample=call)
-
-
-# Edit group
-@app.route('/set-group/<object_uid>', methods=['GET', 'POST'])
-@login_required
-def setGroup(object_uid):
-    data = {'uid': object_uid}
-    call = apiCall('show-group', data, session['sid'])
-    form = GroupForm(request.form)
-    object = {
-        'uid': object_uid,
-        'Nom': call['name'],
-        }
-    if request.method == 'POST' and form.validate():
-        data = {
-            'uid': object_uid,
-            'new-name': form.name.data,
-            }
-        call = apiCall('set-group', data, session['sid'])
-        flash('Grup editat!')
-        session['changes'] += 1
-        return redirect(url_for('showGroups'))
-    else:
-        return render_template('edit-group.html', object=object, form=form)
-
-
-# Delete group
-@app.route('/delete-group/<object_uid>', methods=['GET', 'POST'])
-@login_required
-def deleteGroup(object_uid):
-    data = {'uid': object_uid}
-    call = apiCall('show-group', data, session['sid'])
-    object = {
-        'uid': object_uid,
-        'Nom': call['name'],
-        }
-    if request.method == 'POST':
-        call = apiCall('delete-group', data, session['sid'])
-        flash('Grup esborrat!')
-        session['changes'] += 1
-        return redirect(url_for('showGroups'))
-    else:
-        return render_template('delete-group.html', object=object)
-
-
 ##############
 # CRUD RULES #
 ##############
@@ -585,11 +439,97 @@ def deleteAccessRule(object_uid):
         return render_template('delete-access-rule.html', object=object)
 
 
-####################
 # Errors
 @app.errorhandler(401)
 def custom_401(error):
     return render_template('401.html')
+
+
+##############################################################################
+##############################################################################
+##############################################################################
+
+
+###############
+# CRUD GROUPS #
+###############
+
+# Add group
+@app.route('/add-group', methods=['GET', 'POST'])
+@login_required
+def addGroup():
+    form = GroupForm(request.form)
+    if request.method == 'POST' and form.validate():
+        data = {
+            'name': form.name.data,
+            }
+        call = apiCall('add-group', data, session['sid'])
+        flash('Grup afegit!')
+        session['changes'] += 1
+        return redirect(url_for('publish', after_publish='showGroups'))
+    else:
+        return render_template('new-group.html', form=form)
+
+
+# Show groups
+@app.route('/show-groups')
+@login_required
+def showGroups():
+    objects = []
+    data = {}
+    call = apiCall('show-groups', data, session['sid'])
+    for element in call['objects']:
+        data = {'uid': element['uid']}
+        call = apiCall('show-group', data, session['sid'])
+        object = {
+            'uid': call['uid'],
+            'Nom': call['name'],
+            }
+        objects.append(object)
+    return render_template('show-groups.html', objects=objects)
+
+
+# Edit group
+@app.route('/set-group/<object_uid>', methods=['GET', 'POST'])
+@login_required
+def setGroup(object_uid):
+    data = {'uid': object_uid}
+    call = apiCall('show-group', data, session['sid'])
+    form = GroupForm(request.form)
+    object = {
+        'uid': object_uid,
+        'Nom': call['name'],
+        }
+    if request.method == 'POST' and form.validate():
+        data = {
+            'uid': object_uid,
+            'new-name': form.name.data,
+            }
+        call = apiCall('set-group', data, session['sid'])
+        flash('Grup editat!')
+        session['changes'] += 1
+        return redirect(url_for('publish', after_publish='showGroups'))
+    else:
+        return render_template('edit-group.html', object=object, form=form)
+
+
+# Delete group
+@app.route('/delete-group/<object_uid>', methods=['GET', 'POST'])
+@login_required
+def deleteGroup(object_uid):
+    data = {'uid': object_uid}
+    call = apiCall('show-group', data, session['sid'])
+    object = {
+        'uid': object_uid,
+        'Nom': call['name'],
+        }
+    if request.method == 'POST':
+        call = apiCall('delete-group', data, session['sid'])
+        flash('Grup esborrat!')
+        session['changes'] += 1
+        return redirect(url_for('publish', after_publish='showGroups'))
+    else:
+        return render_template('delete-group.html', object=object)
 
 
 
@@ -597,7 +537,27 @@ def custom_401(error):
 # CRUD APP GROUPS #
 ###################
 
-# Show app groups
+# Add applications group member
+@app.route('/add-application-site-group', methods=['GET', 'POST'])
+@login_required
+def addApplicationSiteGroup():
+    form = ApplicationSiteGroupForm(request.form)
+    if request.method == 'POST' and form.validate():
+        data = {
+            'name': form.name.data
+        }
+        call = apiCall('add-application-site-group', data, session['sid'])
+        flash("Grup d'aplicacions afegit!")
+        session['changes'] += 1
+        return redirect(url_for(
+            'publish',
+            after_publish='showApplicationSiteGroups'
+            ))
+    else:
+        return render_template('new-application-site-group.html', form=form)
+
+
+# Show applications groups
 @app.route('/show-application-site-groups')
 @login_required
 def showApplicationSiteGroups():
@@ -621,53 +581,124 @@ def showApplicationSiteGroups():
         objects=objects
         )
 
-# Show applications
-@app.route('/show-application-site-group-members/<group_id>')
+
+# Delete applications group member
+@app.route('/delete-application-site-group/<object_uid>', methods=['GET', 'POST'])
 @login_required
-def showApplicationSiteGroupMembers(group_id):
+def deleteApplicationSiteGroup(object_uid):
+    data = {'uid': object_uid}
+    call = apiCall('show-application-site-group', data, session['sid'])
+    object = {
+        'uid': call['uid'],
+        'name': call['name']
+        }
+    if request.method == 'POST':
+        call = apiCall('delete-application-site-group', data, session['sid'])
+        flash('Grup esborrat')
+        session['changes'] += 1
+        return redirect(url_for(
+            'publish',
+            after_publish='showApplicationSiteGroups'
+            ))
+    else:
+        return render_template('delete-application-site-group.html', object=object)
+
+
+#####################
+# CRUD APPLICATIONS #
+#####################
+
+# Add applications group member
+@app.route('/add-application-site', methods=['POST'])
+@login_required
+def addApplicationSite():
+    form = ApplicationSiteForm(request.form)
+    if form.validate():
+        data = {
+            'name': form.name.data,
+            'url-list': form.url_list.data,
+            'description': form.description.data,
+            'primary-category': 'Custom_Application_Site',
+            'groups': app.config['DEFAULT_APP_GROUP']
+        }
+        call = apiCall('add-application-site', data, session['sid'])
+        flash(u'Aplicació afegida!')
+        session['changes'] += 1
+        return redirect(url_for(
+            'publish',
+            after_publish='showApplicationSiteGroups'
+            ))
+    else:
+        return render_template('new-application-site.html', form=form)
+
+
+# Show applications group members
+@app.route('/show-application-sites/<group_id>')
+@login_required
+def showApplicationSites(group_id):
     objects = []
+    form = ApplicationSiteForm(request.form)
     data = {'uid': group_id, 'details-level': 'full'}
     call = apiCall('show-application-site-group', data, session['sid'])
     for element in call['members']:
         object = {
-            'members': element['url-list'][0]
+            'uid': element['uid'],
+            'name': element['name'],
+            'url': element['url-list'][0],
+            'description': element['description']
         }
         objects.append(object)
     return render_template(
-        'show-application-site-group-members.html',
+        'show-application-sites.html',
         objects=objects,
+        form=form
         )
 
 
+# Edit application group member (Pending)
+@app.route('/set-application-site/<object_uid>', methods=['GET', 'POST'])
+@login_required
+def setApplicationSite(object_uid):
+    data = {'uid': object_uid}
+    call = apiCall('show-application-site', data, session['sid'])
+    form = ApplicationSiteForm(request.form)
+    object = {
+        'uid': object_uid,
+        'Nom': call['name'],
+        u'Descripció': call['description']
+        }
+    if request.method == 'POST' and form.validate():
+        data = {'uid': object_uid}
+        call = apiCall('set-application-site', data, session['sid'])
+        flash(u'Aplicació modificada!')
+        session['changes'] += 1
+        return redirect(url_for('showApplicationSites'))
+    else:
+        return render_template(
+            'edit-application-site.html',
+            object=object,
+            form=form
+            )
 
 
-# @app.route('/show-application-site-groups')
-# @login_required
-# def showApplicationSiteGroups():
-#     objects = []
-#     members = []
-#     call = apiCall('show-application-site-groups', {}, session['sid'])
-#     for element in call['objects']:
-#         data = {'uid': element['uid']}
-#         call = apiCall('show-application-site-group', data, session['sid'])
-#         object = {
-#             'uid': call['uid'],
-#             'Nom': call['name'],
-#         }
-#         for elem in call['members']:
-#             data = {'uid': elem['uid']}
-#             call = apiCall('show-application-site', data, session['sid'])
-#             member = {
-#                 'url_list': call['url-list']
-#                 }
-#             members.append(member)
-#         object['members'] = members
-#         members = []
-#         objects.append(object)
-#     return render_template(
-#         'show-application-site-groups.html',
-#         objects=objects,
-#         members=members,
-#         sample=call
-#         )
-
+# Delete application group member
+@app.route('/delete-application-site/<object_uid>', methods=['GET', 'POST'])
+@login_required
+def deleteApplicationSite(object_uid):
+    data = {'uid': object_uid}
+    call = apiCall('show-application-site', data, session['sid'])
+    object = {
+        'uid': call['uid'],
+        'Nom': call['name'],
+        'URL': call['url-list'][0],
+        }
+    if request.method == 'POST':
+        call = apiCall('delete-application-site', data, session['sid'])
+        flash('Element esborrat')
+        session['changes'] += 1
+        return redirect(url_for(
+            'publish',
+            after_publish='showApplicationSiteGroups'
+            ))
+    else:
+        return render_template('delete-application-site.html', object=object)

@@ -1,0 +1,47 @@
+{%- if objects -%}
+<div class="member-header">
+    <div class="cell big-cell">Nom</div>
+    <div class="cell big-cell">URL</div>
+    <div class="cell big-cell">Descripció</div>
+    <div class="cell small-cell center">Editar</div>
+    <div class="cell small-cell center">Esborrar</div>
+</div>
+
+{%- for object in objects -%}
+<div class="member">
+    <div class="cell big-cell">{{ object.name }}</div>
+    <div class="cell big-cell">{{ object.url }}</div>
+    <div class="cell big-cell">{{ object.description }}</div>
+    <div class="cell small-cell center">
+        <a href="{{ url_for('setApplicationSite', object_uid=object.uid) }}">
+            <img src="{{ url_for('static', filename='img/edit.svg') }}" class="icon" alt="Edit">
+        </a>
+    </div>
+    <div class="cell small-cell center">
+        <a href="{{ url_for('deleteApplicationSite', object_uid=object.uid) }}">
+            <img src="{{ url_for('static', filename='img/garbage.svg') }}" class="icon" alt="Delete">
+        </a>
+    </div>
+</div>
+{%- endfor -%}
+{%- endif -%}
+
+
+{% if form %}
+<div class="member">
+    <form class="form-member" action="{{ url_for('addApplicationSite') }}" method="POST">
+    {% for element in form %}
+        <div class="cell big-cell">{{ element (size=25) }}</div>
+        {%- if element.errors -%}
+            {% for error in element.errors %}
+            <span class="error">{{ error }}</span>
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+        <div class="cell small-cell center">
+            <input type="image" name="submit" src="{{ url_for('static', filename='img/accept.svg') }}" alt="Enviar" class="icon">
+        </div>
+        <div class="cell small-cell center"></div>
+    </form>
+</div>
+{% endif %}

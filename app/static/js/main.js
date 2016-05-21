@@ -16,7 +16,7 @@ $(document).ready(function() {
     $('.app-group').click(function() {
     	var uid = $(this).data('uid');
     	$.ajax({
-    		url: $SCRIPT_ROOT + '/show-application-site-group-members/' + uid,
+    		url: $SCRIPT_ROOT + '/show-application-sites/' + uid,
     		async: false,
     		success: function(data) {
     			$('[data-group=' + uid + ']').html(data);

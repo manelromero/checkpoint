@@ -192,7 +192,6 @@ nav {
 .icon {
 	position: relative;
 	top: 0.2rem;
-	width: 1rem;
 	height: 1rem;
 	opacity: 0.6;
 }
@@ -264,8 +263,6 @@ nav {
 
 .cell {
 	padding: 0 0.5rem;
-	justify-content: center;
-	min-width: 50px;
 }
 
 .clear {
@@ -281,9 +278,9 @@ input[type=submit] {
 	margin-left: 0;
     background-color: #fff;
     color: #bf0000;
-	font: 600 1rem 'Open Sans', sans-serif;
+	font: 600 0.9rem 'Open Sans', sans-serif;
     border: 2px solid #bf0000;
-    padding: 0.4rem 0.8rem;
+    padding: 0.3rem 0.6rem;
     transition: background-color 0.2s, color 0.2s;
 }
 
@@ -333,8 +330,9 @@ input[type=submit]:focus {
 
 .members {
 	display: none;
-	padding-left: 2rem;
+	padding-left: 1rem;
 	background-color: #f5f5f5;
+	color: #bf0000;
 }
 
 .member {
@@ -345,3 +343,37 @@ input[type=submit]:focus {
 	border-top: 1px solid #fff;
 
 }
+
+.member-header {
+	background-color: rgba(51, 51, 51, 0.4);
+	color: #fff;
+	font-weight: 600;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	padding: 0.2rem;
+}
+
+.form-member {
+	width: 100%;
+	display: flex;
+	margin: 0;
+}
+
+.form-member .cell {
+	padding-left: 0;
+}
+
+.form-member input {
+	margin: 0;
+	font: 400 1rem 'Open Sans', sans-serif;
+	padding: 0.2rem 0.5rem;
+}
+
+.form-member input[type='image'] {
+	margin: 0;
+	padding: 0;
+	vertical-align: middle;
+}
+
+

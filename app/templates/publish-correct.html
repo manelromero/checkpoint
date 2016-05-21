@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="error-message">Petició processada correctament.</div>
+<div class="error-message">
+	<a href="{{ url_for(after_publish) }}">Tornar</a>
+</div>
+
+{% endblock %}

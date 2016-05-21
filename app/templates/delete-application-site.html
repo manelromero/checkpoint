@@ -6,7 +6,9 @@
 
 <form action="{{ url_for('deleteApplicationSite', object_uid=object.uid) }}" method="POST">
 	<ul>
-		<li>Voleu esborrar la següent aplicació?</li>
+		<li>
+			Voleu esborrar l'aplicació <span class="red">{{ object.name }}</span> amb URL <span class="red">{{ object.url }}</span>?
+		</li>
 
 		{% for key, value in object.items() %}
         {% if key != 'uid' %}
@@ -17,6 +19,6 @@
 	</ul>
 	<input type="submit" value="Si">
 </form>
-<a href="{{ url_for('showApplicationSites') }}"><button>No</button></a>
+<a href="{{ url_for('showApplicationSiteGroups') }}"><button>No</button></a>
 
 {% endblock %}
