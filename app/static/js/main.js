@@ -14,9 +14,10 @@ $(document).ready(function() {
 	});
 
     $('.app-group').click(function() {
-    	var uid = $(this).data('uid');
+        var uid = $(this).data('uid');
+    	var route = $(this).data('route');
     	$.ajax({
-    		url: $SCRIPT_ROOT + '/show-application-sites/' + uid,
+    		url: $SCRIPT_ROOT + '/' + route + '/' + uid,
     		async: false,
     		success: function(data) {
     			$('[data-group=' + uid + ']').html(data);

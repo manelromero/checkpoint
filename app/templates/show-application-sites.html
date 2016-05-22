@@ -18,7 +18,7 @@
         </a>
     </div>
     <div class="cell small-cell center">
-        <a href="{{ url_for('deleteApplicationSite', object_uid=object.uid) }}">
+        <a href="{{ url_for('deleteApplicationSite', group_id=group_id, object_uid=object.uid) }}">
             <img src="{{ url_for('static', filename='img/garbage.svg') }}" class="icon" alt="Delete">
         </a>
     </div>
@@ -29,7 +29,7 @@
 
 {% if form %}
 <div class="member">
-    <form class="form-member" action="{{ url_for('addApplicationSite') }}" method="POST">
+    <form class="form-member" action="{{ url_for('addApplicationSite', group_id=group_id) }}" method="POST">
     {% for element in form %}
         <div class="cell big-cell">{{ element (size=25) }}</div>
         {%- if element.errors -%}

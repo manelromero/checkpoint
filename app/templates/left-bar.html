@@ -19,7 +19,7 @@
 
     <h3>Accions</h3>
     <div>
-        <a href="{{ url_for('showHosts') }}">Permetre accés</a>
+        <a href="{{ url_for('addAccessRule') }}">Permetre accés</a>
     </div>
     <div>
         <a href="{{ url_for('showHosts') }}">Bloquejar host</a>
@@ -31,7 +31,13 @@
         <a href="{{ url_for('showApplicationSiteGroups') }}">Gestionar grups d'URLs</a>
     </div>
 
-    <h3>Extra</h3>
+    <h3>Taules</h3>
+    <div>
+        <a href="{{ url_for('showHosts') }}">Hosts</a>
+    </div>
+    <div>
+        <a href="{{ url_for('showNetworks') }}">Xarxes</a>
+    </div>
 
 </div>
 

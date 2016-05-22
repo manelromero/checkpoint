@@ -1,0 +1,97 @@
+<!-- Hosts detail -->
+{%- if hosts -%}
+<div class="member-header">
+    <div class="cell medium-cell">Nom</div>
+    <div class="cell medium-cell">Adreça IPv4</div>
+    <div class="cell medium-cell"></div>
+    <div class="cell small-cell center">Editar</div>
+    <div class="cell small-cell center">Esborrar</div>
+</div>
+
+{%- for host in hosts -%}
+<div class="member">
+    <div class="cell medium-cell">{{ host.name }}</div>
+    <div class="cell medium-cell">{{ host.ipv4_address }}</div>
+    <div class="cell medium-cell"></div>
+    <div class="cell small-cell center">
+        <a href="{{ url_for('setHost', object_uid=host.uid) }}">
+            <img src="{{ url_for('static', filename='img/edit.svg') }}" class="icon" alt="Edit">
+        </a>
+    </div>
+    <div class="cell small-cell center">
+        <a href="{{ url_for('deleteHost', object_uid=host.uid) }}">
+            <img src="{{ url_for('static', filename='img/garbage.svg') }}" class="icon" alt="Delete">
+        </a>
+    </div>
+</div>
+{%- endfor -%}
+{%- endif -%}
+
+<!-- Hosts form -->
+{%- if form_host -%}
+<div class="member">
+    <form class="form-member" action="{{ url_for('addHost') }}" method="POST">
+    {%- for element in form_host -%}
+        <div class="cell medium-cell">{{ element (size=20) }}</div>
+        {%- if element.errors -%}
+            {%- for error in element.errors -%}
+            <span class="error">{{ error }}</span>
+            {%- endfor -%}
+        {%- endif -%}
+    {%- endfor -%}
+        <div class="cell small-cell center">
+            <input type="image" name="submit" src="{{ url_for('static', filename='img/accept.svg') }}" alt="Enviar" class="icon">
+        </div>
+        <div class="cell small-cell center"></div>
+    </form>
+</div>
+{%- endif -%}
+
+<!-- Networks detail -->
+{%- if networks -%}
+<div class="member-header">
+    <div class="cell medium-cell">Nom</div>
+    <div class="cell medium-cell">Adreça IPv4 subxarxa</div>
+    <div class="cell medium-cell">Màscara subxarxa</div>
+    <div class="cell small-cell center">Editar</div>
+    <div class="cell small-cell center">Esborrar</div>
+</div>
+
+{%- for network in networks -%}
+<div class="member">
+    <div class="cell medium-cell">{{ network.name }}</div>
+    <div class="cell medium-cell">{{ network.subnet4 }}</div>
+    <div class="cell medium-cell">{{ network.subnet_mask }}</div>
+    <div class="cell small-cell center">
+        <a href="{{ url_for('setNetwork', object_uid=network.uid) }}">
+            <img src="{{ url_for('static', filename='img/edit.svg') }}" class="icon" alt="Edit">
+        </a>
+    </div>
+    <div class="cell small-cell center">
+        <a href="{{ url_for('deleteNetwork', object_uid=network.uid) }}">
+            <img src="{{ url_for('static', filename='img/garbage.svg') }}" class="icon" alt="Delete">
+        </a>
+    </div>
+</div>
+{%- endfor -%}
+{%- endif -%}
+
+<!-- Networks form -->
+{%- if form_network -%}
+<div class="member">
+    <form class="form-member" action="{{ url_for('addHost') }}" method="POST">
+    {%- for element in form_network -%}
+        <div class="cell medium-cell">{{ element (size=20) }}</div>
+        {%- if element.errors -%}
+            {%- for error in element.errors -%}
+            <span class="error">{{ error }}</span>
+            {%- endfor -%}
+        {%- endif -%}
+    {%- endfor -%}
+        <div class="cell small-cell center">
+            <input type="image" name="submit" src="{{ url_for('static', filename='img/accept.svg') }}" alt="Enviar" class="icon">
+        </div>
+        <div class="cell small-cell center"></div>
+    </form>
+</div>
+{%- endif -%}

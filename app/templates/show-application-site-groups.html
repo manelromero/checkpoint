@@ -18,7 +18,7 @@
 
     <div class="table">
         {% for object in objects %}
-        <div class="row app-group" data-uid={{ object.uid }}>
+        <div class="row app-group" data-uid={{ object.uid }} data-route={{ 'show-application-sites' }}>
             <div class="cell big-cell">{{ object.Nom }}</div>
             <div class="cell medium-cell">{{ object.Creat|datetimeformat }}</div>
             <div class="cell medium-cell">{{ object.Modificat|datetimeformat }}</div>

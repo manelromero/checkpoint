@@ -52,8 +52,8 @@ class HostForm(Form):
             message="Heu d'introduir un nom"
             ),
         validators.Length(
-            max=10,
-            message=u'El nom no pot tenir més de 10 caràcters'
+            max=15,
+            message=u'El nom no pot tenir més de 15 caràcters'
             )
         ])
 

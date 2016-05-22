@@ -1,5 +1,5 @@
-{% extends "layout.html" %}
-{% block content %}
+{%- extends "layout.html" -%}
+{%- block content -%}
 
 <h1>Hosts</h1>
 <h2>Editar host</h2>
@@ -10,16 +10,22 @@
 	<form action="{{ url_for('setHost', object_uid=object.uid) }}" method="POST">
 
 		<ul>
-			<li>Esteu editant el host <span class="red">{{ object.Nom }}</span></li>
-			{% for element in form %}
-			<li>{{ element.label }}</li>
-			<li>{{ element (size=30)}}</li>
-			{% if element.errors %}
-				{% for error in element.errors %}
+			<li>Esteu editant el host <span class="red">{{ object.name }}</span></li>
+
+			<li>{{ form.name.label }}</li>
+			<li>{{ form.name (size=30, placeholder=object.name) }}</li>
+			{% if form.name.errors %}
+				{% for error in form.name.errors %}
 					<span class="error">{{ error }}</span>
 				{% endfor %}
 			{% endif %}
-			{% endfor %}
+			<li>{{ form.ipv4_address.label }}</li>
+			<li>{{ form.ipv4_address (size=30, placeholder=object.ipv4_address) }}</li>
+			{% if form.ipv4_address.errors %}
+				{% for error in form.ipv4_address.errors %}
+					<span class="error">{{ error }}</span>
+				{% endfor %}
+			{% endif %}
 
 		</ul>
 		<input type="submit" value="Enviar">
