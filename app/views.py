@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from . import app
+from models import User
 from helpers import *
 from flask import request, render_template, redirect, url_for, flash, session,\
     abort
-from flask_login import LoginManager, login_user, login_required
+from flask_login import LoginManager, UserMixin, login_user, login_required
 
 
 # initiate the login manager
@@ -14,14 +15,61 @@ login_manager.init_app(app)
 
 # login manager
 @login_manager.user_loader
-def load_user(user_id):
-    call = apiCall('show-session', {}, session['sid'])
-    try:
-        call['errors']
-        print '\nERROR =>', call['errors']
-    except:
-        user = User(uid=session['sid'], username=session['username'])
-        return User.get(user)
+def load_user(sid):
+    call = apiCall('show-session', {}, sid)
+    # check if session has expired
+    if 'user-name' in call:
+        user = User(
+            sid=sid,
+            username=call['user-name']
+            )
+        return user
+    return None
+
+
+# login
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm(request.form)
+    if request.method == 'POST' and form.validate():
+        # store the uid in session so @login_manager can use it
+        session['sid'] = register(form.username.data, form.password.data)
+        # check if login is correct
+        if session['sid']:
+            user = User(
+                sid=session['sid'],
+                username=form.username.data
+                )
+            # store the username in session so can be shown in header
+            session['username'] = form.username.data
+            # initiate changes to 0
+            session['changes'] = 0
+            login_user(user)
+            flash('Usuari registrat')
+            return render_template(
+                'publish-correct.html',
+                after_publish='home'
+                )
+        flash(u"Error d'inici de sessió, torneu a intentar-ho.")
+        return render_template('publish-error.html', after_publish='login')
+    return render_template('login.html', form=form)
+
+
+# logout
+@app.route('/logout')
+@login_required
+def logout():
+    if session['changes'] > 0:
+        return render_template('logout.html')
+    call = apiCall('logout', {}, session['sid'])
+    if call['message'] == 'OK':
+        session.clear()
+        flash('Usuari desconnectat')
+        return render_template(
+            'publish-correct.html',
+            after_publish='home'
+            )
+    return redirect(url_for('home'))
 
 
 # home
@@ -39,35 +87,6 @@ def login_page():
 @app.route('/clear')
 def sessionClear():
     session.clear()
-    flash('Session cleared!')
-    return redirect(url_for('home'))
-
-
-# login
-@app.route('/login')
-def login():
-    session['sid'] = register(app.config['USER'], app.config['PASSWORD'])
-    call = apiCall('show-session', {}, session['sid'])
-    session['username'] = call['user-name']
-    user = User(uid=session['sid'], username=session['username'])
-    session['logged_in'] = True
-    session['changes'] = 0
-    login_user(user)
-    flash('Usuari registrat!')
-    return redirect(url_for('home'))
-
-
-# logout
-@app.route('/logout')
-@login_required
-def logout():
-    if session['changes'] > 0:
-        return render_template('logout.html')
-    call = apiCall('logout', {}, session['sid'])
-    if call['message'] == 'OK':
-        session.clear()
-        flash('Usuari desconnectat!')
-        return redirect(url_for('home'))
     return redirect(url_for('home'))
 
 
@@ -468,17 +487,17 @@ def addApplicationSite(group_id):
     form = ApplicationSiteForm(request.form)
     if form.validate():
         data = {
-            'name': form.name.data,
+            'name': 'App ' + form.name.data,
             'url-list': form.url_list.data,
             'description': form.description.data,
-            # 'primary-category': 'Custom_Application_Site',
+            'primary-category': 'Custom_Application_Site', # required
         }
         # call for adding the application
         call = apiCall('add-application-site', data, session['sid'])
         data = {
             'uid': group_id,
             'members': {
-                'add': form.name.data
+                'add': 'App ' + form.name.data
                 }
             }
         # call for adding the application to application group
@@ -501,14 +520,16 @@ def showApplicationSites(group_id):
     form = ApplicationSiteForm(request.form)
     data = {'uid': group_id, 'details-level': 'full'}
     call = apiCall('show-application-site-group', data, session['sid'])
-    for element in call['members']:
-        object = {
-            'uid': element['uid'],
-            'name': element['name'],
-            'url': element['url-list'][0],
-            'description': element['description']
-        }
-        objects.append(object)
+    # check if there is at least one url in the group
+    if call['members']:
+        for element in call['members']:
+            object = {
+                'uid': element['uid'],
+                'name': element['name'],
+                'url': element['url-list'][0],
+                'description': element['description']
+            }
+            objects.append(object)
     return render_template(
         'show-application-sites.html',
         objects=objects,

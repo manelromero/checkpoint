@@ -2,7 +2,7 @@
 {%- block content -%}
 
 <h1>Hosts</h1>
-<h2>Editar host</h2>
+<h2>Editar host: {{ object.name }}</h2>
 
 <div class="wrapper-object">
 
@@ -10,8 +10,6 @@
 	<form action="{{ url_for('setHost', object_uid=object.uid) }}" method="POST">
 
 		<ul>
-			<li>Esteu editant el host <span class="red">{{ object.name }}</span></li>
-
 			<li>{{ form.name.label }}</li>
 			<li>{{ form.name (size=30, placeholder=object.name) }}</li>
 			{% if form.name.errors %}
@@ -26,7 +24,6 @@
 					<span class="error">{{ error }}</span>
 				{% endfor %}
 			{% endif %}
-
 		</ul>
 		<input type="submit" value="Enviar">
 

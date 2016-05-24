@@ -1,22 +1,13 @@
-class User():
-    def __init__(self, uid, username):
-        self.uid = uid,
+from flask_login import UserMixin
+
+
+class User(UserMixin):
+    def __init__(self, sid, username):
+        self.sid = sid,
         self.username = username
 
-    def is_authenticated(self):
-        return True
-
-    def is_active(self):
-        return True
-
-    def is_anonymous(self):
-        return False
-
     def get_id(self):
-        return unicode(self.uid)
-
-    def get(self):
-        return self
+        return unicode(self.sid)
 
 
 class Network():

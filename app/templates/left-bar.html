@@ -1,16 +1,5 @@
 {% block bar %}
 
-<!-- get flash messages -->
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-{% for message in messages %}
-<div class="flash">
-    <div class="flash-message">{{ message }}</div>
-</div>
-{% endfor %}
-{% endif %}
-{% endwith %}
-
 <div class="left-bar-content">
     <h3>Usuari</h3>
     <div>
@@ -37,6 +26,9 @@
     </div>
     <div>
         <a href="{{ url_for('showNetworks') }}">Xarxes</a>
+    </div>
+    <div>
+        <a href="{{ url_for('showAccessRules') }}">Regles</a>
     </div>
 
 </div>

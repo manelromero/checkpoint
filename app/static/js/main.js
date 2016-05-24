@@ -1,19 +1,22 @@
 $(document).ready(function() {
 
-	$('.flash').delay(2000).slideUp(300);
-	$('.flash').click(function() {
-		$(this).slideUp(300);
-	});
+    $('.row').mouseover(function() {
+        $(this).css('background-color', 'rgba(191, 0, 0, 0.05');
+    });
 
-	$('.row').mouseover(function() {
-		$(this).css('background-color', 'rgba(191, 0, 0, 0.05');
-	});
+    $('.row').mouseleave(function() {
+        $(this).css('background-color', '#fff');
+    });
 
-	$('.row').mouseleave(function() {
-		$(this).css('background-color', '#fff');
-	});
+    $('.member').mouseover(function() {
+        $(this).css('background-color', 'rgba(191, 0, 0, 1');
+    });
 
-    $('.app-group').click(function() {
+    $('.member').mouseleave(function() {
+        $(this).css('background-color', '#fff');
+    });
+
+    $('.unfold').click(function() {
         var uid = $(this).data('uid');
     	var route = $(this).data('route');
     	$.ajax({
@@ -23,8 +26,8 @@ $(document).ready(function() {
     			$('[data-group=' + uid + ']').html(data);
     		}
     	});
+        $(this).toggleClass('more');
     	$('[data-group=' + uid + ']').slideToggle(300)
-
     });
 
 });

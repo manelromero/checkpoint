@@ -1,9 +1,35 @@
-{% extends "layout.html" %}
-{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Checkpoint</title>
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+	<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+	<script>var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};</script>
+</head>
+<body>
 
-<div class="error-message">Petició processada correctament.</div>
-<div class="error-message">
-	<a href="{{ url_for(after_publish) }}">Tornar</a>
-</div>
+	<div class="wrapper-modal">
 
-{% endblock %}
+		<div class="modal">
+
+			<!-- get flash messages -->
+			{%- with messages = get_flashed_messages() -%}
+			{%- if messages -%}
+			{%- for message in messages -%}
+			<div>{{ message }}</div>
+			{%- endfor -%}
+			{%- endif -%}
+			{%- endwith -%}
+
+			<div><a href="{{ url_for(after_publish) }}">Tornar</a></div>
+
+		</div>
+
+	</div>
+
+</body>
+</html>

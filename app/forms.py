@@ -1,6 +1,31 @@
 # -*- coding: utf-8 -*-
 
-from wtforms import Form, StringField, IntegerField, SelectField, validators
+from wtforms import Form, StringField, IntegerField, SelectField, \
+    PasswordField, validators
+
+
+class LoginForm(Form):
+    username = StringField('Usuari', [
+        validators.InputRequired(
+            message="Heu d'introduir un usuari"
+            ),
+        validators.Length(
+            max=8,
+            message=u"L'usuari no pot tenir més de 8 caràcters"
+            )
+        ])
+
+    password = PasswordField('Contrasenya', [
+        validators.InputRequired(
+            message="Heu d'introduir una contrasenya"
+            ),
+        validators.Length(
+            min=4,
+            max=10,
+            message=u"La contrasenya ha de tenir entre 4 i 10 caràcters"
+            )
+        ])
+
 
 class ApplicationSiteGroupForm(Form):
     name = StringField('Nom', [

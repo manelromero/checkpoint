@@ -8,7 +8,7 @@
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 	<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/main.js') }}"></script>
-	<script>var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};</script> 
+	<script>var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};</script>
 </head>
 <body>
 
@@ -27,9 +27,7 @@
 		</div>
 	</div>
 
-	<footer>
-		<p>Sessió: <span style="color:red">{{ session.sid }}</span></p>
-	</footer>
+	<footer></footer>
 
 </body>
 </html>

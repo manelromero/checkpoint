@@ -5,14 +5,7 @@
 			<a href="{{ url_for('home') }}" class="negative">Home</a>
 		</div>
 		<div class="nav-data">
-		    <span class="publish-num">
-			    {% if session.changes %}
-			    	{{ session.changes }}
-			    {% else %}
-			    	0
-			    {% endif %}
-		    </span>
-		    <a href="{{ url_for('discard') }}" class="negative">Descartar</a>
+			<span>{{ session.user_id }}</span>
 		</div>
 		<div class="nav-login">
 			{% if session.username %}

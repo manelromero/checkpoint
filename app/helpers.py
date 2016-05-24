@@ -9,8 +9,9 @@ from flask import session
 def register(user, password):
     payload = {'user': user, 'password': password}
     call = apiCall('login', payload, '')
-    print '\n\nCALL =>', call
-    return call['sid']
+    if 'sid' in call:
+        return call['sid']
+    return None
 
 
 def apiCall(command, json_payload, sid):

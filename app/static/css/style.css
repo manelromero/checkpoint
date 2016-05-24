@@ -11,22 +11,22 @@ html {
 }
 
 body {
-	font: 400 1rem 'Open Sans', sans-serif;
+	font: 400 0.9rem 'Open Sans', sans-serif;
 	background-color: #f5f5f5;
 }
 
 h1 {
-	font: 600 1.8rem/3rem 'Open Sans', sans-serif;
+	font: 600 1.6rem/3rem 'Open Sans', sans-serif;
 	color: #bf0000;
 }
 
 h2 {
-	font: 600 1.6rem/3rem 'Open Sans', sans-serif;
+	font: 600 1.4rem/3rem 'Open Sans', sans-serif;
 	display: block;
 }
 
 h3 {
-	font: 400 1.4rem/2.5rem 'Open Sans', sans-serif;
+	font: 400 1.2rem/2.5rem 'Open Sans', sans-serif;
 	color: #bf0000;
 }
 
@@ -72,6 +72,30 @@ header {
 	/**/
 }
 
+.wrapper-modal {
+	position: relative;
+	width: 100vw;
+	height: 100vh;
+	background-color: #eee;
+}
+
+.modal {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	height: 200px;
+	width: 300px;
+	margin-top: -100px;
+	margin-left: -150px;
+	background-color: #fff;
+	padding: 1rem;
+	text-align: center;
+	font: 600 1.3rem/3rem 'Open Sans', sans-serif;
+	color: #bf0000;
+	border-radius: 2%;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
 footer {
 	width: 100%;
 	padding: 0.5rem;
@@ -106,11 +130,11 @@ li {
 
 label {
 	display: inline-block;
-	font: 600 1rem/2rem 'Open Sans', sans-serif;
+	font: 600 0.9rem/2rem 'Open Sans', sans-serif;
 }
 
 input {
-	font: 400 1.2rem 'Open Sans', sans-serif;
+	font: 400 1.1rem 'Open Sans', sans-serif;
 	padding: 0.2rem 0.5rem;
 	margin-bottom: 1rem;
 }
@@ -182,7 +206,7 @@ nav {
 
 .red {
 	color: #bf0000;
-	font: 600 1.2rem 'Open Sans', sans-serif;
+	font: 600 1rem 'Open Sans', sans-serif;
 }
 
 .center {
@@ -259,6 +283,21 @@ nav {
 
 .small-cell {
 	width: 100px;
+}
+
+.tiny-cell {
+	width: 1rem;
+	height: 1rem;
+}
+
+.unfold {
+	background: url('../img/less.svg') no-repeat;
+	background-size: cover;
+}
+
+.more {
+	background: url('../img/more.svg') no-repeat;
+	background-size: cover;
 }
 
 .cell {
