@@ -33,8 +33,8 @@ class ApplicationSiteGroupForm(Form):
             message="Heu d'introduir un nom"
             ),
         validators.Length(
-            max=15,
-            message=u'El nom no pot tenir més de 10 caràcters'
+            max=20,
+            message=u'El nom no pot tenir més de 20 caràcters'
             )
         ])
 
@@ -134,8 +134,8 @@ class GroupForm(Form):
             message="Heu d'introduir un nom"
             ),
         validators.Length(
-            max=15,
-            message=u'El nom no pot tenir més de 10 caràcters'
+            max=20,
+            message=u'El nom no pot tenir més de 20 caràcters'
             )
         ])
 
@@ -158,6 +158,12 @@ class AccessRuleForm(Form):
         ])
 
     service = SelectField(u'Aplicació', [
+        validators.InputRequired(
+            message=u'Heu de seleccionar una opció'
+            )
+        ])
+
+    action = SelectField(u'Acció', [
         validators.InputRequired(
             message=u'Heu de seleccionar una opció'
             )

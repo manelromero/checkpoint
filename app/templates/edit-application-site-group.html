@@ -1,16 +1,16 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<h1>Grups</h1>
-<h2>Editar grup</h2>
+<h1>Grup d'aplicacions</h1>
+<h2>Editar grup d'aplicacions</h2>
 
 <div class="wrapper-object">
 
 	{% if form %}
-	<form action="{{ url_for('setGroup', object_uid=object.uid) }}" method="POST">
+	<form action="{{ url_for('setApplicationSiteGroup', object_uid=object.uid) }}" method="POST">
 
 		<ul>
-			<li>Esteu editant el grup <span class="red">{{ object.name }}</span></li>
+			<li>Esteu editant el grup d'aplicacions <span class="red">{{ object.name }}</span></li>
 			<li>{{ form.name.label }}</li>
 			<li>{{ form.name (size=25, placeholder=object.name) }}</li>
 			{% if form.name.errors %}
@@ -25,7 +25,7 @@
 	</form>
 	{% endif %}
 
-    <a href="{{ url_for('showGroups') }}"><button>Tornar</button></a>
+    <a href="{{ url_for('showApplicationSiteGroups') }}"><button>Tornar</button></a>
 
 </div>
 

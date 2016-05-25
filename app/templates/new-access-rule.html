@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<h1>Regles</h1>
+<h1>Permetre accés</h1>
 <h2>Crear regla</h2>
 
 <div class="wrapper-object">
@@ -9,31 +9,63 @@
 	{% if form %}
 	<form action="{{ url_for('addAccessRule') }}" method="POST">
 
-		<ul>
-			<li>{{ form.name.label }}</li>
-			<li>{{ form.name (size=30) }}</li>
-			{% if form.name.errors %}
-				{% for error in form.name.errors %}
-					<span class="error">{{ error }}</span>
-				{% endfor %}
-			{% endif %}
+		<div class="rules">
 
-			<li>{{ form.source.label }}</li>
-			<li>{{ form.source (size=1) }}</li>
-			{% if form.source.errors %}
-				{% for error in form.source.errors %}
-					<span class="error">{{ error }}</span>
-				{% endfor %}
-			{% endif %}
+			<div class="rules-name">
 
-			<li>{{ form.service.label }}</li>
-			<li>{{ form.service (size=1) }}</li>
-			{% if form.service.errors %}
-				{% for error in form.service.errors %}
+				<div>{{ form.name.label }}</div>
+				<div>{{ form.name (size=30) }}</div>
+				{% if form.name.errors %}
+					{% for error in form.name.errors %}
+						<span class="error">{{ error }}</span>
+					{% endfor %}
+				{% endif %}
+
+			</div>
+
+			<div class="rules-select">
+
+				<div class="rules-column">{{ form.source.label }}</div>
+				<div class="rules-column">{{ form.service.label }}</div>
+				<div class="rules-column">{{ form.action.label }}</div>
+
+				<div class="rules-column">{{ form.source (size=1) }}</div>
+				<div class="rules-column">{{ form.service (size=1) }}</div>
+				<div class="rules-column">{{ form.action (size=1) }}</div>
+
+				<div class="rules-column">
+				{% if form.source.errors %}
+					{% for error in form.source.errors %}
 					<span class="error">{{ error }}</span>
-				{% endfor %}
-			{% endif %}
-		</ul>
+					{% endfor %}
+				{% endif %}
+				</div>
+				<div class="rules-column">
+				{% if form.service.errors %}
+					{% for error in form.service.errors %}
+						<span class="error">{{ error }}</span>
+					{% endfor %}
+				{% endif %}
+				</div>
+				<div class="rules-column">
+				{% if form.action.errors %}
+					{% for error in form.action.errors %}
+						<span class="error">{{ error }}</span>
+					{% endfor %}
+				{% endif %}
+				</div>
+
+				<div class="rules-column">
+					<div id="group-detail"></div>
+				</div>
+				<div class="rules-column">
+					<div id="app-group-detail"></div>
+				</div>
+
+			</div>
+
+		</div>
+
 		<input type="submit" value="Enviar">
 
 	</form>

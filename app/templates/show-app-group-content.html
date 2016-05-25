@@ -1,0 +1,8 @@
+<!-- Application detail -->
+{%- if objects -%}
+{%- for object in objects -%}
+<div>
+    <div>{{ object.name }} - {{ object.url }}</div>
+</div>
+{%- endfor -%}
+{%- endif -%}

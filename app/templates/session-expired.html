@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="error-message">
+	La vostra sessió d'usuari ha caducat.
+</div>
+
+<div class="error-message">
+	Per tornar a registrar-vos feu <a href="{{ url_for('login') }}">click aquí</a>
+</div>
+
+{% endblock %}

@@ -1,0 +1,17 @@
+<!-- Hosts detail -->
+{%- if hosts -%}
+{%- for host in hosts -%}
+<div>
+    <div>{{ host.name }} - {{ host.ipv4_address }}</div>
+</div>
+{%- endfor -%}
+{%- endif -%}
+
+<!-- Networks detail -->
+{%- if networks -%}
+{%- for network in networks -%}
+<div>
+    <div>{{ network.name }}, {{ network.subnet4 }}</div>
+</div>
+{%- endfor -%}
+{%- endif -%}

@@ -8,14 +8,6 @@ $(document).ready(function() {
         $(this).css('background-color', '#fff');
     });
 
-    $('.member').mouseover(function() {
-        $(this).css('background-color', 'rgba(191, 0, 0, 1');
-    });
-
-    $('.member').mouseleave(function() {
-        $(this).css('background-color', '#fff');
-    });
-
     $('.unfold').click(function() {
         var uid = $(this).data('uid');
     	var route = $(this).data('route');
@@ -30,18 +22,28 @@ $(document).ready(function() {
     	$('[data-group=' + uid + ']').slideToggle(300)
     });
 
-    $('#smart').click(function() {
-        data = {username:'admin', userPass:'developer1'}
+    $('#source').change(function() {
+        var group_uid = $(this).val();
+        var route = 'show-group-content';
         $.ajax({
-            type: 'POST',
-            url: 'https://192.168.1.10/cgi-bin/home.tcl',
-            data: data,
+            url: $SCRIPT_ROOT + '/' + route + '/' + group_uid,
+            async: false,
             success: function(data) {
-                $('#result').html(data);
+                $('#group-detail').html(data);
             }
         });
+    });
 
-
-    })
+    $('#service').change(function() {
+        var group_uid = $(this).val();
+        var route = 'show-app-group-content';
+        $.ajax({
+            url: $SCRIPT_ROOT + '/' + route + '/' + group_uid,
+            async: false,
+            success: function(data) {
+                $('#app-group-detail').html(data);
+            }
+        });
+    });
 
 });

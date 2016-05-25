@@ -2,19 +2,17 @@
 
 	<nav>
 		<div class="nav-home">
-			<a href="{{ url_for('home') }}" class="negative">Home</a>
+			<a href="{{ url_for('home') }}" class="negative">Inici</a>
 		</div>
-		<div class="nav-data">
-			<span>{{ session.user_id }}</span>
-		</div>
+		<div class="nav-data"></div>
 		<div class="nav-login">
 			{% if session.username %}
 			<div>
-				<span class="user">{{ session.username }}</span>
-				<a href="{{ url_for('logout') }}" class="negative">Logout</a>
+				Usuari: <span class="user">{{ session.username }}</span>
+				<a href="{{ url_for('logout') }}" class="negative">Sortir</a>
 			</div>
 			{% else %}
-			<a href="{{ url_for('login') }}" class="negative">Login</a>
+			<a href="{{ url_for('login') }}" class="negative">Registrar usuari</a>
 			{% endif %}
 		</div>
 	</nav>

@@ -6,14 +6,7 @@
 
 <form action="{{ url_for('deleteGroup', object_uid=object.uid) }}" method="POST">
 	<ul>
-		<li>Voleu esborrar el següent grup?</li>
-
-		{% for key, value in object.items() %}
-        {% if key != 'uid' %}
-		<li>{{ key }}: <span class="red">{{ value }}</span></li>
-		{% endif %}
-		{% endfor %}
-
+		<li>Voleu esborrar el grup <span class="red">{{ object.name }}</span>?</li>
 	</ul>
 	<input type="submit" value="Si">
 </form>

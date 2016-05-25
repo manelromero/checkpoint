@@ -77,7 +77,7 @@ header {
 	position: relative;
 	width: 100vw;
 	height: 100vh;
-	background-color: #eee;
+	background-color: #ccc;
 }
 
 .modal {
@@ -89,8 +89,7 @@ header {
 	margin-left: -150px;
 	background-color: #fff;
 	padding: 1rem;
-	font: 600 1.3rem/3rem 'Open Sans', sans-serif;
-	color: #bf0000;
+	font: 600 1.3rem/2rem 'Open Sans', sans-serif;
 	border-radius: 2%;
 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
@@ -177,7 +176,7 @@ nav {
 
 .nav-home,
 .nav-login {
-	flex-basis: 20%;
+	flex-basis: 30%;
 }
 
 .nav-data {
@@ -419,5 +418,29 @@ input[type=submit]:focus {
 	padding: 0;
 	vertical-align: middle;
 }
+
+.rules {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.rules-name {
+	width: 100%;
+}
+
+.rules-select {
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.rules-column {
+	width: 33.3%;
+}
+
+
+
+
+
 
 
