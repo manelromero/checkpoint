@@ -4,7 +4,7 @@
 <h1>Hosts</h1>
 <h2>Esborrar host</h2>
 
-<form action="{{ url_for('deleteHost', object_uid=object.uid) }}" method="POST">
+<form action="{{ url_for('deleteHost', group_id=group_id, object_uid=object.uid) }}" method="POST">
 	<ul>
 		<li>Voleu esborrar el següent host?</li>
 

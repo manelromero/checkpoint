@@ -8,6 +8,7 @@
     {% if objects %}
     <div class="table-header">
         <div class="header-row">
+            <div class="cell tiny-cell"></div>
             <div class="cell big-cell">Nom</div>
             <div class="cell small-cell center">Editar</div>
             <div class="cell small-cell center">Esborrar</div>
@@ -16,7 +17,8 @@
 
     <div class="table">
         {% for object in objects %}
-        <div class="row app-group" data-uid={{ object.uid }} data-route={{ 'show-group-members' }}>
+        <div class="row app-group">
+            <div class="cell tiny-cell unfold more" data-uid={{ object.uid }} data-route={{ 'show-group-members' }}></div>
             <div class="cell big-cell">{{ object.Nom }}</div>
             <div class="cell small-cell center">
                 <a href="{{ url_for('setGroup', object_uid=object.uid) }}">

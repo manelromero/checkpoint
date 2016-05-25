@@ -137,24 +137,24 @@ def addAccessRule():
     form = AccessRuleForm(request.form)
 
     # call hosts
-    objects = []
+    hosts = []
     data = {}
     call = apiCall('show-groups', data, session['sid'])
     for element in call['objects']:
-        objects.append((element['uid'], element['name']))
+        hosts.append((element['uid'], element['name']))
 
     # add options
-    form.source.choices = objects
+    form.source.choices = hosts
 
     # call hosts
-    objects = []
+    app_groups = []
     data = {}
     call = apiCall('show-application-site-groups', data, session['sid'])
     for element in call['objects']:
-        objects.append((element['uid'], element['name']))
+        app_groups.append((element['uid'], element['name']))
 
     # add options
-    form.service.choices = objects
+    form.service.choices = app_groups
 
     if request.method == 'POST' and form.validate():
         data = {
@@ -308,7 +308,6 @@ def addGroup():
 def showGroups():
     objects = []
     call = apiCall('show-groups', {}, session['sid'])
-    order = 0
     for element in call['objects']:
         data = {'uid': element['uid']}
         call = apiCall('show-group', data, session['sid'])
@@ -317,7 +316,6 @@ def showGroups():
             'Nom': call['name'],
             }
         objects.append(object)
-        order += 1
     return render_template('show-groups.html', objects=objects)
 
 
@@ -331,7 +329,6 @@ def showGroupMembers(group_id):
     # call for group members
     data = {'uid': group_id, 'details-level': 'full'}
     call = apiCall('show-group', data, session['sid'])
-    print '\n\nCALL=>', call
     for element in call['members']:
         # select the hosts
         if element['type'] == 'host':
@@ -355,7 +352,8 @@ def showGroupMembers(group_id):
         hosts=hosts,
         networks=networks,
         form_host=form_host,
-        form_network=form_network
+        form_network=form_network,
+        group_id=group_id
         )
 
 
@@ -481,7 +479,7 @@ def deleteApplicationSiteGroup(object_uid):
 #####################
 
 # Add applications group member
-@app.route('/add-application-site<group_id>', methods=['POST'])
+@app.route('/add-application-site/<group_id>', methods=['POST'])
 @login_required
 def addApplicationSite(group_id):
     form = ApplicationSiteForm(request.form)
@@ -490,7 +488,7 @@ def addApplicationSite(group_id):
             'name': 'App ' + form.name.data,
             'url-list': form.url_list.data,
             'description': form.description.data,
-            'primary-category': 'Custom_Application_Site', # required
+            'primary-category': 'Custom_Application_Site',  # required
         }
         # call for adding the application
         call = apiCall('add-application-site', data, session['sid'])
@@ -565,7 +563,10 @@ def setApplicationSite(object_uid):
 
 
 # Delete application group member
-@app.route('/delete-application-site/<group_id>/<object_uid>', methods=['GET', 'POST'])
+@app.route(
+    '/delete-application-site/<group_id>/<object_uid>',
+    methods=['GET', 'POST']
+    )
 @login_required
 def deleteApplicationSite(group_id, object_uid):
     data = {'uid': object_uid}
@@ -576,18 +577,18 @@ def deleteApplicationSite(group_id, object_uid):
         'url_list': call['url-list'][0],
         }
     if request.method == 'POST':
+        # call for removing the application from the application group
         data = {
             'uid': group_id,
             'members': {
                 'remove': object['name']
                 }
             }
-        # call for removing the application from the application group
         call = apiCall('set-application-site-group', data, session['sid'])
-        data = {'uid': object_uid}
         # call for deleting the application
+        data = {'uid': object_uid}
         call = apiCall('delete-application-site', data, session['sid'])
-        flash('Element esborrat')
+        flash(u'Aplicació esborrada')
         session['changes'] += 1
         return redirect(url_for(
             'publish',
@@ -606,21 +607,30 @@ def deleteApplicationSite(group_id, object_uid):
 ##############
 
 # Add host
-@app.route('/add-host', methods=['GET', 'POST'])
+@app.route('/add-host/<group_id>', methods=['POST'])
 @login_required
-def addHost():
+def addHost(group_id):
     form = HostForm(request.form)
-    if request.method == 'POST' and form.validate():
+    if form.validate():
+        # call for adding the host
         data = {
-            'name': form.name.data,
-            'ipv4-address': form.ipv4_address.data,
+            'name': 'Host ' + form.name.data,
+            'ipv4-address': form.ipv4_address.data
         }
         call = apiCall('add-host', data, session['sid'])
-        flash('Host afegit!')
+        # call for adding the host to group
+        data = {
+            'uid': group_id,
+            'members': {
+                'add': 'Host ' + form.name.data
+                }
+            }
+        call = apiCall('set-group', data, session['sid'])
+        flash('Host afegit')
         session['changes'] += 1
         return redirect(url_for(
             'publish',
-            after_publish='showHosts'
+            after_publish='showGroups'
             ))
     else:
         return render_template('new-host.html', form=form)
@@ -654,13 +664,13 @@ def setHost(object_uid):
     form = HostForm(request.form)
     object = {
         'uid': object_uid,
-        'name': call['name'],
+        'name': call['name'][5:],
         'ipv4_address': call['ipv4-address']
         }
     if request.method == 'POST' and form.validate():
         data = {
             'uid': object_uid,
-            'new-name': form.name.data,
+            'new-name': 'Host ' + form.name.data,
             'ipv4-address': form.ipv4_address.data
             }
         call = apiCall('set-host', data, session['sid'])
@@ -668,33 +678,47 @@ def setHost(object_uid):
         session['changes'] += 1
         return redirect(url_for(
             'publish',
-            after_publish='showHosts'
+            after_publish='showGroups'
             ))
     else:
         return render_template('edit-host.html', object=object, form=form)
 
 
 # Delete host
-@app.route('/delete-host/<object_uid>', methods=['GET', 'POST'])
+@app.route('/delete-host/<group_id>/<object_uid>', methods=['GET', 'POST'])
 @login_required
-def deleteHost(object_uid):
+def deleteHost(group_id, object_uid):
     data = {'uid': object_uid}
     call = apiCall('show-host', data, session['sid'])
     object = {
         'uid': call['uid'],
-        'Nom': call['name'],
-        u'Adreça IPv4': call['ipv4-address']
+        'name': call['name'],
+        'ipv4_address': call['ipv4-address']
         }
     if request.method == 'POST':
+        # call for removing the host from the group
+        data = {
+            'uid': group_id,
+            'members': {
+                'remove': object['name']
+                }
+            }
+        call = apiCall('set-group', data, session['sid'])
+        # call for deleting the host
+        data = {'uid': object_uid}
         call = apiCall('delete-host', data, session['sid'])
         flash('Host esborrat')
         session['changes'] += 1
         return redirect(url_for(
             'publish',
-            after_publish='showHosts'
+            after_publish='showGroups'
             ))
     else:
-        return render_template('delete-host.html', object=object)
+        return render_template(
+            'delete-host.html',
+            group_id=group_id,
+            object=object
+            )
 
 
 #################
@@ -708,7 +732,7 @@ def addNetwork():
     form = NetworkForm(request.form)
     if request.method == 'POST' and form.validate():
         data = {
-            'name': form.name.data,
+            'name': 'Net ' + form.name.data,
             'subnet4': form.subnet4.data,
             'subnet-mask': form.subnet_mask.data
         }

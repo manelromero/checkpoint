@@ -30,4 +30,18 @@ $(document).ready(function() {
     	$('[data-group=' + uid + ']').slideToggle(300)
     });
 
+    $('#smart').click(function() {
+        data = {username:'admin', userPass:'developer1'}
+        $.ajax({
+            type: 'POST',
+            url: 'https://192.168.1.10/cgi-bin/home.tcl',
+            data: data,
+            success: function(data) {
+                $('#result').html(data);
+            }
+        });
+
+
+    })
+
 });

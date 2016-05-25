@@ -39,6 +39,7 @@ header {
 	position: fixed;
 	width: 100%;
 	background-color: #333;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 	z-index: 10;
 }
 
@@ -64,7 +65,7 @@ header {
 	width: 80%;
 	flex-grow: 1;
 	padding: 0.5rem;
-	border-left: 2px solid #e9e9e9;
+	/*border-left: 2px solid #e9e9e9;*/
 
 }
 
@@ -81,19 +82,23 @@ header {
 
 .modal {
 	position: absolute;
-	top: 50%;
+	top: 20%;
 	left: 50%;
 	height: 200px;
 	width: 300px;
-	margin-top: -100px;
 	margin-left: -150px;
 	background-color: #fff;
 	padding: 1rem;
-	text-align: center;
 	font: 600 1.3rem/3rem 'Open Sans', sans-serif;
 	color: #bf0000;
 	border-radius: 2%;
-	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.modal button {
+	position: absolute;
+    bottom: 0;
+    right: 0;
 }
 
 footer {
@@ -357,7 +362,7 @@ input[type=submit]:focus {
 
 .error-message {
 	padding: 1rem;
-	font: 600 1.5rem 'Open Sans', sans-serif;
+	font: 600 1.2rem 'Open Sans', sans-serif;
 	color: #bf0000;
 }
 

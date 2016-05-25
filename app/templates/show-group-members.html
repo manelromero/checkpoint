@@ -1,5 +1,4 @@
 <!-- Hosts detail -->
-{%- if hosts -%}
 <div class="member-header">
     <div class="cell medium-cell">Nom</div>
     <div class="cell medium-cell">Adreça IPv4</div>
@@ -7,7 +6,7 @@
     <div class="cell small-cell center">Editar</div>
     <div class="cell small-cell center">Esborrar</div>
 </div>
-
+{%- if hosts -%}
 {%- for host in hosts -%}
 <div class="member">
     <div class="cell medium-cell">{{ host.name }}</div>
@@ -19,7 +18,7 @@
         </a>
     </div>
     <div class="cell small-cell center">
-        <a href="{{ url_for('deleteHost', object_uid=host.uid) }}">
+        <a href="{{ url_for('deleteHost', group_id=group_id, object_uid=host.uid) }}">
             <img src="{{ url_for('static', filename='img/garbage.svg') }}" class="icon" alt="Delete">
         </a>
     </div>
@@ -30,7 +29,7 @@
 <!-- Hosts form -->
 {%- if form_host -%}
 <div class="member">
-    <form class="form-member" action="{{ url_for('addHost') }}" method="POST">
+    <form class="form-member" action="{{ url_for('addHost', group_id=group_id) }}" method="POST">
     {%- for element in form_host -%}
         <div class="cell medium-cell">{{ element (size=20) }}</div>
         {%- if element.errors -%}
@@ -79,7 +78,7 @@
 <!-- Networks form -->
 {%- if form_network -%}
 <div class="member">
-    <form class="form-member" action="{{ url_for('addHost') }}" method="POST">
+    <form class="form-member" action="{{ url_for('addHost', group_id=group_id) }}" method="POST">
     {%- for element in form_network -%}
         <div class="cell medium-cell">{{ element (size=20) }}</div>
         {%- if element.errors -%}
