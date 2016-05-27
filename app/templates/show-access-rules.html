@@ -8,13 +8,10 @@
     {% if objects %}
     <div class="table-header">
         <div class="header-row">
-            {% for object in objects[:1] %}
-            {% for key, value in object.items() %}
-            {% if key != 'uid' %}
-            <div class="cell big-cell">{{ key }}</div>
-            {% endif %}
-            {% endfor %}
-            {% endfor %}
+            <div class="cell big-cell">Nom</div>
+            <div class="cell big-cell">Origen</div>
+            <div class="cell big-cell">Aplicació</div>
+            <div class="cell big-cell">Acció</div>
             <div class="cell small-cell center">Editar</div>
             <div class="cell small-cell center">Esborrar</div>
         </div>
@@ -23,11 +20,10 @@
     <div class="table">
         {% for object in objects %}
         <div class="row">
-            {% for key, value in object.items() %}
-            {% if key != 'uid' %}
-            <div class="cell big-cell">{{ value }}</div>
-            {% endif %}
-            {% endfor %}
+            <div class="cell big-cell">{{ object.name }}</div>
+            <div class="cell big-cell">{{ object.source }}</div>
+            <div class="cell big-cell">{{ object.service }}</div>
+            <div class="cell big-cell">{{ object.action }}</div>
             <div class="cell small-cell center">
                 <a href="{{ url_for('setAccessRule', object_uid=object.uid) }}">
                     <img src="{{ url_for('static', filename='img/edit.svg') }}" class="icon" alt="Edit">
@@ -43,6 +39,7 @@
     </div>
     {% endif %}
 
+    <a href="{{ url_for('addAccessRule') }}"><button>Afegir</button></a>
     <a href="{{ url_for('home') }}"><button>Tornar</button></a>
 
 {% include "sample-object.html" %}

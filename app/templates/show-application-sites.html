@@ -1,3 +1,23 @@
+{% if form %}
+<div class="form-member-title">Afegir aplicació:</div>
+<div class="member">
+    <form class="form-member" action="{{ url_for('addApplicationSite', group_id=group_id) }}" method="POST">
+    {% for element in form %}
+        <div class="cell big-cell">{{ element (size=25) }}</div>
+        {%- if element.errors -%}
+            {% for error in element.errors %}
+            <span class="error">{{ error }}</span>
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+        <div class="cell small-cell center">
+            <input type="image" name="submit" src="{{ url_for('static', filename='img/accept.svg') }}" alt="Enviar" class="icon">
+        </div>
+        <div class="cell small-cell center"></div>
+    </form>
+</div>
+{% endif %}
+
 <div class="member-header">
     <div class="cell big-cell">Nom</div>
     <div class="cell big-cell">URL</div>
@@ -5,6 +25,7 @@
     <div class="cell small-cell center">Editar</div>
     <div class="cell small-cell center">Esborrar</div>
 </div>
+
 {%- if objects -%}
 {%- for object in objects -%}
 <div class="member">
@@ -24,23 +45,3 @@
 </div>
 {%- endfor -%}
 {%- endif -%}
-
-
-{% if form %}
-<div class="member">
-    <form class="form-member" action="{{ url_for('addApplicationSite', group_id=group_id) }}" method="POST">
-    {% for element in form %}
-        <div class="cell big-cell">{{ element (size=25) }}</div>
-        {%- if element.errors -%}
-            {% for error in element.errors %}
-            <span class="error">{{ error }}</span>
-            {% endfor %}
-        {% endif %}
-    {% endfor %}
-        <div class="cell small-cell center">
-            <input type="image" name="submit" src="{{ url_for('static', filename='img/accept.svg') }}" alt="Enviar" class="icon">
-        </div>
-        <div class="cell small-cell center"></div>
-    </form>
-</div>
-{% endif %}

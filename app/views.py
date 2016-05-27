@@ -134,7 +134,8 @@ def discard():
 @login_required
 def addAccessRule():
     form = AccessRuleForm(request.form)
-    hosts, app_groups = [('','Select')], [('','Select')]
+    hosts = [('','Select')]
+    app_groups = [('','Select'), ('Any','Any')]
     # call hosts
     call = apiCall('show-groups', {}, session['sid'])
     for element in call['objects']:
@@ -187,9 +188,10 @@ def showAccessRules():
         call = apiCall('show-access-rule', data, session['sid'])
         object = {
             'uid': call['uid'],
-            'Nom': call['name'],
-            'Origen': call['source'][0]['name'],
-            u'Destinació': call['destination'][0]['name'],
+            'name': call['name'],
+            'source': call['source'][0]['name'],
+            'service': call['service'][0]['name'],
+            'action': call['action']['name']
             }
         objects.append(object)
     return render_template('show-access-rules.html', objects=objects)

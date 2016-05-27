@@ -1,4 +1,22 @@
-<!-- Hosts detail -->
+<!-- Hosts form -->
+{%- if form_host -%}
+<div class="form-member-title">Afegir host:</div>
+<div class="member">
+    <form class="form-member" action="{{ url_for('addHost', group_id=group_id) }}" method="POST">
+    {%- for element in form_host -%}
+        <div class="cell medium-cell">{{ element (size=20) }}</div>
+        {%- if element.errors -%}
+            {%- for error in element.errors -%}
+            <span class="error">{{ error }}</span>
+            {%- endfor -%}
+        {%- endif -%}
+    {%- endfor -%}
+        <div class="cell small-cell center">
+            <input type="image" name="submit" src="{{ url_for('static', filename='img/accept.svg') }}" alt="Enviar" class="icon">
+        </div>
+        <div class="cell small-cell center"></div>
+    </form>
+</div>
 <div class="member-header">
     <div class="cell medium-cell">Nom</div>
     <div class="cell medium-cell">Adreça IPv4</div>
@@ -6,6 +24,9 @@
     <div class="cell small-cell center">Editar</div>
     <div class="cell small-cell center">Esborrar</div>
 </div>
+{%- endif -%}
+
+<!-- Hosts detail -->
 {%- if hosts -%}
 {%- for host in hosts -%}
 <div class="member">
@@ -24,13 +45,19 @@
     </div>
 </div>
 {%- endfor -%}
+{%- else -%}
+<div class="form-member-empty">Cap host en aquest grup</div>
 {%- endif -%}
 
-<!-- Hosts form -->
-{%- if form_host -%}
+<!-- Division -->
+<div class="host-end"></div>
+
+<!-- Networks form -->
+{%- if form_network -%}
+<div class="form-member-title">Afegir xarxa:</div>
 <div class="member">
     <form class="form-member" action="{{ url_for('addHost', group_id=group_id) }}" method="POST">
-    {%- for element in form_host -%}
+    {%- for element in form_network -%}
         <div class="cell medium-cell">{{ element (size=20) }}</div>
         {%- if element.errors -%}
             {%- for error in element.errors -%}
@@ -44,10 +71,6 @@
         <div class="cell small-cell center"></div>
     </form>
 </div>
-{%- endif -%}
-
-<!-- Networks detail -->
-{%- if networks -%}
 <div class="member-header">
     <div class="cell medium-cell">Nom</div>
     <div class="cell medium-cell">Adreça IPv4 subxarxa</div>
@@ -55,7 +78,10 @@
     <div class="cell small-cell center">Editar</div>
     <div class="cell small-cell center">Esborrar</div>
 </div>
+{%- endif -%}
 
+<!-- Networks detail -->
+{%- if networks -%}
 {%- for network in networks -%}
 <div class="member">
     <div class="cell medium-cell">{{ network.name }}</div>
@@ -73,24 +99,6 @@
     </div>
 </div>
 {%- endfor -%}
-{%- endif -%}
-
-<!-- Networks form -->
-{%- if form_network -%}
-<div class="member">
-    <form class="form-member" action="{{ url_for('addHost', group_id=group_id) }}" method="POST">
-    {%- for element in form_network -%}
-        <div class="cell medium-cell">{{ element (size=20) }}</div>
-        {%- if element.errors -%}
-            {%- for error in element.errors -%}
-            <span class="error">{{ error }}</span>
-            {%- endfor -%}
-        {%- endif -%}
-    {%- endfor -%}
-        <div class="cell small-cell center">
-            <input type="image" name="submit" src="{{ url_for('static', filename='img/accept.svg') }}" alt="Enviar" class="icon">
-        </div>
-        <div class="cell small-cell center"></div>
-    </form>
-</div>
+{%- else -%}
+<div class="form-member-empty">Cap xarxa en aquest grup</div>
 {%- endif -%}
