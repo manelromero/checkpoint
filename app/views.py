@@ -134,12 +134,12 @@ def discard():
 @login_required
 def addAccessRule():
     form = AccessRuleForm(request.form)
-    hosts = [('','Select')]
-    app_groups = [('','Select'), ('Any','Any')]
+    hosts = [('','seleccionar')]
+    app_groups = [('','seleccionar'), ('Any','Any')]
     # call hosts
     call = apiCall('show-groups', {}, session['sid'])
     for element in call['objects']:
-        hosts.append((element['uid'], element['name']))
+        hosts.append((element['uid'], element['name'][3:]))
     # add options
     form.source.choices = hosts
     # call groups
@@ -150,7 +150,7 @@ def addAccessRule():
     form.service.choices = app_groups
     # add actions
     form.action.choices = [
-        ('','Select'),
+        ('','seleccionar'),
         ('Accept', 'Accept'),
         ('Drop', 'Drop')
         ]
@@ -189,7 +189,7 @@ def showAccessRules():
         object = {
             'uid': call['uid'],
             'name': call['name'],
-            'source': call['source'][0]['name'],
+            'source': call['source'][0]['name'][3:],
             'service': call['service'][0]['name'],
             'action': call['action']['name']
             }
@@ -319,7 +319,7 @@ def showGroups():
         call = apiCall('show-group', data, session['sid'])
         object = {
             'uid': call['uid'],
-            'Nom': call['name'],
+            'name': call['name'][3:],
             }
         objects.append(object)
     return render_template('show-groups.html', objects=objects)
@@ -330,8 +330,22 @@ def showGroups():
 @login_required
 def showGroupMembers(group_id):
     hosts, networks = [], []
+    form_hosts = [('','seleccionar')]
+    form_networks = [('','seleccionar')]
     form_host = HostForm(request.form)
     form_network = NetworkForm(request.form)
+    form_select_host = HostSelectForm(request.form)
+    form_select_network = NetworkSelectForm(request.form)
+    # call for host choices
+    call = apiCall('show-hosts', {}, session['sid'])
+    for element in call['objects']:
+        form_hosts.append((element['uid'], element['name'][4:]))
+    form_select_host.name.choices = form_hosts
+    # call for network choices
+    call = apiCall('show-networks', {}, session['sid'])
+    for element in call['objects']:
+        form_networks.append((element['uid'], element['name'][3:]))
+    form_select_network.name.choices = form_networks
     # call for group members
     data = {'uid': group_id, 'details-level': 'full'}
     call = apiCall('show-group', data, session['sid'])
@@ -340,7 +354,7 @@ def showGroupMembers(group_id):
         if element['type'] == 'host':
             object = {
                 'uid': element['uid'],
-                'name': element['name'],
+                'name': element['name'][4:],
                 'ipv4_address': element['ipv4-address']
                 }
             hosts.append(object)
@@ -348,17 +362,21 @@ def showGroupMembers(group_id):
         if element['type'] == 'network':
             object = {
                 'uid': element['uid'],
-                'name': element['name'],
+                'name': element['name'][3:],
                 'subnet4': element['subnet4'],
                 'subnet_mask': element['subnet-mask'],
                 }
             networks.append(object)
+    hosts = orderList(hosts)
+    networks = orderList(networks)
     return render_template(
         'show-group-members.html',
         hosts=hosts,
         networks=networks,
         form_host=form_host,
+        form_select_host=form_select_host,
         form_network=form_network,
+        form_select_network=form_select_network,
         group_id=group_id
         )
 
@@ -376,7 +394,7 @@ def showGroupContent(group_id):
         if element['type'] == 'host':
             object = {
                 'uid': element['uid'],
-                'name': element['name'],
+                'name': element['name'][4:],
                 'ipv4_address': element['ipv4-address']
                 }
             hosts.append(object)
@@ -384,7 +402,7 @@ def showGroupContent(group_id):
         if element['type'] == 'network':
             object = {
                 'uid': element['uid'],
-                'name': element['name'],
+                'name': element['name'][3:],
                 'subnet4': element['subnet4'],
                 }
             networks.append(object)
@@ -473,9 +491,7 @@ def showApplicationSiteGroups():
         call = apiCall('show-application-site-group', data, session['sid'])
         object = {
             'uid': call['uid'],
-            'Nom': call['name'],
-            'Creat': call['meta-info']['creation-time']['posix'],
-            'Modificat': call['meta-info']['last-modify-time']['posix']
+            'name': call['name'],
         }
         objects.append(object)
     return render_template(
@@ -576,7 +592,7 @@ def addApplicationSite(group_id):
             after_publish='showApplicationSiteGroups'
             ))
     else:
-        return render_template('new-application-site.html', form=form)
+        return render_template('new-application-site.html', form=form, group_id=group_id)
 
 
 # Show applications group members
@@ -584,23 +600,34 @@ def addApplicationSite(group_id):
 @login_required
 def showApplicationSites(group_id):
     objects = []
+    applications = [('', 'seleccionar')]
     form = ApplicationSiteForm(request.form)
+    form_select = ApplicationSelectForm(request.form)
+    # call for application choices
+    call = apiCall('show-application-sites', {}, session['sid'])
+    for element in call['objects']:
+        applications.append((element['uid'], element['name']))
+    form_select.name.choices = applications
+    # call for application groups
     data = {'uid': group_id, 'details-level': 'full'}
     call = apiCall('show-application-site-group', data, session['sid'])
     # check if there is at least one url in the group
     if call['members']:
+        # then show them all
         for element in call['members']:
             object = {
                 'uid': element['uid'],
-                'name': element['name'],
-                'url': element['url-list'][0],
+                'name': element['name'][4:],
+                'url_list': element['url-list'][0],
                 'description': element['description']
             }
             objects.append(object)
+    objects = orderList(objects)
     return render_template(
         'show-application-sites.html',
         objects=objects,
         form=form,
+        form_select=form_select,
         group_id=group_id
         )
 
@@ -616,14 +643,14 @@ def showAppGroupContent(group_id):
     for element in call['members']:
         object = {
             'uid': element['uid'],
-            'name': element['name'],
+            'name': element['name'][4:],
             'url': element['url-list'][0]
             }
         objects.append(object)
     return render_template('show-app-group-content.html', objects=objects)
 
 
-# Edit application group member (Pending)
+# Edit application group member
 @app.route('/set-application-site/<object_uid>', methods=['GET', 'POST'])
 @login_required
 def setApplicationSite(object_uid):
@@ -632,15 +659,24 @@ def setApplicationSite(object_uid):
     form = ApplicationSiteForm(request.form)
     object = {
         'uid': object_uid,
-        'Nom': call['name'],
-        u'Descripció': call['description']
+        'name': call['name'][4:],
+        'url_list': call['url-list'][0],
+        'description': call['description']
         }
     if request.method == 'POST' and form.validate():
-        data = {'uid': object_uid}
+    	data = {
+    		'uid': object_uid,
+    		'new-name': 'App ' + form.name.data,
+    		'url-list': form.url_list.data,
+    		'description': form.description.data
+    		}
         call = apiCall('set-application-site', data, session['sid'])
         flash(u'Aplicació modificada!')
         session['changes'] += 1
-        return redirect(url_for('showApplicationSites'))
+        return redirect(url_for(
+        	'publish',
+        	after_publish='showApplicationSiteGroups'
+        	))
     else:
         return render_template(
             'edit-application-site.html',
@@ -813,22 +849,31 @@ def deleteHost(group_id, object_uid):
 #################
 
 # Add network
-@app.route('/add-network', methods=['GET', 'POST'])
+@app.route('/add-network/<group_id>', methods=['POST'])
 @login_required
-def addNetwork():
+def addNetwork(group_id):
     form = NetworkForm(request.form)
-    if request.method == 'POST' and form.validate():
+    if form.validate():
+        # call for adding the network
         data = {
             'name': 'Net ' + form.name.data,
             'subnet4': form.subnet4.data,
             'subnet-mask': form.subnet_mask.data
         }
         call = apiCall('add-network', data, session['sid'])
-        flash('Xarxa afegida!')
+        # call for adding the network to group
+        data = {
+            'uid': group_id,
+            'members': {
+                'add': 'Net ' + form.name.data
+                }
+            }
+        call = apiCall('set-group', data, session['sid'])
+        flash('Xarxa afegida')
         session['changes'] += 1
         return redirect(url_for(
             'publish',
-            after_publish='showNetworks'
+            after_publish='showGroups'
             ))
     else:
         return render_template('new-network.html', form=form)
@@ -863,14 +908,14 @@ def setNetwork(object_uid):
     form = NetworkForm(request.form)
     object = {
         'uid': object_uid,
-        'name': call['name'],
+        'name': call['name'][4:],
         'subnet4': call['subnet4'],
         'subnet_mask': call['subnet-mask']
         }
     if request.method == 'POST' and form.validate():
         data = {
             'uid': object_uid,
-            'new-name': form.name.data,
+            'new-name': 'Net ' + form.name.data,
             'subnet4': form.subnet4.data,
             'subnet-mask': form.subnet_mask.data
             }
@@ -879,31 +924,45 @@ def setNetwork(object_uid):
         session['changes'] += 1
         return redirect(url_for(
             'publish',
-            after_publish='showNetworks'
+            after_publish='showGroups'
             ))
     else:
         return render_template('edit-network.html', object=object, form=form)
 
 
 # Delete network
-@app.route('/delete-network/<object_uid>', methods=['GET', 'POST'])
+@app.route('/delete-network/<group_id>/<object_uid>', methods=['GET', 'POST'])
 @login_required
-def deleteNetwork(object_uid):
+def deleteNetwork(group_id, object_uid):
     data = {'uid': object_uid}
     call = apiCall('show-network', data, session['sid'])
     object = {
         'uid': object_uid,
-        'Nom': call['name'],
-        u'IPv4 de la xarxa': call['subnet4'],
-        u'Màscara de xarxa': call['subnet-mask']
+        'name': call['name'],
+        'subnet4': call['subnet4'],
+        'subnet_mask': call['subnet-mask']
         }
     if request.method == 'POST':
+        # call for removing the network from the group
+        data = {
+            'uid': group_id,
+            'members': {
+                'remove': object['name']
+                }
+            }
+        call = apiCall('set-group', data, session['sid'])
+        # call for deleting the network
+        data = {'uid': object_uid}
         call = apiCall('delete-network', data, session['sid'])
-        flash('Xarxa esborrada!')
+        flash('Xarxa esborrada')
         session['changes'] += 1
         return redirect(url_for(
             'publish',
-            after_publish='showNetworks'
+            after_publish='showGroups'
             ))
     else:
-        return render_template('delete-network.html', object=object)
+        return render_template(
+            'delete-network.html',
+            group_id=group_id,
+            object=object
+            )

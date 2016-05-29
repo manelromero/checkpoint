@@ -2,21 +2,17 @@
 {% block content %}
 
 <h1>Xarxes</h1>
-<h2>Esborrar xarxa</h2>
+<h2>Elimiinar xarxa</h2>
 
-<form action="{{ url_for('deleteNetwork', object_uid=object.uid) }}" method="POST">
+<form action="{{ url_for('deleteNetwork', group_id=group_id, object_uid=object.uid) }}" method="POST">
 	<ul>
-		<li>Voleu esborrar la següent xarxa?</li>
-
-		{% for key, value in object.items() %}
-        {% if key != 'uid' %}
-		<li>{{ key }}: <span class="red">{{ value }}</span></li>
-		{% endif %}
-		{% endfor %}
-
+		<li>Voleu eliminar la següent xarxa?</li>
+		<li>Nom: <span class="red">{{ object.name[4:] }}</span></li>
+		<li>IPv4 de la xarxa: <span class="red">{{ object.subnet4 }}</span></li>
+		<li>Màscara de xarxa: <span class="red">{{ object.subnet_mask }}</span></li>
 	</ul>
 	<input type="submit" value="Si">
 </form>
-<a href="{{ url_for('showNetworks') }}"><button>No</button></a>
+<a href="{{ url_for('showGroups') }}"><button>No</button></a>
 
 {% endblock %}

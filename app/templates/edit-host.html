@@ -18,7 +18,7 @@
 				{% endfor %}
 			{% endif %}
 			<li>{{ form.ipv4_address.label }}</li>
-			<li>{{ form.ipv4_address (size=30, placeholder=object.ipv4_address) }}</li>
+			<li>{{ form.ipv4_address (size=20, placeholder=object.ipv4_address) }}</li>
 			{% if form.ipv4_address.errors %}
 				{% for error in form.ipv4_address.errors %}
 					<span class="error">{{ error }}</span>
@@ -30,7 +30,7 @@
 	</form>
 	{% endif %}
 
-    <a href="{{ url_for('showHosts') }}"><button>Tornar</button></a>
+    <a href="{{ url_for('showGroups') }}"><button>Tornar</button></a>
 
 </div>
 

@@ -138,21 +138,17 @@ label {
 }
 
 input {
-	font: 400 1.1rem 'Open Sans', sans-serif;
+	font: 400 1rem 'Open Sans', sans-serif;
 	padding: 0.2rem 0.5rem;
 	margin-bottom: 1rem;
-}
-
-input:focus {
 	outline: 0;
 }
 
 select {
+	min-width: 227px;
 	padding: 0.2rem 0.5rem;
-	padding-right: 3rem;
-	font: 400 1.3rem 'Open Sans', sans-serif;
+	font: 400 0.9rem 'Open Sans', sans-serif;
 	border: 1px solid #999;
-	margin-bottom: 1rem;
 	background: url('../img/down_arrow.png') no-repeat right #ddd;
 	border-radius: 0;
 	-webkit-appearance: none;
@@ -278,7 +274,7 @@ nav {
 }
 
 .big-cell {
-	width: 400px;
+	width: 300px;
 }
 
 .medium-cell {
@@ -398,6 +394,10 @@ input[type=submit]:focus {
 	border-radius: 15px;
 }
 
+.member-detail {
+	padding-left: 0.5rem;
+}
+
 .form-member {
 	width: 100%;
 	display: flex;
@@ -427,7 +427,7 @@ input[type=submit]:focus {
 
 .form-member input {
 	margin: 0;
-	font: 400 1rem 'Open Sans', sans-serif;
+	font: 400 0.9rem 'Open Sans', sans-serif;
 	padding: 0.2rem 0.5rem;
 }
 

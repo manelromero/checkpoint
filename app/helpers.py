@@ -46,18 +46,7 @@ def instantiateForm(className, request):
 
 
 def orderList(list):
-    # list.sort(key=lambda x: x.name, reverse=True)
-    newList = []
-    order = list[0].order()
-    for object in list:
-        newObject = {}
-        for element in order:
-            for attr, value in object.__dict__.items():
-                if attr == element:
-                    newObject[attr] = value
-        newList.append(newObject)
-
-    return newList
+    return sorted(list, key = lambda element: (element['name']))
 
 
 def redirect_url(default='home'):

@@ -10,8 +10,6 @@
         <div class="header-row">
             <div class="cell tiny-cell"></div>
             <div class="cell big-cell">Nom</div>
-            <div class="cell medium-cell">Creat</div>
-            <div class="cell medium-cell">Modificat</div>
             <div class="cell small-cell center">Editar</div>
             <div class="cell small-cell center">Esborrar</div>
         </div>
@@ -21,9 +19,7 @@
         {% for object in objects %}
         <div class="row app-group">
             <div class="cell tiny-cell unfold more" data-uid={{ object.uid }} data-route={{'show-application-sites' }}></div>
-            <div class="cell big-cell">{{ object.Nom }}</div>
-            <div class="cell medium-cell">{{ object.Creat|datetimeformat }}</div>
-            <div class="cell medium-cell">{{ object.Modificat|datetimeformat }}</div>
+            <div class="cell big-cell">{{ object.name }}</div>
             <div class="cell small-cell center">
                 <a href="{{ url_for('setApplicationSiteGroup', object_uid=object.uid) }}">
                     <img src="{{ url_for('static', filename='img/edit.svg') }}" class="icon" alt="Edit">

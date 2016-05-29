@@ -2,6 +2,14 @@
 <div class="form-member-title">Afegir aplicació:</div>
 <div class="member">
     <form class="form-member" action="{{ url_for('addApplicationSite', group_id=group_id) }}" method="POST">
+        <div class="cell big-cell">{{ form_select.name (size=1) }}</div>
+        <div class="cell big-cell">
+            <input type="image" name="submit" src="{{ url_for('static', filename='img/accept.svg') }}" alt="Enviar" class="icon">
+        </div>
+    </form>
+</div>
+<div class="member">
+    <form class="form-member" action="{{ url_for('addApplicationSite', group_id=group_id) }}" method="POST">
     {% for element in form %}
         <div class="cell big-cell">{{ element (size=25) }}</div>
         {%- if element.errors -%}
@@ -33,7 +41,7 @@
     <div class="cell big-cell">{{ object.url }}</div>
     <div class="cell big-cell">{{ object.description }}</div>
     <div class="cell small-cell center">
-        <a href="{{ url_for('setApplicationSite', object_uid=object.uid) }}">
+        <a href="{{ url_for('setApplicationSite', group_id=group_id, object_uid=object.uid) }}">
             <img src="{{ url_for('static', filename='img/edit.svg') }}" class="icon" alt="Edit">
         </a>
     </div>

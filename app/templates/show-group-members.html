@@ -1,5 +1,13 @@
 <!-- Hosts form -->
-{%- if form_host -%}
+<div class="form-member-title">Afegir aplicació:</div>
+<div class="member">
+    <form class="form-member" action="{{ url_for('addHost', group_id=group_id) }}" method="POST">
+        <div class="cell big-cell">{{ form_select_host.name (size=1) }}</div>
+        <div class="cell big-cell">
+            <input type="image" name="submit" src="{{ url_for('static', filename='img/accept.svg') }}" alt="Enviar" class="icon">
+        </div>
+    </form>
+</div>
 <div class="form-member-title">Afegir host:</div>
 <div class="member">
     <form class="form-member" action="{{ url_for('addHost', group_id=group_id) }}" method="POST">
@@ -24,7 +32,6 @@
     <div class="cell small-cell center">Editar</div>
     <div class="cell small-cell center">Esborrar</div>
 </div>
-{%- endif -%}
 
 <!-- Hosts detail -->
 {%- if hosts -%}
@@ -53,10 +60,16 @@
 <div class="host-end"></div>
 
 <!-- Networks form -->
-{%- if form_network -%}
 <div class="form-member-title">Afegir xarxa:</div>
 <div class="member">
-    <form class="form-member" action="{{ url_for('addHost', group_id=group_id) }}" method="POST">
+    <form class="form-member" action="{{ url_for('addNetwork', group_id=group_id) }}" method="POST">
+        <div class="cell big-cell">{{ form_select_network.name (size=1) }}</div>
+        <div class="cell big-cell">
+            <input type="image" name="submit" src="{{ url_for('static', filename='img/accept.svg') }}" alt="Enviar" class="icon">
+        </div>
+    </form>
+</div><div class="member">
+    <form class="form-member" action="{{ url_for('addNetwork', group_id=group_id) }}" method="POST">
     {%- for element in form_network -%}
         <div class="cell medium-cell">{{ element (size=20) }}</div>
         {%- if element.errors -%}
@@ -78,7 +91,6 @@
     <div class="cell small-cell center">Editar</div>
     <div class="cell small-cell center">Esborrar</div>
 </div>
-{%- endif -%}
 
 <!-- Networks detail -->
 {%- if networks -%}
@@ -93,7 +105,7 @@
         </a>
     </div>
     <div class="cell small-cell center">
-        <a href="{{ url_for('deleteNetwork', object_uid=network.uid) }}">
+        <a href="{{ url_for('deleteNetwork', group_id=group_id, object_uid=network.uid) }}">
             <img src="{{ url_for('static', filename='img/garbage.svg') }}" class="icon" alt="Delete">
         </a>
     </div>

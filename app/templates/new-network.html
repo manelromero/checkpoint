@@ -7,7 +7,7 @@
 <div class="wrapper-object">
 
 	{% if form %}
-	<form action="{{ url_for('addNetwork') }}" method="POST">
+	<form action="{{ url_for('addNetwork', group_id=group_id) }}" method="POST">
 
 		<ul>
 			{% for element in form %}
@@ -25,7 +25,7 @@
 	</form>
     {% endif %}
 
-    <a href="{{ url_for('showNetworks') }}"><button>Tornar</button></a>
+    <a href="{{ url_for('showGroups') }}"><button>Tornar</button></a>
 
 </div>
 

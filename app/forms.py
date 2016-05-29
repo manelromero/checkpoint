@@ -45,8 +45,8 @@ class ApplicationSiteForm(Form):
             message="Heu d'introduir un nom"
             ),
         validators.Length(
-            max=20,
-            message=u'El nom no pot tenir més de 20 lletres'
+            max=25,
+            message=u'El nom no pot tenir més de 25 lletres'
             )
         ])
 
@@ -71,14 +71,22 @@ class ApplicationSiteForm(Form):
         ])
 
 
+class ApplicationSelectForm(Form):
+    name = SelectField('Nom', [
+        validators.InputRequired(
+            message="Heu d'introduir un nom"
+            )
+        ])
+
+
 class HostForm(Form):
     name = StringField('Nom', [
         validators.InputRequired(
             message="Heu d'introduir un nom"
             ),
         validators.Length(
-            max=15,
-            message=u'El nom no pot tenir més de 15 caràcters'
+            max=20,
+            message=u'El nom no pot tenir més de 20 caràcters'
             )
         ])
 
@@ -94,14 +102,22 @@ class HostForm(Form):
         ])
 
 
+class HostSelectForm(Form):
+    name = SelectField('Nom', [
+        validators.InputRequired(
+            message="Heu d'introduir un nom"
+            )
+        ])
+
+
 class NetworkForm(Form):
     name = StringField('Nom', [
         validators.InputRequired(
             message="Heu d'introduir un nom"
             ),
         validators.Length(
-            max=15,
-            message=u'El nom no pot tenir més de 10 caràcters'
+            max=20,
+            message=u'El nom no pot tenir més de 20 caràcters'
             )
         ])
 
@@ -128,14 +144,22 @@ class NetworkForm(Form):
         ])
 
 
+class NetworkSelectForm(Form):
+    name = SelectField('Nom', [
+        validators.InputRequired(
+            message="Heu d'introduir un nom"
+            )
+        ])
+
+
 class GroupForm(Form):
     name = StringField('Nom', [
         validators.InputRequired(
             message="Heu d'introduir un nom"
             ),
         validators.Length(
-            max=20,
-            message=u'El nom no pot tenir més de 20 caràcters'
+            max=25,
+            message=u'El nom no pot tenir més de 25 caràcters'
             )
         ])
 
@@ -146,8 +170,8 @@ class AccessRuleForm(Form):
             message="Heu d'introduir un nom"
             ),
         validators.Length(
-            max=15,
-            message=u'El nom no pot tenir més de 10 caràcters'
+            max=25,
+            message=u'El nom no pot tenir més de 25 caràcters'
             )
         ])
 
