@@ -116,8 +116,12 @@ class APIClient:
             sid = self.sid
 
         # set headers
-        _headers = {"User-Agent": "python-api-wrapper", "Accept": "*/*",
-                    "Content-Type": "application/json", "Content-Length": len(_data)}
+        _headers = {
+            "User-Agent": "python-api-wrapper",
+            "Accept": "*/*",
+            "Content-Type": "application/json",
+            "Content-Length": len(_data)
+            }
 
         # in all API calls (except for 'login') a header containing the Check Point session-id is required.
         if sid is not None:
@@ -166,6 +170,10 @@ class APIClient:
         _api_log["request"] = {"url": url, "payload": json.loads(_data), "headers": _headers}
         _api_log["response"] = res.res_obj
         self.api_calls.append(_api_log)
+
+        # FOR MY DEBUG save debug data with all api calls to disk
+        # out_file = open(self.debug_file, 'w+')
+        # out_file.write(json.dumps(self.api_calls, indent=4, sort_keys=True))
 
         # If we want to wait for the task to end, wait for it
         if wait_for_task is True and res.success and "task-id" in res.data:

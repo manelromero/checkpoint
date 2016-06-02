@@ -2,7 +2,7 @@
 {%- if hosts -%}
 {%- for host in hosts -%}
 <div class="member-detail">
-    <div>{{ host.name }} - {{ host.ipv4_address }}</div>
+    <div>{{ host.name[5:] }} - {{ host.ipv4_address }}</div>
 </div>
 {%- endfor -%}
 {%- endif -%}
@@ -11,7 +11,7 @@
 {%- if networks -%}
 {%- for network in networks -%}
 <div class="member-detail">
-    <div>{{ network.name }}, {{ network.subnet4 }}</div>
+    <div>{{ network.name[4:] }}, {{ network.subnet4 }}</div>
 </div>
 {%- endfor -%}
 {%- endif -%}

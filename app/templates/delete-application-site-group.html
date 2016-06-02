@@ -2,12 +2,12 @@
 {% block content %}
 
 <h1>Grups d'aplicacions</h1>
-<h2>Esborrar grup d'aplicació</h2>
+<h2>Eliminar grup d'aplicació</h2>
 
 <form action="{{ url_for('deleteApplicationSiteGroup', object_uid=object.uid) }}" method="POST">
 	<ul>
 		<li>
-			Voleu esborrar el grup d'aplicacions <span class="red">{{ object.name }}</span>?
+			Voleu eliminar el grup d'aplicacions <span class="red">{{ object.name }}</span>?
 		</li>
 	</ul>
 	<input type="submit" value="Si">

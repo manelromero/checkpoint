@@ -228,15 +228,14 @@ nav {
 	min-height: 50px;
 	position: absolute;
 	left: 0;
-	text-align: center;
 	margin-top: 1rem;
+	padding: 1rem 0.5rem;
 	background-color: #bf0000;
 	box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
 	z-index: 5;
 }
 
 .flash-message {
-	margin: 2rem auto;
 	font: 600 0.9rem 'Open Sans', sans-serif;
 	color: #fff;
 }
@@ -429,10 +428,18 @@ input[type=submit]:focus {
 	padding: 0.2rem 0.5rem;
 }
 
-.form-member input[type='image'] {
-	margin: 0;
-	padding: 0;
-	vertical-align: middle;
+.form-member input[type='submit'] {
+    font: 600 0.9rem 'Open Sans', sans-serif;
+    border: 0;
+    background-color: transparent;
+    color: #333;
+    cursor: pointer;
+}
+
+.form-member input[type='submit']:hover,
+.form-member input[type='submit']:focus {
+	text-decoration: underline;
+	color: #333;
 }
 
 .rules {

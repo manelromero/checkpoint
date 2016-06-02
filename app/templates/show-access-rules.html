@@ -1,11 +1,11 @@
-{% extends "layout.html" %}
-{% block content %}
+{%- extends "layout.html" -%}
+{%- block content -%}
 
 <h1>Regles</h1>
 
 <div class="wrapper-object">
 
-    {% if objects %}
+    {%- if objects -%}
     <div class="table-header">
         <div class="header-row">
             <div class="cell big-cell">Nom</div>
@@ -18,10 +18,10 @@
     </div>
 
     <div class="table">
-        {% for object in objects %}
+        {%- for object in objects -%}
         <div class="row">
             <div class="cell big-cell">{{ object.name }}</div>
-            <div class="cell big-cell">{{ object.source }}</div>
+            <div class="cell big-cell">{{ object.source[2:] }}</div>
             <div class="cell big-cell">{{ object.service }}</div>
             <div class="cell big-cell">{{ object.action }}</div>
             <div class="cell small-cell center">
@@ -35,17 +35,17 @@
                 </a>
             </div>
         </div>
-        {% endfor %}
+        {%- endfor -%}
     </div>
-    {% endif %}
+    {%- endif -%}
 
     <a href="{{ url_for('addAccessRule') }}"><button>Afegir</button></a>
     <a href="{{ url_for('home') }}"><button>Tornar</button></a>
 
-{% include "sample-object.html" %}
-{% block object %}{% endblock %}
+{%- include "sample-object.html" -%}
+{%- block object -%}{%- endblock -%}
 
 
 </div>
 
-{% endblock %}
+{%- endblock -%}

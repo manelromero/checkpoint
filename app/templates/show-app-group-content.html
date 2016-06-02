@@ -2,7 +2,7 @@
 {%- if objects -%}
 {%- for object in objects -%}
 <div class="member-detail">
-    <div>{{ object.name }} - {{ object.url }}</div>
+    <div>{{ object.name[4:] }} - {{ object.url }}</div>
 </div>
 {%- endfor -%}
 {%- endif -%}

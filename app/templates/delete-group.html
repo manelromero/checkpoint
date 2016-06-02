@@ -2,11 +2,11 @@
 {%- block content -%}
 
 <h1>Grups</h1>
-<h2>Esborrar grup</h2>
+<h2>Eliminar grup</h2>
 
 <form action="{{ url_for('deleteGroup', object_uid=object.uid) }}" method="POST">
 	<ul>
-		<li>Voleu esborrar el grup <span class="red">{{ object.name[2:] }}</span>?</li>
+		<li>Voleu eliminar el grup <span class="red">{{ object.name[2:] }}</span>?</li>
 	</ul>
 	<input type="submit" value="Si">
 </form>

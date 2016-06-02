@@ -3,8 +3,8 @@
 <div class="member">
     <form class="form-member" action="{{ url_for('addHost', group_id=group_id) }}" method="POST">
         <div class="cell big-cell">{{ form_select_host.name (size=1) }}</div>
-        <div class="cell big-cell">
-            <input type="image" name="submit" src="{{ url_for('static', filename='img/accept.svg') }}" alt="Enviar" class="icon">
+        <div class="cell medium-cell">
+            <input type="submit" value="Afegir">
         </div>
     </form>
 </div>
@@ -19,8 +19,8 @@
             {%- endfor -%}
         {%- endif -%}
     {%- endfor -%}
-        <div class="cell small-cell center">
-            <input type="image" name="submit" src="{{ url_for('static', filename='img/accept.svg') }}" alt="Enviar" class="icon">
+        <div class="cell medium-cell center">
+            <input type="submit" value="Afegir">
         </div>
         <div class="cell small-cell center"></div>
     </form>
@@ -64,8 +64,8 @@
 <div class="member">
     <form class="form-member" action="{{ url_for('addNetwork', group_id=group_id) }}" method="POST">
         <div class="cell big-cell">{{ form_select_network.name (size=1) }}</div>
-        <div class="cell big-cell">
-            <input type="image" name="submit" src="{{ url_for('static', filename='img/accept.svg') }}" alt="Enviar" class="icon">
+        <div class="cell medium-cell">
+            <input type="submit" value="Afegir">
         </div>
     </form>
 </div>
@@ -80,8 +80,8 @@
             {%- endfor -%}
         {%- endif -%}
     {%- endfor -%}
-        <div class="cell small-cell center">
-            <input type="image" name="submit" src="{{ url_for('static', filename='img/accept.svg') }}" alt="Enviar" class="icon">
+        <div class="cell medium-cell center">
+            <input type="submit" value="Afegir">
         </div>
         <div class="cell small-cell center"></div>
     </form>

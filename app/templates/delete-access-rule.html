@@ -2,11 +2,11 @@
 {% block content %}
 
 <h1>Regles</h1>
-<h2>Esborrar regla</h2>
+<h2>Eliminar regla</h2>
 
 <form action="{{ url_for('deleteAccessRule', object_uid=object.uid) }}" method="POST">
 	<ul>
-		<li>Voleu esborrar la regla <span class="red">{{ object.name }}</span>?</li>
+		<li>Voleu eliminar la regla <span class="red">{{ object.name }}</span>?</li>
 	</ul>
 	<input type="submit" value="Si">
 </form>

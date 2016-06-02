@@ -2,21 +2,18 @@
 {% block content %}
 
 <h1>Hosts</h1>
-<h2>Esborrar host</h2>
+<h2>Eliminar host</h2>
 
 <form action="{{ url_for('deleteHost', group_id=group_id, object_uid=object.uid) }}" method="POST">
 	<ul>
-		<li>Voleu esborrar el següent host?</li>
+		<li>Voleu eliminar el següent host?</li>
 
-		{% for key, value in object.items() %}
-        {% if key != 'uid' %}
-		<li>{{ key }}: <span class="red">{{ value }}</span></li>
-		{% endif %}
-		{% endfor %}
+		<li>Nom: <span class="red">{{ object.name[5:] }}</span></li>
+		<li>Adreça IP: <span class="red">{{ object.ipv4_address }}</span></li>
 
 	</ul>
 	<input type="submit" value="Si">
 </form>
-<a href="{{ url_for('showHosts') }}"><button>No</button></a>
+<a href="{{ url_for('showGroups') }}"><button>No</button></a>
 
 {% endblock %}

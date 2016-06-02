@@ -1,32 +1,32 @@
-{% extends "layout.html" %}
-{% block content %}
+{%- extends "layout.html" -%}
+{%- block content -%}
 
 <h1>Hosts</h1>
 <h2>Crear host</h2>
 
 <div class="wrapper-object">
 
-	{% if form %}
+	{%- if form -%}
 	<form action="{{ url_for('addHost') }}" method="POST">
 
 		<ul>
-			{% for element in form %}
+			{%- for element in form -%}
 			<li>{{ element.label }}</li>
 			<li>{{ element (size=30) }}</li>
-			{% if element.errors %}
-				{% for error in element.errors %}
+			{%- if element.errors -%}
+				{%- for error in element.errors -%}
 					<span class="error">{{ error }}</span>
-				{% endfor %}
-			{% endif %}
-			{% endfor %}
+				{%- endfor -%}
+			{%- endif -%}
+			{%- endfor -%}
 		</ul>
 		<input type="submit" value="Enviar">
 
 	</form>
-    {% endif %}
+    {%- endif -%}
 
     <a href="{{ url_for('showHosts') }}"><button>Tornar</button></a>
 
 </div>
 
-{% endblock %}
+{%- endblock -%}
