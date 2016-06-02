@@ -51,13 +51,10 @@ header {
 
 .left-bar {
 	width: 20%;
-	max-width: 200px;
 	min-height: calc(100vh - 50px);
-	background-color: #fff;
-}
-
-.left-bar-content {
+	max-width: 200px;
 	padding: 0.5rem;
+	background-color: #fff;
 }
 
 .wrapper {
@@ -65,8 +62,7 @@ header {
 	width: 80%;
 	flex-grow: 1;
 	padding: 0.5rem;
-	/*border-left: 2px solid #e9e9e9;*/
-
+	border-left: 1px solid #e9e9e9;
 }
 
 .wrapper-object {
@@ -104,7 +100,6 @@ footer {
 	width: 100%;
 	padding: 0.5rem;
 	background-color: #efefef;
-	height: 500px; /* provissional */
 }
 
 a {
@@ -229,18 +224,21 @@ nav {
 }
 
 .flash {
-	width: 100%;
-	position: relative;
-	top: 0;
+	width: 200px;
+	min-height: 50px;
+	position: absolute;
 	left: 0;
 	text-align: center;
-	background-color: rgba(191, 0, 0, 0.2);
+	margin-top: 1rem;
+	background-color: #bf0000;
+	box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
 	z-index: 5;
 }
 
 .flash-message {
-	font: 400 1rem/3rem 'Open Sans', sans-serif;
-	color: #bf0000;
+	margin: 2rem auto;
+	font: 600 0.9rem 'Open Sans', sans-serif;
+	color: #fff;
 }
 
 .table {

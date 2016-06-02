@@ -37,7 +37,7 @@
 {%- if objects -%}
 {%- for object in objects -%}
 <div class="member">
-    <div class="cell big-cell">{{ object.name }}</div>
+    <div class="cell big-cell">{{ object.name[3:] }}</div>
     <div class="cell big-cell">{{ object.url }}</div>
     <div class="cell big-cell">{{ object.description }}</div>
     <div class="cell small-cell center">

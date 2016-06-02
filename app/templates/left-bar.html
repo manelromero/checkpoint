@@ -1,6 +1,6 @@
 {% block bar %}
 
-<div class="left-bar-content">
+<div>
 
     <h3>Accions</h3>
     <div>
@@ -12,6 +12,17 @@
     <div>
         <a href="{{ url_for('showApplicationSiteGroups') }}">Gestionar grups d'URLs</a>
     </div>
+
+    <!-- get flash messages -->
+    {%- with messages = get_flashed_messages() -%}
+    {%- if messages -%}
+    {%- for message in messages -%}
+    <div class="flash">
+        <div class="flash-message">{{ message }}</div>
+    </div>
+    {%- endfor -%}
+    {%- endif -%}
+    {%- endwith -%}
 
 </div>
 

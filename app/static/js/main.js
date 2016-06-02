@@ -1,5 +1,7 @@
 $(document).ready(function() {
 
+    $('.flash').delay(3000).animate({left: '-200'});
+
     $('.row').mouseover(function() {
         $(this).css('background-color', 'rgba(191, 0, 0, 0.05');
     });
@@ -7,6 +9,14 @@ $(document).ready(function() {
     $('.row').mouseleave(function() {
         $(this).css('background-color', '#fff');
     });
+
+    $('.members').on('mouseover', '.member', function() {
+        $(this).css('background-color', 'rgba(191, 0, 0, 0.05');
+    })
+
+    $('.members').on('mouseleave', '.member', function() {
+        $(this).css('background-color', '#f5f5f5');
+    })
 
     $('.unfold').click(function() {
         var uid = $(this).data('uid');
