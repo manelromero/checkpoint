@@ -1,8 +1,59 @@
-<!-- Application detail -->
-{%- if objects -%}
-{%- for object in objects -%}
-<div class="member-detail">
-    <div>{{ object.name[4:] }} - {{ object.url }}</div>
+<!-- select app form -->
+<div class="form-member-title">Triar una aplicació existent...</div>
+<div class="member">
+    <form class="form-member" action="{{ url_for('addApplicationSite', group_id=group_id) }}" method="POST">
+        <div class="cell big-cell">{{ form_select_app.name (size=1) }}</div>
+        <div class="cell medium-cell">
+            <input type="submit" value="Afegir">
+        </div>
+    </form>
+</div>
+
+<!-- new app form -->
+<div class="form-member-title">... o afegir una aplicació nova</div>
+<div class="member">
+    <form class="form-member" action="{{ url_for('addApplicationSite', group_id=group_id) }}" method="POST">
+    {%- for element in form_new_app -%}
+        <div class="cell medium-cell">{{ element (size=20) }}</div>
+        {%- if element.errors -%}
+            {%- for error in element.errors -%}
+            <span class="error">{{ error }}</span>
+            {%- endfor -%}
+        {%- endif -%}
+    {%- endfor -%}
+        <div class="cell medium-cell center">
+            <input type="submit" value="Afegir">
+        </div>
+        <div class="cell small-cell center"></div>
+    </form>
+</div>
+<div class="member-header">
+    <div class="cell medium-cell">Nom</div>
+    <div class="cell medium-cell">Adreça IPv4</div>
+    <div class="cell medium-cell"></div>
+    <div class="cell small-cell center">Editar</div>
+    <div class="cell small-cell center">Esborrar</div>
+</div>
+
+<!-- apps detail -->
+{%- if apps -%}
+{%- for app in apps -%}
+<div class="member">
+    <div class="cell medium-cell">{{ app.name }}</div>
+    <div class="cell medium-cell">{{ app.ipv4_address }}</div>
+    <div class="cell medium-cell"></div>
+    <div class="cell small-cell center">
+        <a href="{{ url_for('setHost', object_uid=host.uid) }}">
+            <img src="{{ url_for('static', filename='img/edit.svg') }}" class="icon" alt="Edit">
+        </a>
+    </div>
+    <div class="cell small-cell center">
+        <a href="{{ url_for('deleteHost', group_id=group_id, object_uid=host.uid) }}">
+            <img src="{{ url_for('static', filename='img/garbage.svg') }}" class="icon" alt="Delete">
+        </a>
+    </div>
 </div>
 {%- endfor -%}
+{%- else -%}
+<div class="form-member-empty">Cap URL en aquesta llista</div>
 {%- endif -%}

@@ -1,44 +1,33 @@
-{% extends "layout.html" %}
-{% block content %}
+{%- extends "layout.html" -%}
+{%- block content -%}
 
-<h1>Grups d'aplicacions</h1>
+<h1>Permetre URLs per grups (VIPs i Medium)</h1>
 
 <div class="wrapper-object">
 
-    {% if objects %}
+    {%- if objects -%}
     <div class="table-header">
         <div class="header-row">
             <div class="cell tiny-cell"></div>
             <div class="cell big-cell">Nom</div>
-            <div class="cell small-cell center">Editar</div>
-            <div class="cell small-cell center">Esborrar</div>
         </div>
     </div>
 
     <div class="table">
-        {% for object in objects %}
+        {%- for object in objects -%}
+        {%- if object.name != hide -%}
         <div class="row app-group">
             <div class="cell tiny-cell unfold more" data-uid={{ object.uid }} data-route={{'show-application-sites' }}></div>
-            <div class="cell big-cell">{{ object.name }}</div>
-            <div class="cell small-cell center">
-                <a href="{{ url_for('setApplicationSiteGroup', object_uid=object.uid) }}">
-                    <img src="{{ url_for('static', filename='img/edit.svg') }}" class="icon" alt="Edit">
-                </a>
-            </div>
-            <div class="cell small-cell center">
-                <a href="{{ url_for('deleteApplicationSiteGroup', object_uid=object.uid) }}">
-                    <img src="{{ url_for('static', filename='img/garbage.svg') }}" class="icon" alt="Delete">
-                </a>
-            </div>
+            <div class="cell big-cell">{{ object.name[10:] }}</div>
         </div>
         <div class="members" data-group={{ object.uid }}></div>
-        {% endfor %}
+        {%- endif -%}
+        {%- endfor -%}
     </div>
-    {% endif %}
+    {%- endif -%}
 
-    <a href="{{ url_for('addApplicationSiteGroup') }}"><button>Afegir</button></a>
     <a href="{{ url_for('home') }}"><button>Tornar</button></a>
 
 </div>
 
-{% endblock %}
+{%- endblock -%}

@@ -21,8 +21,8 @@ class LoginForm(Form):
             ),
         validators.Length(
             min=4,
-            max=10,
-            message=u"La contrasenya ha de tenir entre 4 i 10 caràcters"
+            max=16,
+            message=u"La contrasenya ha de tenir entre 4 i 16 caràcters"
             )
         ])
 

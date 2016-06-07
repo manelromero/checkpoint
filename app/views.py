@@ -2,6 +2,7 @@
 
 from flask import request, render_template, redirect, url_for, flash, session
 from functools import wraps
+import webbrowser
 
 from . import app
 from models import User
@@ -13,7 +14,6 @@ from cp_mgmt_api import APIClient
 api = APIClient()
 
 
-# home
 @app.route('/')
 def home():
     '''
@@ -106,6 +106,175 @@ def logout():
     return redirect(url_for('home'))
 
 
+@app.route('/block-access')
+@login_required
+def blockAccess():
+    '''
+    block access
+    --------------------------------------------------------------------------
+    shows the group and the application-site-group for blocking hosts and URLs
+
+    return: renders the block access page
+
+    '''
+    # call for group
+    payload = {'name': app.config['ID_COLE'] + 'GRUP_LlistaNegraEquips'}
+    group = api.api_call('show-group', payload).data
+    # call for application group
+    payload = {'name': app.config['ID_COLE'] + app.config['LLISTA_NEGRA']}
+    app_list = api.api_call('show-application-site-group', payload).data
+    return render_template('block-access.html', group=group, app_list=app_list)
+
+
+@app.route('/show-group-members/<group_id>')
+@login_required
+def showGroupMembers(group_id):
+    '''
+    show groups members
+    --------------------------------------------------------------------------
+    shows the hosts of each group, allows the user to add a new host or net to
+    the group, either selecting it from the list or creating a new one
+
+    arguments:
+        group_id: the id number of the group
+
+    return: renders the show group members page
+
+    '''
+    form_new_host = HostForm(request.form)
+    form_select_host = HostSelectForm(request.form)
+
+    # call for host choices
+    options = [('', 'seleccionar')]
+    call = api.api_call('show-hosts').data
+    for element in call['objects']:
+        options.append((element['uid'], element['name'][10:]))
+    form_select_host.name.choices = options
+
+    # call for group members
+    hosts = []
+    payload = {'uid': group_id, 'details-level': 'full'}
+    call = api.api_call('show-group', payload).data
+    for element in call['members']:
+        # select the hosts
+        if element['type'] == 'host':
+            object = {
+                'uid': element['uid'],
+                'name': element['name'],
+                'ipv4_address': element['ipv4-address']
+                }
+            hosts.append(object)
+
+    # order lists by name
+    hosts = orderList(hosts)
+
+    return render_template(
+        'show-group-members.html',
+        hosts=hosts,
+        form_new_host=form_new_host,
+        form_select_host=form_select_host,
+        group_id=group_id
+        )
+
+
+@app.route('/show-app-group-content/<group_id>')
+@login_required
+def showAppGroupContent(group_id):
+    '''
+    show application-site group content
+    -----------------------------------------------------------------------
+    shows application group content when selecting a source in the dropdown
+    menu while adding a new rule
+
+    argument:
+        group_id: the group that's been selected
+
+    return: renders the show application group content page just below the
+        select
+
+    '''
+    form_new_app = ApplicationSiteForm(request.form)
+    form_select_app = ApplicationSelectForm(request.form)
+
+    # call for app choices
+    options = [('', 'seleccionar')]
+    call = api.api_call('show-application-sites').data
+    for element in call['objects']:
+        options.append((element['uid'], element['name'][10:]))
+    form_select_app.name.choices = options
+
+    # call for application group members
+    apps = []
+    payload = {'uid': group_id, 'details-level': 'full'}
+    call = api.api_call('show-application-site-group', payload).data
+    for element in call['members']:
+        app = {
+            'name': element['name'],
+            'url': element['url-list'][0]
+            }
+        apps.append(app)
+    return render_template(
+        'show-app-group-content.html',
+        form_select_app=form_select_app,
+        form_new_app=form_new_app,
+        apps=apps)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@app.route('/smartview')
+def smartview():
+
+    from selenium import webdriver
+    from selenium.webdriver.common.keys import Keys
+
+    # driver = webdriver.Chrome()
+
+    webdriver.Chrome().execute_script("window.open('','_blank');")
+
+    # driver.get('https://' + app.config['SERVER'] + '/smartview')
+    # assert "Python" in driver.title
+    # elem = driver.find_element_by_name("q")
+    # input1 = driver.find_element_by_tag_name('body')
+    # input1.send_keys("admin")
+    # elem.send_keys(Keys.TAB)
+    # elem.send_keys("developer")
+    # elem.send_keys(Keys.ENTER)
+    # assert "No results found." not in driver.page_source
+    # driver.close()
+
+    return render_template('home.html')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @app.route('/show-access-rulebase')
 @login_required
 def showAccessRules():
@@ -179,7 +348,7 @@ def addAccessRule():
             'position': 'top',
             'action': form.action.data,
             'enabled': True,
-            'name': form.name.data,
+            'name': app.config['ID_COLE'] + 'RULE_' + form.name.data,
             'source': form.source.data,
             'service': form.service.data
             }
@@ -234,35 +403,6 @@ def showGroupContent(group_id):
         )
 
 
-@app.route('/show-app-group-content/<group_id>')
-@login_required
-def showAppGroupContent(group_id):
-    '''
-    show application-site group content
-    -----------------------------------------------------------------------
-    shows application group content when selecting a source in the dropdown
-    menu while adding a new rule
-
-    argument:
-        group_id: the group that's been selected in the drowdown menu
-
-    return: renders the show application group content page just below the
-        select
-
-    '''
-    objects = []
-    # call for application group members
-    payload = {'uid': group_id, 'details-level': 'full'}
-    call = api.api_call('show-application-site-group', payload).data
-    for element in call['members']:
-        object = {
-            'name': element['name'],
-            'url': element['url-list'][0]
-            }
-        objects.append(object)
-    return render_template('show-app-group-content.html', objects=objects)
-
-
 @app.route('/delete-rule/<object_uid>', methods=['GET', 'POST'])
 @login_required
 def deleteAccessRule(object_uid):
@@ -313,80 +453,6 @@ def showGroups():
     return render_template('show-groups.html', objects=call['objects'])
 
 
-@app.route('/show-group-members/<group_id>')
-@login_required
-def showGroupMembers(group_id):
-    '''
-    show groups members
-    -------------------------------------------------------------------------
-    shows the hosts and nets of each group, allows the user to add a new host
-    or net to the group, either selecting it from the list or creating a new
-    one
-
-    arguments:
-        group_id: the id number of the group
-
-    return: renders the show group members page
-
-    '''
-    form_host = HostForm(request.form)
-    form_network = NetworkForm(request.form)
-    form_select_host = HostSelectForm(request.form)
-    form_select_network = NetworkSelectForm(request.form)
-
-    # call for host choices
-    form_hosts = [('', 'seleccionar')]
-    call = api.api_call('show-hosts').data
-    for element in call['objects']:
-        form_hosts.append((element['uid'], element['name']))
-    form_select_host.name.choices = form_hosts
-
-    # call for network choices
-    form_networks = [('', 'seleccionar')]
-    call = api.api_call('show-networks').data
-    for element in call['objects']:
-        form_networks.append((element['uid'], element['name']))
-    form_select_network.name.choices = form_networks
-
-    # call for group members
-    hosts, networks = [], []
-    payload = {'uid': group_id, 'details-level': 'full'}
-    call = api.api_call('show-group', payload).data
-    for element in call['members']:
-        # select the hosts
-        if element['type'] == 'host':
-            object = {
-                'uid': element['uid'],
-                'name': element['name'],
-                'ipv4_address': element['ipv4-address']
-                }
-            hosts.append(object)
-        # select the networks
-        if element['type'] == 'network':
-            object = {
-                'uid': element['uid'],
-                'name': element['name'],
-                'subnet4': element['subnet4'],
-                'subnet_mask': element['subnet-mask'],
-                }
-            networks.append(object)
-
-    # order lists by name
-    hosts = orderList(hosts)
-    networks = orderList(networks)
-
-    return render_template(
-        'show-group-members.html',
-        hosts=hosts,
-        networks=networks,
-        form_host=form_host,
-        form_select_host=form_select_host,
-        form_network=form_network,
-        form_select_network=form_select_network,
-        group_id=group_id
-        )
-
-
 @app.route('/add-host/<group_id>', methods=['POST'])
 @login_required
 def addHost(group_id):
@@ -407,7 +473,7 @@ def addHost(group_id):
     if form.validate():
         # call for creating the host
         payload = {
-            'name': 'Host ' + form.name.data,
+            'name': app.config['ID_COLE'] + 'HOST_' + form.name.data,
             'ipv4-address': form.ipv4_address.data
             }
         api.api_call('add-host', payload)
@@ -446,7 +512,7 @@ def addNetwork(group_id):
     if form.validate():
         # call for adding the network
         payload = {
-            'name': 'Net ' + form.name.data,
+            'name': app.config['ID_COLE'] + 'NETW_' + form.name.data,
             'subnet4': form.subnet4.data,
             'subnet-mask': form.subnet_mask.data
         }
@@ -650,7 +716,7 @@ def addGroup():
     form = GroupForm(request.form)
 
     if request.method == 'POST' and form.validate():
-        payload = {'name': 'Gr ' + form.name.data}
+        payload = {'name': app.config['ID_COLE'] + 'GRUP_' + form.name.data}
         api.api_call('add-group', payload)
         api.api_call('publish')
         flash('Grup afegit')
@@ -729,9 +795,11 @@ def showApplicationSiteGroups():
 
     '''
     call = api.api_call('show-application-site-groups').data
+    hide = app.config['ID_COLE'] + app.config['LLISTA_BLANCA']
     return render_template(
         'show-application-site-groups.html',
-        objects=call['objects']
+        objects=call['objects'],
+        hide=hide
         )
 
 
@@ -752,13 +820,13 @@ def showApplicationSites(group_id):
 
     '''
     # form for selecting an application
-    form_select = ApplicationSelectForm(request.form)
+    form_select_app = ApplicationSelectForm(request.form)
     # fill the applications selection list
     applications = [('', 'seleccionar')]
     call = api.api_call('show-application-sites').data
     for element in call['objects']:
         applications.append((element['uid'], element['name']))
-    form_select.name.choices = applications
+    form_select_app.name.choices = applications
 
     # form for adding an application
     form = ApplicationSiteForm(request.form)
@@ -779,7 +847,7 @@ def showApplicationSites(group_id):
     return render_template(
         'show-application-sites.html',
         objects=objects,
-        form_select=form_select,
+        form_select_app=form_select_app,
         form=form,
         group_id=group_id
         )
@@ -803,7 +871,7 @@ def addApplicationSite(group_id):
     if form.validate():
         # call for adding the application
         payload = {
-            'name': 'App ' + form.name.data,
+            'name': app.config['ID_COLE'] + 'APPL_' + form.name.data,
             'url-list': form.url_list.data,
             'description': form.description.data,
             'primary-category': 'Custom_Application_Site',  # required
@@ -934,7 +1002,7 @@ def addApplicationSiteGroup():
     form = ApplicationSiteGroupForm(request.form)
 
     if request.method == 'POST' and form.validate():
-        payload = {'name': form.name.data}
+        payload = {'name': app.config['ID_COLE'] + 'APGR_' + form.name.data}
         api.api_call('add-application-site-group', payload)
         api.api_call('publish')
         flash("Grup d'aplicacions afegit")
@@ -1071,10 +1139,10 @@ def setAccessRule(object_uid):
 @login_required
 def showHosts():
     objects = []
-    call = apiCall('show-hosts').data
+    call = api.api_call('show-hosts').data
     for element in call['objects']:
         payload = {'uid': element['uid']}
-        call = apiCall('show-host', payload)
+        call = api.api_call('show-host', payload)
         object = {
             'uid': call['uid'],
             'name': call['name'],
@@ -1089,7 +1157,7 @@ def showHosts():
 @login_required
 def showNetworks():
     objects = []
-    call = apiCall('show-networks').data
+    call = api.api_call('show-networks').data
     for element in call['objects']:
         payload = {'uid': element['uid']}
         call = api.api_call('show-network', payload).data

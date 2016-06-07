@@ -124,7 +124,12 @@ form {
 }
 
 li {
-	list-style: none;
+	list-style-type: none;
+}
+
+.menu-options {
+	list-style-type: disc;
+    margin-left: 1rem;
 }
 
 label {

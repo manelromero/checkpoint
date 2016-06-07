@@ -1,17 +1,20 @@
-<div class="form-member-title">Triar URL existent:</div>
+<!-- select app form -->
+<div class="form-member-title">Triar una aplicació existent...</div>
 <div class="member">
     <form class="form-member" action="{{ url_for('addApplicationSite', group_id=group_id) }}" method="POST">
-        <div class="cell big-cell">{{ form_select_app.name (size=1) }}</div>
-        <div class="medium big-cell">
+        <div class="cell big-cell">{{ form_select_host.name (size=1) }}</div>
+        <div class="cell medium-cell">
             <input type="submit" value="Afegir">
         </div>
     </form>
 </div>
-<div class="form-member-title">... o afegir una URL nova</div>
+
+<!-- new app form -->
+<div class="form-member-title">... o afegir una aplicació nova</div>
 <div class="member">
     <form class="form-member" action="{{ url_for('addApplicationSite', group_id=group_id) }}" method="POST">
-    {%- for element in form -%}
-        <div class="cell big-cell">{{ element (size=25) }}</div>
+    {%- for element in form_new_app -%}
+        <div class="cell medium-cell">{{ element (size=20) }}</div>
         {%- if element.errors -%}
             {%- for error in element.errors -%}
             <span class="error">{{ error }}</span>
@@ -24,33 +27,34 @@
         <div class="cell small-cell center"></div>
     </form>
 </div>
-
 <div class="member-header">
-    <div class="cell big-cell">Nom</div>
-    <div class="cell big-cell">URL</div>
-    <div class="cell big-cell">Descripció</div>
-    <div class="cell small-cell center">VIP</div>
-    <div class="cell small-cell center">Medium</div>
+    <div class="cell medium-cell">Nom</div>
+    <div class="cell medium-cell">Adreça IPv4</div>
+    <div class="cell medium-cell"></div>
+    <div class="cell small-cell center">Editar</div>
+    <div class="cell small-cell center">Esborrar</div>
 </div>
 
-{%- if objects -%}
-{%- for object in objects -%}
+<!-- apps detail -->
+{%- if apps -%}
+aaa: {{ apps }}
+{%- for app in apps -%}
 <div class="member">
-    <div class="cell big-cell">{{ object.name[3:] }}</div>
-    <div class="cell big-cell">{{ object.url }}</div>
-    <div class="cell big-cell">{{ object.description }}</div>
+    <div class="cell medium-cell">{{ app.name }}</div>
+    <div class="cell medium-cell">{{ app.ipv4_address }}</div>
+    <div class="cell medium-cell"></div>
     <div class="cell small-cell center">
-        <a href="{{ url_for('setApplicationSite', group_id=group_id, object_uid=object.uid) }}">
+        <a href="{{ url_for('setHost', object_uid=host.uid) }}">
             <img src="{{ url_for('static', filename='img/edit.svg') }}" class="icon" alt="Edit">
         </a>
     </div>
     <div class="cell small-cell center">
-        <a href="{{ url_for('deleteApplicationSite', group_id=group_id, object_uid=object.uid) }}">
+        <a href="{{ url_for('deleteHost', group_id=group_id, object_uid=host.uid) }}">
             <img src="{{ url_for('static', filename='img/garbage.svg') }}" class="icon" alt="Delete">
         </a>
     </div>
 </div>
 {%- endfor -%}
 {%- else -%}
-<div class="form-member-empty">Cap URL a aquest grup</div>
+<div class="form-member-empty">Cap URL en aquesta llista</div>
 {%- endif -%}

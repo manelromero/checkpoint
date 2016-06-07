@@ -1,17 +1,23 @@
-{% block bar %}
+{%- block bar -%}
 
 <div>
 
     <h3>Accions</h3>
-    <div>
-        <a href="{{ url_for('showAccessRules') }}">Gestionar regles</a>
-    </div>
-    <div>
-        <a href="{{ url_for('showGroups') }}">Gestionar grups</a>
-    </div>
-    <div>
-        <a href="{{ url_for('showApplicationSiteGroups') }}">Gestionar aplicacions</a>
-    </div>
+
+    <ul>
+        <li class="menu-options">
+            <a href="{{ url_for('blockAccess') }}">Bloquejar accés per equips i URLs</a>
+        </li>
+        <li class="menu-options">
+            <a href="{{ url_for('showApplicationSiteGroups') }}">Permetre URLs per grups (VIPs i Medium)</a>
+        </li>
+        <li class="menu-options">
+          <a href="{{ url_for('showApplicationSiteGroups') }}">Gestionar grups (VIPs i Meium)</a>
+        </li>
+        <li class="menu-options">
+            <a href="{{ url_for('smartview') }}">Accés a SmartView</a>
+        </li>
+    </ul>
 
     <!-- get flash messages -->
     {%- with messages = get_flashed_messages() -%}
@@ -26,4 +32,4 @@
 
 </div>
 
-{% endblock %}
+{%- endblock -%}
