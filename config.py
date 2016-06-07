@@ -5,4 +5,4 @@ SERVER = '192.168.1.10'
 LAYER = 'Network'
 ID_COLE = '0001_'  # Four numbers and underscore _
 LLISTA_NEGRA = 'APGR_LlistaNegraURLs'  # Black list
-LLISTA_BLANCA = 'APGR_LlistaBlancaGeneral'  # Invisible list for the user
+LLISTA_GENERAL = 'APGR_GENERAL'  # Invisible list for the user

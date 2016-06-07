@@ -1,17 +1,17 @@
 {%- extends "layout.html" -%}
 {%- block content -%}
 
-<h1>Aplicacions</h1>
-<h2>Eliminar aplicació</h2>
+<h1>URLs</h1>
+<h2>Eliminar URL</h2>
 
-<form action="{{ url_for('deleteApplicationSite', group_id=group_id, object_uid=object.uid) }}" method="POST">
+<form action="{{ url_for('deleteApplicationSite', app_list=app_list, object_uid=object.uid, url_back=url_back) }}" method="POST">
 	<ul>
 		<li>
-			Voleu eliminar l'aplicació <span class="red">{{ object.name[4:] }}</span> amb URL <span class="red">{{ object.url_list }}</span>?
+			Voleu eliminar la URL <span class="red">{{ object.name }}</span>, <span class="red">{{ object.url_list }}</span>?
 		</li>
 	</ul>
 	<input type="submit" value="Si">
 </form>
-<a href="{{ url_for('showApplicationSiteGroups') }}"><button>No</button></a>
+<a href="{{ url_for(url_back) }}"><button>No</button></a>
 
 {%- endblock -%}

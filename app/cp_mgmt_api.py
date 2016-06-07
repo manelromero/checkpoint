@@ -172,8 +172,8 @@ class APIClient:
         self.api_calls.append(_api_log)
 
         # FOR MY DEBUG save debug data with all api calls to disk
-        out_file = open(self.debug_file, 'w+')
-        out_file.write(json.dumps(self.api_calls, indent=4, sort_keys=True))
+        # out_file = open(self.debug_file, 'w+')
+        # out_file.write(json.dumps(self.api_calls, indent=4, sort_keys=True))
 
         # If we want to wait for the task to end, wait for it
         if wait_for_task is True and res.success and "task-id" in res.data:
@@ -259,6 +259,7 @@ class APIClient:
         all_objects = []     # accumulate all teh objects from all the API calls
         iterations  = 0      # number of times we've made an API call
         api_res = {}         # API call response object
+
 
         # are we done?
         while not finished:

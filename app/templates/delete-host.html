@@ -1,19 +1,19 @@
-{% extends "layout.html" %}
-{% block content %}
+{%- extends "layout.html" -%}
+{%- block content -%}
 
-<h1>Hosts</h1>
-<h2>Eliminar host</h2>
+<h1>Equips</h1>
+<h2>Eliminar equip</h2>
 
-<form action="{{ url_for('deleteHost', group_id=group_id, object_uid=object.uid) }}" method="POST">
+<form action="{{ url_for('deleteHost', group_id=group_id, object_uid=object.uid, url_back=url_back) }}" method="POST">
 	<ul>
-		<li>Voleu eliminar el següent host?</li>
+		<li>Voleu eliminar el següent equip?</li>
 
-		<li>Nom: <span class="red">{{ object.name[5:] }}</span></li>
+		<li>Nom: <span class="red">{{ object.name }}</span></li>
 		<li>Adreça IP: <span class="red">{{ object.ipv4_address }}</span></li>
 
 	</ul>
 	<input type="submit" value="Si">
 </form>
-<a href="{{ url_for('showGroups') }}"><button>No</button></a>
+<a href="{{ url_for(url_back) }}"><button>No</button></a>
 
-{% endblock %}
+{%- endblock -%}

@@ -20,9 +20,10 @@ $(document).ready(function() {
 
     $('.unfold').click(function() {
         var uid = $(this).data('uid');
-    	var route = $(this).data('route');
+        var route = $(this).data('route');
+    	var url_back = $(this).data('url-back');
     	$.ajax({
-    		url: $SCRIPT_ROOT + '/' + route + '/' + uid,
+    		url: $SCRIPT_ROOT + '/' + route + '/' + uid + '/' + url_back,
     		async: false,
     		success: function(data) {
     			$('[data-group=' + uid + ']').html(data);
@@ -30,30 +31,6 @@ $(document).ready(function() {
     	});
         $(this).toggleClass('more');
     	$('[data-group=' + uid + ']').slideToggle(300)
-    });
-
-    $('#source').change(function() {
-        var group_uid = $(this).val();
-        var route = 'show-group-content';
-        $.ajax({
-            url: $SCRIPT_ROOT + '/' + route + '/' + group_uid,
-            async: false,
-            success: function(data) {
-                $('#group-detail').html(data);
-            }
-        });
-    });
-
-    $('#service').change(function() {
-        var group_uid = $(this).val();
-        var route = 'show-app-group-content';
-        $.ajax({
-            url: $SCRIPT_ROOT + '/' + route + '/' + group_uid,
-            async: false,
-            success: function(data) {
-                $('#app-group-detail').html(data);
-            }
-        });
     });
 
 });

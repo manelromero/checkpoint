@@ -1,7 +1,7 @@
 <!-- select app form -->
-<div class="form-member-title">Triar una aplicació existent...</div>
+<div class="form-member-title">Triar una URL existent...</div>
 <div class="member">
-    <form class="form-member" action="{{ url_for('addApplicationSite', group_id=group_id) }}" method="POST">
+    <form class="form-member" action="{{ url_for('addExistingApplication', app_list=app_list, url_back=url_back) }}" method="POST">
         <div class="cell big-cell">{{ form_select_app.name (size=1) }}</div>
         <div class="cell medium-cell">
             <input type="submit" value="Afegir">
@@ -10,9 +10,9 @@
 </div>
 
 <!-- new app form -->
-<div class="form-member-title">... o afegir una aplicació nova</div>
+<div class="form-member-title">... o afegir una URL nova</div>
 <div class="member">
-    <form class="form-member" action="{{ url_for('addApplicationSite', group_id=group_id) }}" method="POST">
+    <form class="form-member" action="{{ url_for('addApplicationSite', app_list=app_list, url_back=url_back) }}" method="POST">
     {%- for element in form_new_app -%}
         <div class="cell medium-cell">{{ element (size=20) }}</div>
         {%- if element.errors -%}
@@ -29,7 +29,7 @@
 </div>
 <div class="member-header">
     <div class="cell medium-cell">Nom</div>
-    <div class="cell medium-cell">Adreça IPv4</div>
+    <div class="cell medium-cell">URL</div>
     <div class="cell medium-cell"></div>
     <div class="cell small-cell center">Editar</div>
     <div class="cell small-cell center">Esborrar</div>
@@ -37,18 +37,18 @@
 
 <!-- apps detail -->
 {%- if apps -%}
-{%- for app in apps -%}
+{%- for appl in apps -%}
 <div class="member">
-    <div class="cell medium-cell">{{ app.name }}</div>
-    <div class="cell medium-cell">{{ app.ipv4_address }}</div>
+    <div class="cell medium-cell">{{ appl.name }}</div>
+    <div class="cell medium-cell">{{ appl.url_list }}</div>
     <div class="cell medium-cell"></div>
     <div class="cell small-cell center">
-        <a href="{{ url_for('setHost', object_uid=host.uid) }}">
+        <a href="{{ url_for('setApplicationSite', object_uid=appl.uid, url_back=url_back) }}">
             <img src="{{ url_for('static', filename='img/edit.svg') }}" class="icon" alt="Edit">
         </a>
     </div>
     <div class="cell small-cell center">
-        <a href="{{ url_for('deleteHost', group_id=group_id, object_uid=host.uid) }}">
+        <a href="{{ url_for('deleteApplicationSite', app_list=app_list, object_uid=appl.uid, url_back=url_back) }}">
             <img src="{{ url_for('static', filename='img/garbage.svg') }}" class="icon" alt="Delete">
         </a>
     </div>

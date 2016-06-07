@@ -60,16 +60,6 @@ class ApplicationSiteForm(Form):
             )
         ])
 
-    description = StringField(u'Descripció', [
-        validators.InputRequired(
-            message=u"Heu d'introduir una descripció"
-            ),
-        validators.Length(
-            max=25,
-            message=u'La descripció no pot tenir més de 25 caràcters'
-            )
-        ])
-
 
 class ApplicationSelectForm(Form):
     name = SelectField('Nom', [
@@ -85,8 +75,8 @@ class HostForm(Form):
             message="Heu d'introduir un nom"
             ),
         validators.Length(
-            max=20,
-            message=u'El nom no pot tenir més de 20 caràcters'
+            max=25,
+            message=u'El nom no pot tenir més de 25 caràcters'
             )
         ])
 

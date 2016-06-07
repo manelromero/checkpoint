@@ -7,7 +7,7 @@
 <div class="wrapper-object">
 
 	{% if form %}
-	<form action="{{ url_for('addApplicationSite', group_id=group_id) }}" method="POST">
+	<form action="{{ url_for('addApplicationSite', group_id=group_id, url_back=url_back) }}" method="POST">
 
 		<ul>
 			{% for element in form %}
@@ -25,7 +25,7 @@
 	</form>
     {% endif %}
 
-    <a href="{{ url_for('showApplicationSiteGroups') }}"><button>Tornar</button></a>
+    <a href="{{ url_for(url_back) }}"><button>Tornar</button></a>
 
 </div>
 

@@ -1,7 +1,7 @@
 <!-- select app form -->
 <div class="form-member-title">Triar una aplicació existent...</div>
 <div class="member">
-    <form class="form-member" action="{{ url_for('addApplicationSite', group_id=group_id) }}" method="POST">
+    <form class="form-member" action="{{ url_for('addExistingApplication', group_id=group_id, url_back=url_back) }}" method="POST">
         <div class="cell big-cell">{{ form_select_host.name (size=1) }}</div>
         <div class="cell medium-cell">
             <input type="submit" value="Afegir">
@@ -12,7 +12,7 @@
 <!-- new app form -->
 <div class="form-member-title">... o afegir una aplicació nova</div>
 <div class="member">
-    <form class="form-member" action="{{ url_for('addApplicationSite', group_id=group_id) }}" method="POST">
+    <form class="form-member" action="{{ url_for('addApplicationSite', group_id=group_id, url_back=url_back) }}" method="POST">
     {%- for element in form_new_app -%}
         <div class="cell medium-cell">{{ element (size=20) }}</div>
         {%- if element.errors -%}
@@ -44,12 +44,12 @@ aaa: {{ apps }}
     <div class="cell medium-cell">{{ app.ipv4_address }}</div>
     <div class="cell medium-cell"></div>
     <div class="cell small-cell center">
-        <a href="{{ url_for('setHost', object_uid=host.uid) }}">
+        <a href="{{ url_for('setApplicationSite', object_uid=app.uid, url_back=url_back) }}">
             <img src="{{ url_for('static', filename='img/edit.svg') }}" class="icon" alt="Edit">
         </a>
     </div>
     <div class="cell small-cell center">
-        <a href="{{ url_for('deleteHost', group_id=group_id, object_uid=host.uid) }}">
+        <a href="{{ url_for('deleteApplicationSite', group_id=group_id, object_uid=app.uid, url_back=url_back) }}">
             <img src="{{ url_for('static', filename='img/garbage.svg') }}" class="icon" alt="Delete">
         </a>
     </div>

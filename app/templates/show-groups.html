@@ -1,11 +1,10 @@
 {%- extends "layout.html" -%}
 {%- block content -%}
 
-<h1>Grups</h1>
+<h1>Gestionar grups (VIPs i Medium)</h1>
 
 <div class="wrapper-object">
 
-    {%- if objects -%}
     <div class="table-header">
         <div class="header-row">
             <div class="cell tiny-cell"></div>
@@ -14,15 +13,17 @@
     </div>
 
     <div class="table">
-        {%- for object in objects -%}
         <div class="row app-group">
-            <div class="cell tiny-cell unfold more" data-uid={{ object.uid }} data-route={{ 'show-group-members' }}></div>
-            <div class="cell big-cell">{{ object.name[10:] }}</div>
+            <div class="cell tiny-cell unfold more" data-uid={{ group_vip.uid }} data-route={{ 'show-group-members' }} data-url-back="{{ url_back }}"></div>
+            <div class="cell big-cell">{{ group_vip.name[10:] }}</div>
         </div>
-        <div class="members" data-group={{ object.uid }}></div>
-        {%- endfor -%}
+        <div class="members" data-group={{ group_vip.uid }}></div>
+        <div class="row app-group">
+            <div class="cell tiny-cell unfold more" data-uid={{ group_medium.uid }} data-route={{ 'show-group-members' }} data-url-back="{{ url_back }}"></div>
+            <div class="cell big-cell">{{ group_medium.name[10:] }}</div>
+        </div>
+        <div class="members" data-group={{ group_medium.uid }}></div>
     </div>
-    {%- endif -%}
 
     <a href="{{ url_for('home') }}"><button>Tornar</button></a>
 

@@ -5,7 +5,6 @@
 
 <div class="wrapper-object">
 
-    {%- if objects -%}
     <div class="table-header">
         <div class="header-row">
             <div class="cell tiny-cell"></div>
@@ -14,17 +13,17 @@
     </div>
 
     <div class="table">
-        {%- for object in objects -%}
-        {%- if object.name != hide -%}
         <div class="row app-group">
-            <div class="cell tiny-cell unfold more" data-uid={{ object.uid }} data-route={{'show-application-sites' }}></div>
-            <div class="cell big-cell">{{ object.name[10:] }}</div>
+            <div class="cell tiny-cell unfold more" data-uid={{ app_vip.uid }} data-route={{'show-app-group-content' }} data-url-back={{ url_back }}></div>
+            <div class="cell big-cell">{{ app_vip.name[10:] }}</div>
         </div>
-        <div class="members" data-group={{ object.uid }}></div>
-        {%- endif -%}
-        {%- endfor -%}
+        <div class="members" data-group={{ app_vip.uid }}></div>
+        <div class="row app-group">
+            <div class="cell tiny-cell unfold more" data-uid={{ app_medium.uid }} data-route={{'show-app-group-content' }} data-url-back={{ url_back }}></div>
+            <div class="cell big-cell">{{ app_medium.name[10:] }}</div>
+        </div>
+        <div class="members" data-group={{ app_medium.uid }}></div>
     </div>
-    {%- endif -%}
 
     <a href="{{ url_for('home') }}"><button>Tornar</button></a>
 

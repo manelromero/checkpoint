@@ -9,13 +9,16 @@
             <a href="{{ url_for('blockAccess') }}">Bloquejar accés per equips i URLs</a>
         </li>
         <li class="menu-options">
-            <a href="{{ url_for('showApplicationSiteGroups') }}">Permetre URLs per grups (VIPs i Medium)</a>
+            <a href="{{ url_for('allowURL') }}">Permetre URLs per grups (VIPs i Medium)</a>
         </li>
         <li class="menu-options">
-          <a href="{{ url_for('showApplicationSiteGroups') }}">Gestionar grups (VIPs i Meium)</a>
+          <a href="{{ url_for('manageGroups') }}">Gestionar grups (VIPs i Medium)</a>
         </li>
         <li class="menu-options">
             <a href="{{ url_for('smartview') }}">Accés a SmartView</a>
+        </li>
+        <li class="menu-options">
+            <a href="{{ url_for('installPolicy') }}">Instal·lar política</a>
         </li>
     </ul>
 
