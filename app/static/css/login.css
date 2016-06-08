@@ -1,0 +1,124 @@
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+html, body {
+	overflow: hidden;
+	background-color: #e3e3e3;
+}
+
+.container {
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	vertical-align: middle;
+}
+
+.form-window {
+	margin: auto;
+	width: 675px;
+	height: 290px;
+	background-color: #ebecee;
+	border-radius: 5px;
+	box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+	padding: 5px;
+}
+
+.form-left {
+	float: left;
+	width: 280px;
+	height: 280px;
+	background-color: #1f2a3d;
+	border-radius: 5px;
+}
+
+.form-right {
+	float: right;
+	width: 385px;
+	height: 2800px;
+}
+
+.logo-up,
+.logo-down,
+.data,
+.submit {
+	height: 140px;
+}
+
+.logo-up {
+	padding: 50px 66px 0 66px;
+}
+
+.logo-down {
+	padding: 84px 74px 0 74px;
+}
+
+.data,
+.submit {
+	padding: 12px;
+}
+
+.data {
+	padding-top: 40px;
+}
+
+.submit {
+	position: relative;
+}
+
+.left-image {
+	float: left;
+	margin-top: 6px;
+	background-color: #fff;
+	margin-right: 5px;
+}
+
+.input {
+	width: 100%;
+	background-color: #fff;
+	margin: 11px 0;
+	border-radius: 3px;
+}
+
+input[type="text"],
+input[type="password"] {
+	width: 330px;
+	font: 400 16px/32px 'Open Sans', sans-serif;
+	background-color: #fff;
+	color: #222;
+	border: 0;
+	padding: 2px;
+	outline: 0;
+}
+
+input#submit {
+	position: absolute;
+	bottom: 12px;
+	right: 12px;
+	font: 400 16px/32px 'Open Sans', sans-serif;
+	background-color: #69951c;
+	color: #fff;
+	border: 0;
+	border-radius: 3px;
+	padding: 0 40px 0 20px;
+	outline: 0;
+	background: #69951c url(../img/right-arrow.svg) no-repeat;
+	background-position: 85% 50%;
+}
+
+input#submit:hover{
+	background: #71a517 url(../img/right-arrow.svg) no-repeat;
+	background-position: 85% 50%;
+}
+
+input#submit:focus{
+	background: #69951c url(../img/right-arrow.svg) no-repeat;
+	background-position: 85% 50%;
+}
+
+.error {
+	font: 400 14px 'Open Sans', sans-serif;
+	color: #bf0000;
+}

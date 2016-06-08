@@ -1,6 +1,24 @@
-{% extends "layout.html" %}
-{% block content %}
+{%- extends "layout.html" -%}
+{%- block content -%}
 
-<div class="special">HOME</div>
+    <h3>Accions</h3>
 
-{% endblock %}
+    <ul>
+        <li class="menu-options">
+            <a href="{{ url_for('blockAccess') }}">Bloquejar accés per equips i URLs</a>
+        </li>
+        <li class="menu-options">
+            <a href="{{ url_for('allowURL') }}">Permetre URLs per grups (VIPs i Medium)</a>
+        </li>
+        <li class="menu-options">
+          <a href="{{ url_for('manageGroups') }}">Gestionar grups (VIPs i Medium)</a>
+        </li>
+        <li class="menu-options">
+            <a href="{{ url_for('smartview') }}">Accés a SmartView</a>
+        </li>
+        <li class="menu-options">
+            <a href="{{ url_for('installPolicy') }}">Instal·lar política</a>
+        </li>
+    </ul>
+
+{%- endblock -%}

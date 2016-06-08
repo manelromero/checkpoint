@@ -14,19 +14,6 @@ from cp_mgmt_api import APIClient
 api = APIClient()
 
 
-@app.route('/')
-def home():
-    '''
-    home
-    ------------------------------------------------------------------
-    performs a login call to the server and stores username in session
-
-    return: renders home page if success or login page if error
-
-    '''
-    return render_template('home.html')
-
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     '''
@@ -49,8 +36,7 @@ def login():
         if 'sid' in login.data:
             # store username in session for header and login_required
             session['username'] = form.username.data
-            flash('Usuari registrat')
-            return render_template('home.html')
+            return render_template('home.html', home=True)
         else:
             flash(u"Error d'inici de sessió, torneu a intentar-ho.")
 
@@ -85,7 +71,6 @@ def login_required(f):
             session.clear()
             return render_template('session-expired.html')
         # We don't have a session username, so let's get one
-        flash(u'Necessiteu estar registrats per accedir a aquesta opció')
         return redirect(url_for('login'))
     return wrap
 
@@ -104,6 +89,20 @@ def logout():
     session.clear()
     flash('Usuari desconnectat')
     return redirect(url_for('home'))
+
+
+@app.route('/')
+@login_required
+def home():
+    '''
+    home
+    ------------------------------------------------------------------
+    performs a login call to the server and stores username in session
+
+    return: renders home page if success or login page if error
+
+    '''
+    return render_template('home.html', home=True)
 
 
 @app.route('/block-access')

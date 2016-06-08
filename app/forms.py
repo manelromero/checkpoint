@@ -10,8 +10,8 @@ class LoginForm(Form):
             message="Heu d'introduir un usuari"
             ),
         validators.Length(
-            max=8,
-            message=u"L'usuari no pot tenir més de 8 caràcters"
+            max=16,
+            message=u"L'usuari no pot tenir més de 16 caràcters"
             )
         ])
 

@@ -1,32 +1,57 @@
-{% extends "layout.html" %}
-{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>CheckPoint SmartConsole</title>
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+<body>
 
-<h1>Usuari</h1>
-<h2>Log In</h2>
+	<div class="container">
+		<div class="form-window">
+			<div class="form-left">
+				<div class="logo-up">
+					<img src="{{ url_for('static', filename='img/logo-smartconsole.svg') }}" alt="SmartConsole">
+				</div>
+				<div class="logo-down">
+					<img src="{{ url_for('static', filename='img/logo-checkpoint.svg') }}" alt="CheciPoint">
+				</div>
+			</div>
+			<div class="form-right">
+				<form action="{{ url_for('login') }}" method="POST">
+					<div class="data">
+						<div class="input">
+							<div class="left-image">
+								<img src="{{ url_for('static', filename='img/user.svg') }}">
+							</div>
+							{{ form.username (placeholder='Usuari') }}
+						</div>
+						{% if form.username.errors %}
+						{% for error in form.username.errors %}
+							<span class="error">{{ error }}</span>
+						{% endfor %}
+						{% endif %}
+						<div class="input">
+							<div class="left-image">
+								<img src="{{ url_for('static', filename='img/password.svg') }}">
+							</div>
+							{{ form.password (size=15, placeholder='Contrasenya') }}
+						</div>
+						{% if form.password.errors %}
+						{% for error in form.password.errors %}
+							<span class="error">{{ error }}</span>
+						{% endfor %}
+						{% endif %}
+					</div>
+					<div class="submit">
+						<input type="submit" id="submit" value="LOGIN">
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 
-<div class="wrapper-object">
-
-	{% if form %}
-	<form action="{{ url_for('login') }}" method="POST">
-
-		<ul>
-			{% for element in form %}
-			<li>{{ element.label }}</li>
-			<li>{{ element (size=15) }}</li>
-			{% if element.errors %}
-				{% for error in element.errors %}
-					<span class="error">{{ error }}</span>
-				{% endfor %}
-			{% endif %}
-			{% endfor %}
-		</ul>
-		<input type="submit" value="Enviar">
-
-	</form>
-    {% endif %}
-
-    <a href="{{ url_for('home', next=request.path) }}"><button>Tornar</button></a>
-
-</div>
-
-{% endblock %}
+</body>
+</html>

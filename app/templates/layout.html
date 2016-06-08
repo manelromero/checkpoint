@@ -13,17 +13,19 @@
 <body>
 
 	<header>
-		{% include "header.html" %}
-		{% block header %}{% endblock %}
+		{%- include "header.html" -%}
+		{%- block header -%}{%- endblock -%}
 	</header>
 
 	<div class="container">
+		{%- if not home -%}
 		<div class="left-bar">
-			{% include "left-bar.html" %}
-			{% block bar %}{% endblock %}
+			{%- include "left-bar.html" -%}
+			{%- block bar -%}{%- endblock -%}
 		</div>
+		{%- endif -%}
 		<div class="wrapper">
-			{% block content %}{% endblock %}
+			{%- block content -%}{%- endblock -%}
 		</div>
 	</div>
 
