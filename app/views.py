@@ -87,8 +87,7 @@ def logout():
     '''
     api.api_call('logout')
     session.clear()
-    flash('Usuari desconnectat')
-    return redirect(url_for('home'))
+    return redirect(url_for('login'))
 
 
 @app.route('/')
@@ -120,7 +119,7 @@ def blockAccess():
     payload = {'name': app.config['ID_COLE'] + 'GRUP_LlistaNegraEquips'}
     group = api.api_call('show-group', payload).data
     # call for application group
-    payload = {'name': app.config['ID_COLE'] + app.config['LLISTA_NEGRA']}
+    payload = {'name': app.config['ID_COLE'] + 'APGR_LlistaNegraURLs'}
     app_list = api.api_call('show-application-site-group', payload).data
 
     return render_template(
@@ -163,16 +162,18 @@ def showGroupMembers(group_id, url_back):
                 }
             hosts.append(object)
 
-    # call for host choices
+    # call for app choices
     options = [('', 'seleccionar')]
-    call = api.api_call('show-hosts').data
-    for element in call['objects']:
-        already_in_group = False
-        for host in hosts:
-            if element['name'][10:] == host['name']:
-                already_in_group = True
-        if not already_in_group:
-            options.append((element['name'], element['name'][10:]))
+    payload = {'name': app.config['ID_COLE'] + 'GRUP_GENERAL'}
+    call = api.api_call('show-group', payload).data
+    for element in call['members']:
+        if element['name'][:5] == app.config['ID_COLE']:
+            already_in_group = False
+            for host in hosts:
+                if element['name'][10:] == host['name']:
+                    already_in_group = True
+            if not already_in_group:
+                options.append((element['name'], element['name'][10:]))
     form_select_host.name.choices = options
 
     # order lists by name
@@ -222,7 +223,7 @@ def showAppGroupContent(app_list, url_back):
 
     # call for app choices
     options = [('', 'seleccionar')]
-    payload = {'name': app.config['ID_COLE'] + app.config['LLISTA_GENERAL']}
+    payload = {'name': app.config['ID_COLE'] + 'APGR_GENERAL'}
     call = api.api_call('show-application-site-group', payload).data
     for element in call['members']:
         if element['name'][:5] == app.config['ID_COLE']:
@@ -241,6 +242,60 @@ def showAppGroupContent(app_list, url_back):
         'show-app-group-content.html',
         form_select_app=form_select_app,
         form_new_app=form_new_app,
+        apps=apps,
+        app_list=app_list,
+        url_back=url_back
+        )
+
+
+@app.route('/show-app-group-content-not-add/<app_list>/<url_back>')
+@login_required
+def showAppGroupContentNotAdd(app_list, url_back):
+    '''
+    show application-site group content
+    -----------------------------------------------------------------------
+    shows application group content when selecting a source in the dropdown
+    menu while adding a new rule
+
+    argument:
+        group_id: the group that's been selected
+
+    return: renders the show application group content page just below the
+        select
+
+    '''
+    form_select_app = ApplicationSelectForm(request.form)
+
+    # call for application group members
+    apps = []
+    payload = {'uid': app_list, 'details-level': 'full'}
+    call = api.api_call('show-application-site-group', payload).data
+    for element in call['members']:
+        objects = {
+            'uid': element['uid'],
+            'name': element['name'],
+            }
+        apps.append(objects)
+
+    # call for app choices
+    options = [('', 'seleccionar')]
+    payload = {'name': app.config['ID_COLE'] + 'APGR_APLICACIONS'}
+    call = api.api_call('show-application-site-group', payload).data
+    for element in call['members']:
+        already_in_group = False
+        for appl in apps:
+            if element['name'] == appl['name']:
+                already_in_group = True
+        if not already_in_group:
+            options.append((element['name'], element['name']))
+    form_select_app.name.choices = options
+
+    # order lists by name
+    apps = orderList(apps)
+
+    return render_template(
+        'show-app-group-content-not-add.html',
+        form_select_app=form_select_app,
         apps=apps,
         app_list=app_list,
         url_back=url_back
@@ -295,12 +350,14 @@ def addHost(group_id, url_back):
     form = HostForm(request.form)
 
     if form.validate():
+
         # call for creating the host
         payload = {
             'name': app.config['ID_COLE'] + 'HOST_' + form.name.data,
             'ipv4-address': form.ipv4_address.data
             }
         api.api_call('add-host', payload)
+
         # call for adding the host to the group
         payload = {
             'uid': group_id,
@@ -309,6 +366,16 @@ def addHost(group_id, url_back):
                 }
             }
         api.api_call('set-group', payload)
+
+        # call for adding the host to general group
+        payload = {
+            'name': app.config['ID_COLE'] + 'GRUP_GENERAL',
+            'members': {
+                'add': app.config['ID_COLE'] + 'HOST_' + form.name.data
+                }
+            }
+        api.api_call('set-group', payload)
+
         api.api_call('publish')
         flash('Equip afegit')
         return redirect(url_for(url_back))
@@ -352,9 +419,18 @@ def deleteHost(group_id, object_uid, url_back):
 
         # check if used in more places than its group
         used = whereUsed(object_uid)
-        if used > 0:
+        if used > 1:
             flash(u"L'equip pertany a més grups i no es pot eliminar")
             return redirect(url_for(url_back))
+
+        # call for removing the host from the general group
+        payload = {
+            'name': app.config['ID_COLE'] + 'GRUP_GENERAL',
+            'members': {
+                'remove': app.config['ID_COLE'] + 'HOST_' + object['name']
+                }
+            }
+        api.api_call('set-group', payload)
 
         # call for deleting the host
         payload = {'uid': object_uid}
@@ -481,7 +557,7 @@ def addApplicationSite(app_list, url_back):
 
         # call for adding the application to general group
         payload = {
-            'name': app.config['ID_COLE'] + app.config['LLISTA_GENERAL'],
+            'name': app.config['ID_COLE'] + 'APGR_GENERAL',
             'members': {
                 'add': app.config['ID_COLE'] + 'APPL_' + form.name.data
                 }
@@ -544,7 +620,7 @@ def deleteApplicationSite(app_list, object_uid, url_back):
 
         # call for removing the application from the general group
         payload = {
-            'name': app.config['ID_COLE'] + app.config['LLISTA_GENERAL'],
+            'name': app.config['ID_COLE'] + 'APGR_GENERAL',
             'members': {
                 'remove': app.config['ID_COLE'] + 'APPL_' + object['name']
                 }
@@ -623,12 +699,21 @@ def allowURL():
 
     '''
     payload = {'name': app.config['ID_COLE'] + 'APGR_LlistaBlancaURLsVIP'}
-    app_vip = api.api_call('show-application-site-group', payload).data
+    url_vip = api.api_call('show-application-site-group', payload).data
+
     payload = {'name': app.config['ID_COLE'] + 'APGR_LlistaBlancaURLsMedium'}
+    url_medium = api.api_call('show-application-site-group', payload).data
+
+    payload = {'name': app.config['ID_COLE'] + 'APGR_LlistaBlancaAplicacionsVIP'}
+    app_vip = api.api_call('show-application-site-group', payload).data
+
+    payload = {'name': app.config['ID_COLE'] + 'APGR_LlistaBlancaAplicacionsMedium'}
     app_medium = api.api_call('show-application-site-group', payload).data
 
     return render_template(
         'show-application-site-groups.html',
+        url_vip=url_vip,
+        url_medium=url_medium,
         app_vip=app_vip,
         app_medium=app_medium,
         url_back='allowURL'

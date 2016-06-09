@@ -30,7 +30,6 @@
 <div class="member-header">
     <div class="cell medium-cell">Nom</div>
     <div class="cell medium-cell">URL</div>
-    <div class="cell medium-cell"></div>
     <div class="cell small-cell center">Editar</div>
     <div class="cell small-cell center">Esborrar</div>
 </div>
@@ -41,7 +40,6 @@
 <div class="member">
     <div class="cell medium-cell">{{ appl.name }}</div>
     <div class="cell medium-cell">{{ appl.url_list }}</div>
-    <div class="cell medium-cell"></div>
     <div class="cell small-cell center">
         <a href="{{ url_for('setApplicationSite', object_uid=appl.uid, url_back=url_back) }}">
             <img src="{{ url_for('static', filename='img/edit.svg') }}" class="icon" alt="Edit">

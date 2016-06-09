@@ -46,6 +46,16 @@
 						{% endif %}
 					</div>
 					<div class="submit">
+
+					    <!-- get flash messages -->
+					    {%- with messages = get_flashed_messages() -%}
+					    {%- if messages -%}
+					    {%- for message in messages -%}
+					        <span class="error">{{ message }}</span>
+					    {%- endfor -%}
+					    {%- endif -%}
+					    {%- endwith -%}
+
 						<input type="submit" id="submit" value="LOGIN">
 					</div>
 				</form>
