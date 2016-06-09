@@ -643,6 +643,47 @@ def deleteApplicationSite(app_list, object_uid, url_back):
 
 
 @app.route(
+    '/delete-application/<app_list>/<object_uid>/<url_back>',
+    methods=['GET', 'POST']
+    )
+@login_required
+def deleteApplication(app_list, object_uid, url_back):
+    '''
+    delete application-site
+    --------------------------------------------------------------------------
+    delete an existing application-site
+
+    arguments:
+        app_list: the id number of the application-site groups
+
+    return: renders the show application-sites page
+
+    '''
+    payload = {'uid': object_uid}
+    call = api.api_call('show-application-site', payload).data
+    object = {'name': call['name']}
+
+    # call for removing the application from the application group
+    payload = {
+        'uid': app_list,
+        'members': {
+            'remove': object['name']
+            }
+        }
+    api.api_call('set-application-site-group', payload)
+    api.api_call('publish')
+    flash(u'Aplicació eliminada')
+    return redirect(url_for(url_back))
+
+    return render_template(
+        'delete-application-site.html',
+        app_list=app_list,
+        object=object,
+        url_back=url_back
+        )
+
+
+@app.route(
     '/set-application-site/<object_uid>/<url_back>',
     methods=['GET', 'POST']
     )
@@ -782,7 +823,7 @@ def smartview():
     # assert "No results found." not in driver.page_source
     # driver.close()
 
-    return redirect('https://' + app.config['SERVER'] + '/smartview', code=302)
+    return redirect('https://' + app.config['SERVER'] + '/smartview')
 
 
 @app.route('/install-policy')

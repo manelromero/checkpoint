@@ -1,7 +1,7 @@
 {%- extends "layout.html" -%}
 {%- block content -%}
 
-<h1>Permetre URLs per grups (VIPs i Medium)</h1>
+<h1>Permetre URLs i aplicacions per grups (VIP i Medium)</h1>
 
 <div class="wrapper-object">
 
@@ -25,6 +25,17 @@
             <div class="cell big-cell">{{ url_medium.name[10:] }}</div>
         </div>
         <div class="members" data-group={{ url_medium.uid }}></div>
+
+    </div>
+
+    <div class="table-header">
+        <div class="header-row">
+            <div class="cell tiny-cell"></div>
+            <div class="cell big-cell">Llistes d'aplicacions</div>
+        </div>
+    </div>
+
+    <div class="table">
 
         <div class="row app-group">
             <div class="cell tiny-cell unfold more" data-uid={{ app_vip.uid }} data-route={{'show-app-group-content-not-add' }} data-url-back={{ url_back }}></div>
