@@ -840,7 +840,10 @@ def installPolicy():
     return: renders the show application-sites page
 
     '''
-    payload = {'policy-package': 'standard'}
+    payload = {
+        'policy-package': 'standard',
+        'targets': app.config['TARGETS']
+        }
     api.api_call('install-policy', payload)
     return redirect(url_for('home'))
 
