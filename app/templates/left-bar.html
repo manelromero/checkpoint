@@ -6,13 +6,16 @@
 
     <ul>
         <li class="menu-options">
-            <a href="{{ url_for('blockAccess') }}">Bloquejar accés per equips i URLs</a>
+            <a href="{{ url_for('blockIP') }}">Bloquejar accés per equip</a>
         </li>
         <li class="menu-options">
-            <a href="{{ url_for('allowURL') }}">Permetre URLs i aplicacions</a>
+            <a href="{{ url_for('blockURL') }}">Bloquejar accés per URL</a>
         </li>
         <li class="menu-options">
-          <a href="{{ url_for('manageGroups') }}">Gestionar grups (VIP i Medium)</a>
+          <a href="{{ url_for('blockApp') }}">Bloquejar accés per aplicació</a>
+        </li>
+        <li class="menu-options">
+          <a href="{{ url_for('smartview') }}">SmartView</a>
         </li>
     </ul>
 

@@ -45,15 +45,14 @@ header {
 
 .container {
 	width: 100%;
-	padding-top: 50px;
+	min-height: 100vh;
 	display: flex;
 }
 
 .left-bar {
 	width: 20%;
-	min-height: calc(100vh - 50px);
 	max-width: 200px;
-	padding: 0.5rem;
+	padding: 50px 0.5rem 0.5rem 0.5rem;
 	background-color: #fff;
 }
 
@@ -61,12 +60,10 @@ header {
 	position: relative;
 	width: 80%;
 	flex-grow: 1;
-	padding: 0.5rem;
-	border-left: 1px solid #e9e9e9;
 }
 
-.wrapper-object {
-	/**/
+.wrapper-content {
+	padding: 50px 0.5rem 0.5rem 0.5rem;
 }
 
 .wrapper-modal {
@@ -309,12 +306,16 @@ nav {
 	height: 1rem;
 }
 
-.unfold {
+.group {
+	cursor: pointer;
+}
+
+.open {
 	background: url('../img/less.svg') no-repeat;
 	background-size: cover;
 }
 
-.more {
+.closed {
 	background: url('../img/more.svg') no-repeat;
 	background-size: cover;
 }
@@ -478,16 +479,46 @@ input[type=submit]:focus {
 }
 
 .container-home {
-	padding: 0 2rem;
+	/*height: calc(100vh - 50px);*/
+	width: 100vw;
+	background-color: #ea8697;
 }
 
-.h1-home {
-	font: 600 2rem/4rem 'Open Sans', sans-serif;
-	color: #bf0000;
+.row-home {
+	position: relative;
+	height: 33.33vh;
+	padding: 1%;
 }
 
-.menu-options-home {
-	font: 400 1.2rem/2.5rem 'Open Sans', sans-serif;
-	list-style-type: disc;
-    margin-left: 1.2rem;
+.logo-top,
+.logo-bottom {
+	height: 30%;
 }
+
+.logo-top {
+	position: absolute;
+	top: 25%;
+	left: 5%;
+}
+
+.logo-bottom {
+	position: absolute;
+	bottom: 25%;
+	right: 5%;
+}
+
+.logo {
+	height: 25vh;
+}
+
+.option-home {
+	width: 25%;
+	height: 100%;
+	float: left;
+	text-align: center;
+}
+
+.option-icon {
+	height: 100%;
+}
+

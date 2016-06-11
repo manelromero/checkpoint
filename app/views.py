@@ -5,13 +5,8 @@ from functools import wraps
 import webbrowser
 
 from . import app
-from models import User
-from helpers import *
-from cp_mgmt_api import APIClient
-
-
-# start using CheckpPoint library
-api = APIClient()
+from models import api, Group, ApplicationGroup, Host
+from forms import *
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -104,9 +99,9 @@ def home():
     return render_template('home.html', home=True)
 
 
-@app.route('/block-access')
+@app.route('/blockIP')
 @login_required
-def blockAccess():
+def blockIP():
     '''
     block access
     --------------------------------------------------------------------------
@@ -115,24 +110,13 @@ def blockAccess():
     return: renders the block access page
 
     '''
-    # call for group
-    payload = {'name': app.config['ID_COLE'] + 'GRUP_LlistaNegraEquips'}
-    group = api.api_call('show-group', payload).data
-    # call for application group
-    payload = {'name': app.config['ID_COLE'] + 'APGR_LlistaNegraURLs'}
-    app_list = api.api_call('show-application-site-group', payload).data
-
-    return render_template(
-        'block-access.html',
-        group=group,
-        app_list=app_list,
-        url_back='blockAccess'
-        )
+    group = Group('GRUP_LlistaNegraEquips').show()
+    return render_template('block-ip.html', group=group, url_back='blockIP')
 
 
-@app.route('/show-group-members/<group_id>/<url_back>')
+@app.route('/show-group-members/<group_name>/<url_back>')
 @login_required
-def showGroupMembers(group_id, url_back):
+def showGroupMembers(group_name, url_back):
     '''
     show groups members
     --------------------------------------------------------------------------
@@ -148,51 +132,152 @@ def showGroupMembers(group_id, url_back):
     form_new_host = HostForm(request.form)
     form_select_host = HostSelectForm(request.form)
 
-    # call for group members
-    hosts = []
-    payload = {'uid': group_id, 'details-level': 'full'}
-    call = api.api_call('show-group', payload).data
-    for element in call['members']:
-        # select the hosts
-        if element['type'] == 'host':
-            object = {
-                'uid': element['uid'],
-                'name': element['name'][10:],
-                'ipv4_address': element['ipv4-address']
-                }
-            hosts.append(object)
+    members = Group(group_name).show_members()
+    choices = Group('GRUP_GENERAL').show_members()
 
-    # call for app choices
     options = [('', 'seleccionar')]
-    payload = {'name': app.config['ID_COLE'] + 'GRUP_GENERAL'}
-    call = api.api_call('show-group', payload).data
-    for element in call['members']:
-        if element['name'][:5] == app.config['ID_COLE']:
-            already_in_group = False
-            for host in hosts:
-                if element['name'][10:] == host['name']:
-                    already_in_group = True
-            if not already_in_group:
-                options.append((element['name'], element['name'][10:]))
+    for element in choices:
+        already_in_group = False
+        for host in members:
+            if element['name'] == host['name']:
+                already_in_group = True
+        if not already_in_group:
+            options.append((element['name'], element['name'][10:]))
     form_select_host.name.choices = options
-
-    # order lists by name
-    hosts = orderList(hosts)
 
     return render_template(
         'show-group-members.html',
         request=request,
-        hosts=hosts,
+        members=members,
         form_new_host=form_new_host,
         form_select_host=form_select_host,
-        group_id=group_id,
+        group_name=group_name,
         url_back=url_back
         )
 
 
-@app.route('/show-app-group-content/<app_list>/<url_back>')
+@app.route('/add-host/<group_name>/<url_back>', methods=['GET', 'POST'])
 @login_required
-def showAppGroupContent(app_list, url_back):
+def addHost(group_name, url_back):
+    '''
+    add host
+    ---------------------------------------------------------------------------
+    adds a new host inside a group
+
+    arguments:
+        group_id: the id number of the group where the host has to be added
+
+    return: if YES creates the host and adds it to the group, if NO renders the
+        show groups page
+
+    '''
+    form = HostForm(request.form)
+
+    if form.validate():
+
+        host = Host('HOST_' + form.name.data)
+        host.add(ipv4_address=form.ipv4_address.data)
+        host.add_to_group('set-group', group_name)
+        host.add_to_group('set-group', 'GRUP_GENERAL')
+        api.api_call('publish')
+        flash('Equip afegit')
+        return redirect(url_for(url_back))
+
+    # I have to check what to do here
+    return redirect(url_for('blockIP'))
+
+
+@app.route('/delete-host/<name>/<group_name>/<url_back>', methods=['GET', 'POST'])
+@login_required
+def deleteHost(name, group_name, url_back):
+    '''
+    delete host
+    ---------------------------------------------------------------------
+    deletes an existing host
+
+    arguments:
+        group_id: the id number of the group where the host belongs
+        object_uid: the uid number of the host
+
+    return: if POST deletes the host, if GET renders the delete host page
+
+    '''
+    host = Host(name)
+    host_to_delete = host.show()
+
+    if request.method == 'POST':
+
+        host.delete_from_group('set-group', group_name)
+
+        # call for removing the host from the group
+        # payload = {
+        #     'uid': group_id,
+        #     'members': {
+        #         'remove': app.config['ID_COLE'] + 'HOST_' + object['name']
+        #         }
+        #     }
+        # call = api.api_call('set-group', payload)
+
+        # check if used in more places than its group
+        if host.where_used > 1:
+            flash(u"L'equip pertany a més grups i no es pot eliminar")
+            return redirect(url_for(url_back))
+
+        host.delete_from_group('set-group', 'GRUP_GENERAL')
+        host.delete()
+
+        # call for removing the host from the general group
+        # payload = {
+        #     'name': app.config['ID_COLE'] + 'GRUP_GENERAL',
+        #     'members': {
+        #         'remove': app.config['ID_COLE'] + 'HOST_' + object['name']
+        #         }
+        #     }
+        # api.api_call('set-group', payload)
+
+        # call for deleting the host
+        # payload = {'uid': object_uid}
+        # api.api_call('delete-host', payload)
+
+        api.api_call('publish')
+        flash('Equip eliminat')
+        return redirect(url_for(url_back))
+
+    return render_template(
+        'delete-host.html',
+        group_name=group_name,
+        host_to_delete=host_to_delete,
+        url_back=url_back
+        )
+
+
+@app.route('/blockURL')
+@login_required
+def blockURL():
+    '''
+    show application-site groups
+    ------------------------------------
+    show the application-site groups
+
+    return: renders the show application-site groups page
+
+    '''
+    tots = ApplicationGroup('APGR_LlistaNegraURLsTots').show()
+    professors = ApplicationGroup('APGR_LlistaNegraURLsProfessors').show()
+    alumnes = ApplicationGroup('APGR_LlistaNegraURLsAlumnes').show()
+
+    return render_template(
+        'block-url.html',
+        tots=tots,
+        professors=professors,
+        alumnes=alumnes,
+        url_back='blockURL'
+        )
+
+
+@app.route('/show-app-group-members/<name>/<url_back>')
+@login_required
+def showAppGroupMembers(name, url_back):
     '''
     show application-site group content
     -----------------------------------------------------------------------
@@ -209,43 +294,90 @@ def showAppGroupContent(app_list, url_back):
     form_new_app = ApplicationSiteForm(request.form)
     form_select_app = ApplicationSelectForm(request.form)
 
-    # call for application group members
-    apps = []
-    payload = {'uid': app_list, 'details-level': 'full'}
-    call = api.api_call('show-application-site-group', payload).data
-    for element in call['members']:
-        objects = {
-            'uid': element['uid'],
-            'name': element['name'][10:],
-            'url_list': element['url-list'][0]
-            }
-        apps.append(objects)
+    members = ApplicationGroup(name).show_members()
+    choices = ApplicationGroup('APGR_GENERAL').show_members()
 
-    # call for app choices
     options = [('', 'seleccionar')]
-    payload = {'name': app.config['ID_COLE'] + 'APGR_GENERAL'}
-    call = api.api_call('show-application-site-group', payload).data
-    for element in call['members']:
-        if element['name'][:5] == app.config['ID_COLE']:
-            already_in_group = False
-            for appl in apps:
-                if element['name'][10:] == appl['name']:
-                    already_in_group = True
-            if not already_in_group:
-                options.append((element['name'], element['name'][10:]))
+    for element in choices:
+        already_in_group = False
+        for appl in members:
+            if element['name'] == appl['name']:
+                already_in_group = True
+        if not already_in_group:
+            options.append((element['name'], element['name'][10:]))
     form_select_app.name.choices = options
 
-    # order lists by name
-    apps = orderList(apps)
-
     return render_template(
-        'show-app-group-content.html',
+        'show-app-group-members.html',
         form_select_app=form_select_app,
         form_new_app=form_new_app,
-        apps=apps,
-        app_list=app_list,
+        member=members,
+        name=name,
         url_back=url_back
         )
+
+
+@app.route('/block-app')
+@login_required
+def blockApp():
+    '''
+    block access
+    --------------------------------------------------------------------------
+    shows the group and the application-site-group for blocking hosts and URLs
+
+    return: renders the block access page
+
+    '''
+    tots = ApplicationGroup('APGR_LlistaNegraAplicacionsTots').show()
+    professors = ApplicationGroup(
+        'APGR_LlistaNegraAplicacionsProfessors'
+        ).show()
+    alumnes = ApplicationGroup('APGR_LlistaNegraAplicacionsAlumnes').show()
+
+    return render_template(
+        'block-app.html',
+        tots=tots,
+        professors=professors,
+        alumnes=alumnes,
+        url_back='blockURL'
+        )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 @app.route('/show-app-group-content-not-add/<app_list>/<url_back>')
@@ -302,9 +434,9 @@ def showAppGroupContentNotAdd(app_list, url_back):
         )
 
 
-@app.route('/add-existing-host/<group_id>/<url_back>', methods=['POST'])
+@app.route('/add-existing-host/<group_name>/<url_back>', methods=['POST'])
 @login_required
-def addExistingHost(group_id, url_back):
+def addExistingHost(group_name, url_back):
     '''
     add existing host
     ----------------------------------------------------------------
@@ -332,125 +464,9 @@ def addExistingHost(group_id, url_back):
     return redirect(url_for(url_back))
 
 
-@app.route('/add-host/<group_id>/<url_back>', methods=['POST'])
+@app.route('/set-host/<name>/<url_back>', methods=['GET', 'POST'])
 @login_required
-def addHost(group_id, url_back):
-    '''
-    add host
-    ---------------------------------------------------------------------------
-    adds a new host inside a group
-
-    arguments:
-        group_id: the id number of the group where the host has to be added
-
-    return: if YES creates the host and adds it to the group, if NO renders the
-        show groups page
-
-    '''
-    form = HostForm(request.form)
-
-    if form.validate():
-
-        # call for creating the host
-        payload = {
-            'name': app.config['ID_COLE'] + 'HOST_' + form.name.data,
-            'ipv4-address': form.ipv4_address.data
-            }
-        api.api_call('add-host', payload)
-
-        # call for adding the host to the group
-        payload = {
-            'uid': group_id,
-            'members': {
-                'add': app.config['ID_COLE'] + 'HOST_' + form.name.data
-                }
-            }
-        api.api_call('set-group', payload)
-
-        # call for adding the host to general group
-        payload = {
-            'name': app.config['ID_COLE'] + 'GRUP_GENERAL',
-            'members': {
-                'add': app.config['ID_COLE'] + 'HOST_' + form.name.data
-                }
-            }
-        api.api_call('set-group', payload)
-
-        api.api_call('publish')
-        flash('Equip afegit')
-        return redirect(url_for(url_back))
-
-    return render_template('new-host.html', form=form)
-
-
-@app.route('/delete-host/<group_id>/<object_uid>/<url_back>', methods=['GET', 'POST'])
-@login_required
-def deleteHost(group_id, object_uid, url_back):
-    '''
-    delete host
-    ---------------------------------------------------------------------
-    deletes an existing host
-
-    arguments:
-        group_id: the id number of the group where the host belongs
-        object_uid: the uid number of the host
-
-    return: if POST deletes the host, if GET renders the delete host page
-
-    '''
-    payload = {'uid': object_uid}
-    call = api.api_call('show-host', payload).data
-    object = {
-        'uid': call['uid'],
-        'name': call['name'][10:],
-        'ipv4_address': call['ipv4-address']
-        }
-
-    if request.method == 'POST':
-
-        # call for removing the host from the group
-        payload = {
-            'uid': group_id,
-            'members': {
-                'remove': app.config['ID_COLE'] + 'HOST_' + object['name']
-                }
-            }
-        call = api.api_call('set-group', payload)
-
-        # check if used in more places than its group
-        used = whereUsed(object_uid)
-        if used > 1:
-            flash(u"L'equip pertany a més grups i no es pot eliminar")
-            return redirect(url_for(url_back))
-
-        # call for removing the host from the general group
-        payload = {
-            'name': app.config['ID_COLE'] + 'GRUP_GENERAL',
-            'members': {
-                'remove': app.config['ID_COLE'] + 'HOST_' + object['name']
-                }
-            }
-        api.api_call('set-group', payload)
-
-        # call for deleting the host
-        payload = {'uid': object_uid}
-        api.api_call('delete-host', payload)
-
-        api.api_call('publish')
-        flash('Equip eliminat')
-        return redirect(url_for(url_back))
-
-    return render_template(
-        'delete-host.html',
-        group_id=group_id,
-        object=object,
-        url_back=url_back
-        )
-
-
-@app.route('/set-host/<object_uid>/<url_back>', methods=['GET', 'POST'])
-@login_required
-def setHost(object_uid, url_back):
+def setHost(name, url_back):
     '''
     edit host (to be continued)
     ---------------------------------------------------------------------------
@@ -490,9 +506,9 @@ def setHost(object_uid, url_back):
             )
 
 
-@app.route('/add-existing-application/<app_list>/<url_back>', methods=['POST'])
+@app.route('/add-existing-application/<group_name>/<url_back>', methods=['POST'])
 @login_required
-def addExistingApplication(app_list, url_back):
+def addExistingApplication(group_name, url_back):
     '''
     add existing application
     ----------------------------------------------------------------
@@ -520,9 +536,9 @@ def addExistingApplication(app_list, url_back):
     return redirect(url_for(url_back))
 
 
-@app.route('/add-application-site/<app_list>/<url_back>', methods=['POST'])
+@app.route('/add-application-site/<group_name>/<url_back>', methods=['POST'])
 @login_required
-def addApplicationSite(app_list, url_back):
+def addApplicationSite(group_name, url_back):
     '''
     add application-site
     --------------------------------------------------------------------------
@@ -728,39 +744,6 @@ def setApplicationSite(object_uid, url_back):
         )
 
 
-@app.route('/allow-url')
-@login_required
-def allowURL():
-    '''
-    show application-site groups
-    ------------------------------------
-    show the application-site groups
-
-    return: renders the show application-site groups page
-
-    '''
-    payload = {'name': app.config['ID_COLE'] + 'APGR_LlistaBlancaURLsVIP'}
-    url_vip = api.api_call('show-application-site-group', payload).data
-
-    payload = {'name': app.config['ID_COLE'] + 'APGR_LlistaBlancaURLsMedium'}
-    url_medium = api.api_call('show-application-site-group', payload).data
-
-    payload = {'name': app.config['ID_COLE'] + 'APGR_LlistaBlancaAplicacionsVIP'}
-    app_vip = api.api_call('show-application-site-group', payload).data
-
-    payload = {'name': app.config['ID_COLE'] + 'APGR_LlistaBlancaAplicacionsMedium'}
-    app_medium = api.api_call('show-application-site-group', payload).data
-
-    return render_template(
-        'show-application-site-groups.html',
-        url_vip=url_vip,
-        url_medium=url_medium,
-        app_vip=app_vip,
-        app_medium=app_medium,
-        url_back='allowURL'
-        )
-
-
 @app.route('/manage-groups')
 @login_required
 def manageGroups():
@@ -783,25 +766,6 @@ def manageGroups():
         group_medium=group_medium,
         url_back='manageGroups'
         )
-
-
-@app.route('/where-used/object_uid')
-@login_required
-def whereUsed(object_uid):
-    '''
-    edit application-site
-    --------------------------------------------------------------------------
-    edit an existing application-site
-
-    arguments:
-        group_id: the id number of the application-site groups
-
-    return: renders the show application-sites page
-
-    '''
-    payload = {'uid': object_uid}
-    call = api.api_call('where-used', payload).data
-    return call['used-directly']['total']
 
 
 @app.route('/smartview')

@@ -1,0 +1,28 @@
+{%- extends "layout.html" -%}
+{%- block content -%}
+
+<div class="wrapper-content">
+
+    <h1>Bloquejar accés per equips</h1>
+
+    <div class="table-header">
+        <div class="header-row">
+            <div class="cell tiny-cell"></div>
+            <div class="cell big-cell">Llista d'equips bloquejats</div>
+        </div>
+    </div>
+
+    <div class="table">
+
+        <div class="row group closed" data-group-name="{{ group.name[5:] }}" data-route="{{ 'show-group-members' }}" data-url-back="{{ url_back }}">
+            <div class="cell tiny-cell arrow closed"></div>
+            <div class="cell big-cell">{{ group.name[10:] }}</div>
+        </div>
+        <div class="members" id="{{ group.name[5:] }}"></div>
+    </div>
+
+    <a href="{{ url_for('home') }}"><button>Inici</button></a>
+
+</div>
+
+{%- endblock -%}

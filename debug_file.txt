@@ -1,0 +1,505 @@
+[
+    {
+        "request": {
+            "headers": {
+                "Accept": "*/*", 
+                "Content-Length": 2, 
+                "Content-Type": "application/json", 
+                "User-Agent": "python-api-wrapper"
+            }, 
+            "payload": {}, 
+            "url": "/web_api/show-login-message"
+        }, 
+        "response": {}
+    }, 
+    {
+        "request": {
+            "headers": {
+                "Accept": "*/*", 
+                "Content-Length": 75, 
+                "Content-Type": "application/json", 
+                "User-Agent": "python-api-wrapper"
+            }, 
+            "payload": {
+                "continue-last-session": false, 
+                "password": "****", 
+                "user": "admin"
+            }, 
+            "url": "/web_api/login"
+        }, 
+        "response": {
+            "data": {
+                "last-login-was-at": {
+                    "iso-8601": "2016-06-11T23:26+0200", 
+                    "posix": 1465680362683
+                }, 
+                "session-timeout": 600, 
+                "sid": "K8RFr0SHnvYcPDYyzii8ZctYGi6tjQ_LjGCUACSTNZo", 
+                "uid": "5db46a63-61bd-467f-bd90-f069f52f4134", 
+                "url": "https://192.168.1.10:443/web_api"
+            }, 
+            "status_code": 200
+        }
+    }, 
+    {
+        "request": {
+            "headers": {
+                "Accept": "*/*", 
+                "Content-Length": 2, 
+                "Content-Type": "application/json", 
+                "User-Agent": "python-api-wrapper", 
+                "X-chkp-sid": "K8RFr0SHnvYcPDYyzii8ZctYGi6tjQ_LjGCUACSTNZo"
+            }, 
+            "payload": {}, 
+            "url": "/web_api/show-login-message"
+        }, 
+        "response": {
+            "data": {
+                "domain": {
+                    "domain-type": "domain", 
+                    "name": "SMC User", 
+                    "uid": "41e821a0-3720-11e3-aa6e-0800200c9fde"
+                }, 
+                "header": "Warning", 
+                "message": "This system is for authorized use only", 
+                "show-message": false, 
+                "type": "login-message", 
+                "warning": true
+            }, 
+            "status_code": 200
+        }
+    }, 
+    {
+        "request": {
+            "headers": {
+                "Accept": "*/*", 
+                "Content-Length": 68, 
+                "Content-Type": "application/json", 
+                "User-Agent": "python-api-wrapper", 
+                "X-chkp-sid": "K8RFr0SHnvYcPDYyzii8ZctYGi6tjQ_LjGCUACSTNZo"
+            }, 
+            "payload": {
+                "details-level": "standard", 
+                "name": "0001_GRUP_LlistaNegraEquips"
+            }, 
+            "url": "/web_api/show-group"
+        }, 
+        "response": {
+            "data": {
+                "color": "black", 
+                "comments": "", 
+                "domain": {
+                    "domain-type": "domain", 
+                    "name": "SMC User", 
+                    "uid": "41e821a0-3720-11e3-aa6e-0800200c9fde"
+                }, 
+                "groups": [], 
+                "icon": "General/group", 
+                "members": [
+                    {
+                        "domain": {
+                            "domain-type": "domain", 
+                            "name": "SMC User", 
+                            "uid": "41e821a0-3720-11e3-aa6e-0800200c9fde"
+                        }, 
+                        "name": "0001_HOST_Equip de prova", 
+                        "type": "host", 
+                        "uid": "04b512d4-d9db-40ed-8196-43c0a278dd78"
+                    }, 
+                    {
+                        "domain": {
+                            "domain-type": "domain", 
+                            "name": "SMC User", 
+                            "uid": "41e821a0-3720-11e3-aa6e-0800200c9fde"
+                        }, 
+                        "name": "0001_HOST_Equip de prova 2", 
+                        "type": "host", 
+                        "uid": "eb3ee73e-8b4d-4400-b09a-f01e7c72895d"
+                    }, 
+                    {
+                        "domain": {
+                            "domain-type": "domain", 
+                            "name": "SMC User", 
+                            "uid": "41e821a0-3720-11e3-aa6e-0800200c9fde"
+                        }, 
+                        "name": "0001_HOST_Manel", 
+                        "type": "host", 
+                        "uid": "cabaf1ab-b71e-42e5-968e-3c36cd1fb952"
+                    }
+                ], 
+                "meta-info": {
+                    "creation-time": {
+                        "iso-8601": "2016-06-09T12:23+0200", 
+                        "posix": 1465467782451
+                    }, 
+                    "creator": "admin", 
+                    "last-modifier": "admin", 
+                    "last-modify-time": {
+                        "iso-8601": "2016-06-11T19:34+0200", 
+                        "posix": 1465666459405
+                    }, 
+                    "lock": "locked by other session", 
+                    "validation-state": "ok"
+                }, 
+                "name": "0001_GRUP_LlistaNegraEquips", 
+                "read-only": true, 
+                "tags": [], 
+                "type": "group", 
+                "uid": "21b5b2e0-47fa-42f5-8ff7-086c4f86537a"
+            }, 
+            "status_code": 200
+        }
+    }, 
+    {
+        "request": {
+            "headers": {
+                "Accept": "*/*", 
+                "Content-Length": 2, 
+                "Content-Type": "application/json", 
+                "User-Agent": "python-api-wrapper", 
+                "X-chkp-sid": "K8RFr0SHnvYcPDYyzii8ZctYGi6tjQ_LjGCUACSTNZo"
+            }, 
+            "payload": {}, 
+            "url": "/web_api/show-login-message"
+        }, 
+        "response": {
+            "data": {
+                "domain": {
+                    "domain-type": "domain", 
+                    "name": "SMC User", 
+                    "uid": "41e821a0-3720-11e3-aa6e-0800200c9fde"
+                }, 
+                "header": "Warning", 
+                "message": "This system is for authorized use only", 
+                "show-message": false, 
+                "type": "login-message", 
+                "warning": true
+            }, 
+            "status_code": 200
+        }
+    }, 
+    {
+        "request": {
+            "headers": {
+                "Accept": "*/*", 
+                "Content-Length": 64, 
+                "Content-Type": "application/json", 
+                "User-Agent": "python-api-wrapper", 
+                "X-chkp-sid": "K8RFr0SHnvYcPDYyzii8ZctYGi6tjQ_LjGCUACSTNZo"
+            }, 
+            "payload": {
+                "details-level": "full", 
+                "name": "0001_GRUP_LlistaNegraEquips"
+            }, 
+            "url": "/web_api/show-group"
+        }, 
+        "response": {
+            "data": {
+                "color": "black", 
+                "comments": "", 
+                "domain": {
+                    "domain-type": "domain", 
+                    "name": "SMC User", 
+                    "uid": "41e821a0-3720-11e3-aa6e-0800200c9fde"
+                }, 
+                "groups": [], 
+                "icon": "General/group", 
+                "members": [
+                    {
+                        "color": "black", 
+                        "comments": "", 
+                        "domain": {
+                            "domain-type": "domain", 
+                            "name": "SMC User", 
+                            "uid": "41e821a0-3720-11e3-aa6e-0800200c9fde"
+                        }, 
+                        "groups": [
+                            "21b5b2e0-47fa-42f5-8ff7-086c4f86537a", 
+                            "734f4fa9-784d-49e7-8790-6b209e96c647"
+                        ], 
+                        "icon": "Objects/host", 
+                        "ipv4-address": "10.10.10.10", 
+                        "meta-info": {
+                            "creation-time": {
+                                "iso-8601": "2016-06-11T19:34+0200", 
+                                "posix": 1465666458445
+                            }, 
+                            "creator": "admin", 
+                            "last-modifier": "admin", 
+                            "last-modify-time": {
+                                "iso-8601": "2016-06-11T19:34+0200", 
+                                "posix": 1465666458445
+                            }, 
+                            "lock": "unlocked", 
+                            "validation-state": "ok"
+                        }, 
+                        "name": "0001_HOST_Manel", 
+                        "nat-settings": {
+                            "auto-rule": false
+                        }, 
+                        "read-only": true, 
+                        "tags": [], 
+                        "type": "host", 
+                        "uid": "cabaf1ab-b71e-42e5-968e-3c36cd1fb952"
+                    }, 
+                    {
+                        "color": "black", 
+                        "comments": "", 
+                        "domain": {
+                            "domain-type": "domain", 
+                            "name": "SMC User", 
+                            "uid": "41e821a0-3720-11e3-aa6e-0800200c9fde"
+                        }, 
+                        "groups": [
+                            "21b5b2e0-47fa-42f5-8ff7-086c4f86537a", 
+                            "734f4fa9-784d-49e7-8790-6b209e96c647"
+                        ], 
+                        "icon": "Objects/host", 
+                        "ipv4-address": "192.168.88.1", 
+                        "meta-info": {
+                            "creation-time": {
+                                "iso-8601": "2016-06-11T15:18+0200", 
+                                "posix": 1465651139126
+                            }, 
+                            "creator": "admin", 
+                            "last-modifier": "admin", 
+                            "last-modify-time": {
+                                "iso-8601": "2016-06-11T15:18+0200", 
+                                "posix": 1465651139126
+                            }, 
+                            "lock": "unlocked", 
+                            "validation-state": "ok"
+                        }, 
+                        "name": "0001_HOST_Equip de prova", 
+                        "nat-settings": {
+                            "auto-rule": false
+                        }, 
+                        "read-only": true, 
+                        "tags": [], 
+                        "type": "host", 
+                        "uid": "04b512d4-d9db-40ed-8196-43c0a278dd78"
+                    }, 
+                    {
+                        "color": "black", 
+                        "comments": "", 
+                        "domain": {
+                            "domain-type": "domain", 
+                            "name": "SMC User", 
+                            "uid": "41e821a0-3720-11e3-aa6e-0800200c9fde"
+                        }, 
+                        "groups": [
+                            "21b5b2e0-47fa-42f5-8ff7-086c4f86537a", 
+                            "734f4fa9-784d-49e7-8790-6b209e96c647"
+                        ], 
+                        "icon": "Objects/host", 
+                        "ipv4-address": "192.168.100.1", 
+                        "meta-info": {
+                            "creation-time": {
+                                "iso-8601": "2016-06-11T16:13+0200", 
+                                "posix": 1465654414597
+                            }, 
+                            "creator": "admin", 
+                            "last-modifier": "admin", 
+                            "last-modify-time": {
+                                "iso-8601": "2016-06-11T16:13+0200", 
+                                "posix": 1465654414597
+                            }, 
+                            "lock": "unlocked", 
+                            "validation-state": "ok"
+                        }, 
+                        "name": "0001_HOST_Equip de prova 2", 
+                        "nat-settings": {
+                            "auto-rule": false
+                        }, 
+                        "read-only": true, 
+                        "tags": [], 
+                        "type": "host", 
+                        "uid": "eb3ee73e-8b4d-4400-b09a-f01e7c72895d"
+                    }
+                ], 
+                "meta-info": {
+                    "creation-time": {
+                        "iso-8601": "2016-06-09T12:23+0200", 
+                        "posix": 1465467782451
+                    }, 
+                    "creator": "admin", 
+                    "last-modifier": "admin", 
+                    "last-modify-time": {
+                        "iso-8601": "2016-06-11T19:34+0200", 
+                        "posix": 1465666459405
+                    }, 
+                    "lock": "locked by other session", 
+                    "validation-state": "ok"
+                }, 
+                "name": "0001_GRUP_LlistaNegraEquips", 
+                "read-only": true, 
+                "tags": [], 
+                "type": "group", 
+                "uid": "21b5b2e0-47fa-42f5-8ff7-086c4f86537a"
+            }, 
+            "status_code": 200
+        }
+    }, 
+    {
+        "request": {
+            "headers": {
+                "Accept": "*/*", 
+                "Content-Length": 54, 
+                "Content-Type": "application/json", 
+                "User-Agent": "python-api-wrapper", 
+                "X-chkp-sid": "K8RFr0SHnvYcPDYyzii8ZctYGi6tjQ_LjGCUACSTNZo"
+            }, 
+            "payload": {
+                "details-level": "full", 
+                "name": "0001_GRUP_GENERAL"
+            }, 
+            "url": "/web_api/show-group"
+        }, 
+        "response": {
+            "data": {
+                "color": "black", 
+                "comments": "", 
+                "domain": {
+                    "domain-type": "domain", 
+                    "name": "SMC User", 
+                    "uid": "41e821a0-3720-11e3-aa6e-0800200c9fde"
+                }, 
+                "groups": [], 
+                "icon": "General/group", 
+                "members": [
+                    {
+                        "color": "black", 
+                        "comments": "", 
+                        "domain": {
+                            "domain-type": "domain", 
+                            "name": "SMC User", 
+                            "uid": "41e821a0-3720-11e3-aa6e-0800200c9fde"
+                        }, 
+                        "groups": [
+                            "21b5b2e0-47fa-42f5-8ff7-086c4f86537a", 
+                            "734f4fa9-784d-49e7-8790-6b209e96c647"
+                        ], 
+                        "icon": "Objects/host", 
+                        "ipv4-address": "10.10.10.10", 
+                        "meta-info": {
+                            "creation-time": {
+                                "iso-8601": "2016-06-11T19:34+0200", 
+                                "posix": 1465666458445
+                            }, 
+                            "creator": "admin", 
+                            "last-modifier": "admin", 
+                            "last-modify-time": {
+                                "iso-8601": "2016-06-11T19:34+0200", 
+                                "posix": 1465666458445
+                            }, 
+                            "lock": "unlocked", 
+                            "validation-state": "ok"
+                        }, 
+                        "name": "0001_HOST_Manel", 
+                        "nat-settings": {
+                            "auto-rule": false
+                        }, 
+                        "read-only": true, 
+                        "tags": [], 
+                        "type": "host", 
+                        "uid": "cabaf1ab-b71e-42e5-968e-3c36cd1fb952"
+                    }, 
+                    {
+                        "color": "black", 
+                        "comments": "", 
+                        "domain": {
+                            "domain-type": "domain", 
+                            "name": "SMC User", 
+                            "uid": "41e821a0-3720-11e3-aa6e-0800200c9fde"
+                        }, 
+                        "groups": [
+                            "21b5b2e0-47fa-42f5-8ff7-086c4f86537a", 
+                            "734f4fa9-784d-49e7-8790-6b209e96c647"
+                        ], 
+                        "icon": "Objects/host", 
+                        "ipv4-address": "192.168.88.1", 
+                        "meta-info": {
+                            "creation-time": {
+                                "iso-8601": "2016-06-11T15:18+0200", 
+                                "posix": 1465651139126
+                            }, 
+                            "creator": "admin", 
+                            "last-modifier": "admin", 
+                            "last-modify-time": {
+                                "iso-8601": "2016-06-11T15:18+0200", 
+                                "posix": 1465651139126
+                            }, 
+                            "lock": "unlocked", 
+                            "validation-state": "ok"
+                        }, 
+                        "name": "0001_HOST_Equip de prova", 
+                        "nat-settings": {
+                            "auto-rule": false
+                        }, 
+                        "read-only": true, 
+                        "tags": [], 
+                        "type": "host", 
+                        "uid": "04b512d4-d9db-40ed-8196-43c0a278dd78"
+                    }, 
+                    {
+                        "color": "black", 
+                        "comments": "", 
+                        "domain": {
+                            "domain-type": "domain", 
+                            "name": "SMC User", 
+                            "uid": "41e821a0-3720-11e3-aa6e-0800200c9fde"
+                        }, 
+                        "groups": [
+                            "21b5b2e0-47fa-42f5-8ff7-086c4f86537a", 
+                            "734f4fa9-784d-49e7-8790-6b209e96c647"
+                        ], 
+                        "icon": "Objects/host", 
+                        "ipv4-address": "192.168.100.1", 
+                        "meta-info": {
+                            "creation-time": {
+                                "iso-8601": "2016-06-11T16:13+0200", 
+                                "posix": 1465654414597
+                            }, 
+                            "creator": "admin", 
+                            "last-modifier": "admin", 
+                            "last-modify-time": {
+                                "iso-8601": "2016-06-11T16:13+0200", 
+                                "posix": 1465654414597
+                            }, 
+                            "lock": "unlocked", 
+                            "validation-state": "ok"
+                        }, 
+                        "name": "0001_HOST_Equip de prova 2", 
+                        "nat-settings": {
+                            "auto-rule": false
+                        }, 
+                        "read-only": true, 
+                        "tags": [], 
+                        "type": "host", 
+                        "uid": "eb3ee73e-8b4d-4400-b09a-f01e7c72895d"
+                    }
+                ], 
+                "meta-info": {
+                    "creation-time": {
+                        "iso-8601": "2016-06-09T12:21+0200", 
+                        "posix": 1465467708707
+                    }, 
+                    "creator": "admin", 
+                    "last-modifier": "admin", 
+                    "last-modify-time": {
+                        "iso-8601": "2016-06-11T19:34+0200", 
+                        "posix": 1465666459772
+                    }, 
+                    "lock": "unlocked", 
+                    "validation-state": "ok"
+                }, 
+                "name": "0001_GRUP_GENERAL", 
+                "read-only": true, 
+                "tags": [], 
+                "type": "group", 
+                "uid": "734f4fa9-784d-49e7-8790-6b209e96c647"
+            }, 
+            "status_code": 200
+        }
+    }
+]

@@ -1,25 +1,28 @@
 {%- block header -%}
 
 	<nav>
+
 		<div class="nav-home">
 			{%- if not home -%}
-			<a href="{{ url_for('home') }}" class="negative">Inici</a>
+				<a href="{{ url_for('home') }}" class="negative">Inici</a>
 			{%- endif -%}
 		</div>
+
 		<div class="nav-data">
 			<a href="{{ url_for('installPolicy') }}"><button class="header-button">Instal·lar política</button></a>
-			<a href="{{ url_for('smartview') }}"><button class="header-button">SmartView</button></a>
 		</div>
+
 		<div class="nav-login">
 			{%- if session.username -%}
-			<div>
-				Usuari: <span class="user">{{ session.username }}</span>
-				<a href="{{ url_for('logout') }}" class="negative">Sortir</a>
-			</div>
+				<div>
+					Usuari: <span class="user">{{ session.username }}</span>
+					<a href="{{ url_for('logout') }}" class="negative">Sortir</a>
+				</div>
 			{%- else -%}
-			<a href="{{ url_for('login') }}" class="negative">Log In</a>
+				<a href="{{ url_for('login') }}" class="negative">Log In</a>
 			{%- endif -%}
 		</div>
+
 	</nav>
 
 {%- endblock -%}

@@ -17,17 +17,19 @@
 		{%- block header -%}{%- endblock -%}
 	</header>
 
-	<div class="container">
-		{%- if not home -%}
-		<div class="left-bar">
-			{%- include "left-bar.html" -%}
-			{%- block bar -%}{%- endblock -%}
+		<div class="container">
+
+			{%- if not home -%}
+				<div class="left-bar">
+					{%- include "left-bar.html" -%}
+					{%- block bar -%}{%- endblock -%}
+				</div>
+			{%- endif -%}
+			<div class="wrapper">
+				{%- block content -%}{%- endblock -%}
+			</div>
+
 		</div>
-		{%- endif -%}
-		<div class="wrapper">
-			{%- block content -%}{%- endblock -%}
-		</div>
-	</div>
 
 	<footer></footer>
 

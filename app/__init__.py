@@ -9,9 +9,6 @@ from flask_login import LoginManager
 from time import strftime
 from datetime import datetime
 
-# CheckPoint library
-import api_response
-import cp_mgmt_api
 
 # to avoid request warning of using verify=false
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)

@@ -1,18 +1,7 @@
-<!-- select host form -->
-<div class="form-member-title">Triar un equip existent...</div>
-<div class="member">
-    <form class="form-member" action="{{ url_for('addExistingHost', group_id=group_id, url_back=url_back) }}" method="POST">
-        <div class="cell big-cell">{{ form_select_host.name (size=1) }}</div>
-        <div class="cell medium-cell">
-            <input type="submit" value="Afegir">
-        </div>
-    </form>
-</div>
-
 <!-- new host form -->
 <div class="form-member-title">... o afegir un equip nou</div>
 <div class="member">
-    <form class="form-member" action="{{ url_for('addHost', group_id=group_id, url_back=url_back) }}" method="POST">
+    <form class="form-member" action="{{ url_for('addHost', group_name=group_name, url_back=url_back) }}" method="POST">
     {%- for element in form_new_host -%}
         <div class="cell medium-cell">{{ element (size=20) }}</div>
         {%- if element.errors -%}
@@ -35,18 +24,18 @@
 </div>
 
 <!-- Hosts detail -->
-{%- if hosts -%}
-{%- for host in hosts -%}
+{%- if members -%}
+{%- for host in members -%}
 <div class="member">
-    <div class="cell medium-cell">{{ host.name }}</div>
+    <div class="cell medium-cell">{{ host.name[10:] }}</div>
     <div class="cell medium-cell">{{ host.ipv4_address }}</div>
     <div class="cell small-cell center">
-        <a href="{{ url_for('setHost', object_uid=host.uid, url_back=url_back) }}">
+        <a href="{{ url_for('setHost', name=host.name, url_back=url_back) }}">
             <img src="{{ url_for('static', filename='img/edit.svg') }}" class="icon" alt="Edit">
         </a>
     </div>
     <div class="cell small-cell center">
-        <a href="{{ url_for('deleteHost', group_id=group_id, object_uid=host.uid, url_back=url_back) }}">
+        <a href="{{ url_for('deleteHost', name=host.name[5:], group_name=group_name, url_back=url_back) }}">
             <img src="{{ url_for('static', filename='img/garbage.svg') }}" class="icon" alt="Delete">
         </a>
     </div>

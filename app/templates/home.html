@@ -1,21 +1,39 @@
 {%- extends "layout.html" -%}
 {%- block content -%}
 
-    <div class="container-home">
+<div class="container-home">
 
-        <div class="h1-home">Accions</div>
+	<div class="row-home">
+		<img class="logo-top" src="{{ url_for('static', filename='img/logo-checkpoint.svg') }}" alt="">
+	</div>
 
-        <ul>
-            <li class="menu-options-home">
-                <a href="{{ url_for('blockAccess') }}">Bloquejar accés per equips i URLs</a>
-            </li>
-            <li class="menu-options-home">
-                <a href="{{ url_for('allowURL') }}">Permetre URLs i aplicacions</a>
-            </li>
-            <li class="menu-options-home">
-              <a href="{{ url_for('manageGroups') }}">Gestionar grups (VIP i Medium)</a>
-            </li>
-        </ul>
-    </div>
+	<div class="row-home">
+		<div class="option-home">
+			<a href="{{ url_for('blockIP') }}">
+				<img class="option-icon" src="{{ url_for('static', filename='img/block-ip.svg') }}" alt="">
+			</a>
+		</div>
+		<div class="option-home">
+			<a href="{{ url_for('blockURL') }}">
+				<img class="option-icon" src="{{ url_for('static', filename='img/block-url.svg') }}" alt="">
+			</a>
+		</div>
+		<div class="option-home">
+			<a href="{{ url_for('blockApp') }}">
+				<img class="option-icon" src="{{ url_for('static', filename='img/block-app.svg') }}" alt="">
+			</a>
+		</div>
+		<div class="option-home">
+			<a href="{{ url_for('smartview') }}">
+				<img class="option-icon" src="{{ url_for('static', filename='img/smartview.svg') }}" alt="">
+			</a>
+		</div>
+	</div>
+
+	<div class="row-home">
+		<img class="logo-bottom" src="{{ url_for('static', filename='img/logo-gencat.svg') }}" alt="">
+	</div>
+
+</div>
 
 {%- endblock -%}

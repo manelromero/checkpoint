@@ -29,9 +29,5 @@ def apiCall(command, json_payload, sid):
     return r.json()
 
 
-def orderList(list):
-    return sorted(list, key = lambda element: (element['name']))
-
-
 def redirect_url(default='home'):
     return request.args.get('next') or request.referrer or url_for(default)

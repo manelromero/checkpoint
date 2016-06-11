@@ -1,51 +1,109 @@
-from flask_login import UserMixin
+from . import app
+import api_response
+from cp_mgmt_api import APIClient
 
 
-class User(UserMixin):
-    def __init__(self, sid, username):
-        self.sid = sid,
-        self.username = username
+# CheckpPoint library
+api = APIClient()
 
-    def get_id(self):
-        return unicode(self.sid)
-
-
-class Network():
-    def __init__(self, uid=None, name=None, subnet4=None, mask_length4=None):
-        self.uid = uid,
-        self.name = name,
-        self.subnet4 = subnet4,
-        self.mask_length4 = mask_length4
-
-    def order(self):
-        return ['name', 'subnet4', 'mask_length4']
+# function for replacing - with _ in lists and dicts
+def underscore(data):
+    if isinstance(data, list):
+        for element in data:
+            for key, value in element.iteritems():
+                element[key.replace('-', '_')] = element.pop(key)
+    if isinstance(data, dict):
+        for key, value in data.iteritems():
+            data[key.replace('-', '_')] = data.pop(key)
+    return data
 
 
-class Group():
-    def __init__(self, uid=None, name=None):
-        self.uid = uid,
-        self.name = name,
+class APIObject:
 
-    def order(self):
-        return ['name']
+    #
+    # initialize class
+    #
+    def __init__(self, name):
+        self.name = app.config['ID_COLE'] + name
+        self.uid = None
+        self.kind = None
+
+    def add(self, **kwargs):
+        payload = {'name': self.name}
+        for element in kwargs:
+            payload[element.replace('_', '-')] = kwargs[element]
+        return api.api_call('add-' + self.kind, payload)
+
+    def add_to_group(self, action, group_name):
+        payload = {
+            'name': app.config['ID_COLE'] + group_name,
+            'members': {
+                'add': self.name
+                }
+            }
+        return api.api_call(action, payload)
+
+    def show(self, details_level='standard'):
+        payload = {'name': self.name, 'details-level': details_level}
+        call = api.api_call('show-' + self.kind, payload).data
+        return underscore(call)
+
+    def show_members(self):
+        call = self.show('full')
+        underscore(call['members'])
+        return self.order(call['members'])
+
+    def order(self, list, field='name'):
+        return sorted(list, key = lambda element: (element[field]))
+
+    def edit(self):
+        pass
+
+    def delete(self):
+        payload = {'name': self.name}
+        return api.api_call('delete-' + self.kind, payload)
+
+    def delete_from_group(self, action, group_name):
+        payload = {
+            'name': app.config['ID_COLE'] + group_name,
+            'members': {
+                'remove': self.name
+                }
+            }
+        return api.api_call(action, payload)
+
+    def where_used(self):
+        payload = {'name': self.name}
+        call = api.api_call('where-used', payload).data
+        return call['used-directly']['total']
 
 
-class Host():
-    def __init__(self, uid=None, name=None, ipv4_address=None):
-        self.uid = uid,
-        self.name = name,
-        self.ipv4_address = ipv4_address
+class Group(APIObject):
 
-    def order(self):
-        return ['name', 'ipv4_address']
+    #
+    # initialize class
+    #
+    def __init__(self, name):
+        APIObject.__init__(self, name)
+        self.kind = 'group'
 
 
-class ApplicationSite():
-    def __init__(self, uid=None, name=None, description=None):
-        self.uid = uid,
-        self.name = name,
-        self.description = description
+class ApplicationGroup(APIObject):
 
-    def order(self):
-        return ['name', 'description']
+    #
+    # initialize class
+    #
+    def __init__(self, name):
+        APIObject.__init__(self, name)
+        self.kind = 'application-site-group'
+
+
+class Host(APIObject):
+
+    #
+    # initialize class
+    #
+    def __init__(self, name):
+        APIObject.__init__(self, name)
+        self.kind = 'host'
 
