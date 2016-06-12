@@ -356,9 +356,11 @@ def deleteApplicationSite(name, group_name, url_back):
 
         appl.delete_from_group('set-application-site-group', group_name)
 
-        if appl.where_used() > 2:
+        print '\n\n\nUSED:', appl.where_used()
+
+        if appl.where_used() >= 2:
             api.api_call('publish')
-            flash(u"La URL pertany a més llistes i no s'eliminarà totalment")
+            flash(u"La URL pertany a més llistes, no s'elimina totalment")
             return redirect(url_for(url_back))
 
         appl.delete_from_group('set-application-site-group', 'APGR_GENERAL')
@@ -377,9 +379,9 @@ def deleteApplicationSite(name, group_name, url_back):
         )
 
 
-@app.route('/block-app')
+@app.route('/block-appl')
 @login_required
-def blockApp():
+def blockAppl():
     '''
     block access
     --------------------------------------------------------------------------
@@ -395,14 +397,79 @@ def blockApp():
     alumnes = ApplicationGroup('APGR_LlistaNegraAplicacionsAlumnes').show()
 
     return render_template(
-        'block-app.html',
+        'block-appl.html',
         tots=tots,
         professors=professors,
         alumnes=alumnes,
-        url_back='blockURL'
+        url_back='blockAppl'
         )
 
 
+@app.route('/show-appl-group-members/<name>/<url_back>')
+@login_required
+def showApplGroupMembers(name, url_back):
+    '''
+    show application-site group content
+    -----------------------------------------------------------------------
+    shows application group content when selecting a source in the dropdown
+    menu while adding a new rule
+
+    argument:
+        group_id: the group that's been selected
+
+    return: renders the show application group content page just below the
+        select
+
+    '''
+    form_select_app = ApplicationSelectForm(request.form)
+
+    members = ApplicationGroup(name).show_members()
+    choices = ApplicationGroup('APGR_APLICACIONS').show_members()
+
+    options = [('', 'seleccionar')]
+    for element in choices:
+        already_in_group = False
+        for appl in members:
+            if element['name'] == appl['name']:
+                already_in_group = True
+        if not already_in_group:
+            options.append((element['name'], element['name']))
+    form_select_app.name.choices = options
+
+    return render_template(
+        'show-appl-group-members.html',
+        form_select_app=form_select_app,
+        members=members,
+        name=name,
+        url_back=url_back
+        )
+
+
+@app.route('/add-existing-appl/<group_name>/<url_back>', methods=['POST'])
+@login_required
+def addExistingAppl(group_name, url_back):
+    '''
+    add existing application
+    ----------------------------------------------------------------
+    adds an existing host to a group
+
+    arguments:
+        host_id: the id of the host to be added to the group
+        group_id: the id of the group where the host has to be added
+
+    return: when POST adds the host to the group, if NO renders the
+        show groups page
+
+    '''
+    form = ApplicationSelectForm(request.form)
+
+    appl = ApplicationSite(form.name.data)
+    appl.name = appl.name[5:]
+    appl.add_to_group('set-application-site-group', group_name)
+
+    api.api_call('publish')
+    flash(u'Aplicació afegida')
+    return redirect(url_for(url_back))
 
 
 

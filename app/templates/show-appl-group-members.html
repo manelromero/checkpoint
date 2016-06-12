@@ -1,0 +1,32 @@
+<!-- select application form -->
+<div class="form-member-title">Triar una aplicació existent</div>
+<div class="member">
+    <form class="form-member" action="{{ url_for('addExistingAppl', group_name=name, url_back=url_back) }}" method="POST">
+        <div class="cell big-cell">{{ form_select_app.name (size=1) }}</div>
+        <div class="cell medium-cell">
+            <input type="submit" value="Afegir">
+        </div>
+    </form>
+</div>
+
+<!-- applications header -->
+<div class="member-header">
+    <div class="cell big-cell">Nom</div>
+    <div class="cell small-cell center">Esborrar</div>
+</div>
+
+<!-- applicationss detail -->
+{%- if members -%}
+{%- for appl in members -%}
+<div class="member">
+    <div class="cell big-cell">{{ appl.name }}</div>
+    <div class="cell small-cell center">
+        <a href="{{ url_for('deleteApplicationSite', name=appl.name[5:], group_name=name, url_back=url_back) }}">
+            <img src="{{ url_for('static', filename='img/garbage.svg') }}" class="icon" alt="Delete">
+        </a>
+    </div>
+</div>
+{%- endfor -%}
+{%- else -%}
+<div class="form-member-empty">Cap aplicació en aquesta llista</div>
+{%- endif -%}

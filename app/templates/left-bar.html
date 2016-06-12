@@ -1,23 +1,27 @@
 {%- block bar -%}
 
-<div>
+<div class="menu">
 
-    <h3>Accions</h3>
-
-    <ul>
-        <li class="menu-options">
-            <a href="{{ url_for('blockIP') }}">Bloquejar accés per equip</a>
-        </li>
-        <li class="menu-options">
-            <a href="{{ url_for('blockURL') }}">Bloquejar accés per URL</a>
-        </li>
-        <li class="menu-options">
-          <a href="{{ url_for('blockApp') }}">Bloquejar accés per aplicació</a>
-        </li>
-        <li class="menu-options">
-          <a href="{{ url_for('smartview') }}">SmartView</a>
-        </li>
-    </ul>
+    <div class="menu-option">
+        <a href="{{ url_for('blockIP') }}">
+            <img class="option-icon" src="{{ url_for('static', filename='img/block-ip.svg') }}" alt="">
+        </a>
+    </div>
+    <div class="menu-option">
+        <a href="{{ url_for('blockURL') }}">
+            <img class="option-icon" src="{{ url_for('static', filename='img/block-url.svg') }}" alt="">
+        </a>
+    </div>
+    <div class="menu-option">
+        <a href="{{ url_for('blockAppl') }}">
+            <img class="option-icon" src="{{ url_for('static', filename='img/block-app.svg') }}" alt="">
+        </a>
+    </div>
+    <div class="menu-option">
+        <a href="{{ url_for('smartview') }}">
+            <img class="option-icon" src="{{ url_for('static', filename='img/smartview.svg') }}" alt="">
+        </a>
+    </div>
 
     <!-- get flash messages -->
     {%- with messages = get_flashed_messages() -%}

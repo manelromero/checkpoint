@@ -30,18 +30,18 @@ $(document).ready(function() {
     		}
     	});
         $(this).removeClass('closed');
-        $(this).children('.arrow').removeClass('closed');
+        $(this).children('.arrow').removeClass('right');
         $(this).addClass('open');
-        $(this).children('.arrow').addClass('open');
+        $(this).children('.arrow').addClass('down');
     	$('#' + group_name).slideDown(200)
     });
 
     $('.table').on('click', '.open', function() {
         var group_name = $(this).data('group-name');
         $(this).removeClass('open');
-        $(this).children('.arrow').removeClass('open');
+        $(this).children('.arrow').removeClass('down');
         $(this).addClass('closed');
-        $(this).children('.arrow').addClass('closed');
+        $(this).children('.arrow').addClass('right');
         $('#' + group_name).slideUp(200)
     })
 
