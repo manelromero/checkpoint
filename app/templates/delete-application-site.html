@@ -1,17 +1,21 @@
 {%- extends "layout.html" -%}
 {%- block content -%}
 
-<h1>URLs</h1>
-<h2>Eliminar URL</h2>
+<div class="wrapper-content">
 
-<form action="{{ url_for('deleteApplicationSite', app_list=app_list, object_uid=object.uid, url_back=url_back) }}" method="POST">
-	<ul>
-		<li>
-			Voleu eliminar la URL <span class="red">{{ object.name }}</span>, <span class="red">{{ object.url_list }}</span>?
-		</li>
-	</ul>
-	<input type="submit" value="Si">
-</form>
-<a href="{{ url_for(url_back) }}"><button>No</button></a>
+	<h1>URLs</h1>
+	<h2>Eliminar URL</h2>
+
+	<form action="{{ url_for('deleteApplicationSite', name=appl_to_delete.name[5:], group_name=group_name, url_back=url_back) }}" method="POST">
+		<ul>
+			<li>
+				Voleu eliminar la URL <span class="red">{{ appl_to_delete.name[10:] }}</span>, <span class="red">{{ appl_to_delete.url_list[0] }}</span>?
+			</li>
+		</ul>
+		<input type="submit" value="Si">
+	</form>
+	<a href="{{ url_for(url_back) }}"><button>No</button></a>
+
+</div>
 
 {%- endblock -%}

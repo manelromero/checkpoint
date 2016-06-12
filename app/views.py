@@ -5,7 +5,7 @@ from functools import wraps
 import webbrowser
 
 from . import app
-from models import api, Group, ApplicationGroup, Host
+from models import api, Group, ApplicationGroup, Host, ApplicationSite
 from forms import *
 
 
@@ -129,28 +129,14 @@ def showGroupMembers(group_name, url_back):
     return: renders the show group members page
 
     '''
-    form_new_host = HostForm(request.form)
-    form_select_host = HostSelectForm(request.form)
+    form = HostForm(request.form)
 
     members = Group(group_name).show_members()
-    choices = Group('GRUP_GENERAL').show_members()
-
-    options = [('', 'seleccionar')]
-    for element in choices:
-        already_in_group = False
-        for host in members:
-            if element['name'] == host['name']:
-                already_in_group = True
-        if not already_in_group:
-            options.append((element['name'], element['name'][10:]))
-    form_select_host.name.choices = options
 
     return render_template(
         'show-group-members.html',
-        request=request,
         members=members,
-        form_new_host=form_new_host,
-        form_select_host=form_select_host,
+        form=form,
         group_name=group_name,
         url_back=url_back
         )
@@ -178,7 +164,6 @@ def addHost(group_name, url_back):
         host = Host('HOST_' + form.name.data)
         host.add(ipv4_address=form.ipv4_address.data)
         host.add_to_group('set-group', group_name)
-        host.add_to_group('set-group', 'GRUP_GENERAL')
         api.api_call('publish')
         flash('Equip afegit')
         return redirect(url_for(url_back))
@@ -208,36 +193,7 @@ def deleteHost(name, group_name, url_back):
     if request.method == 'POST':
 
         host.delete_from_group('set-group', group_name)
-
-        # call for removing the host from the group
-        # payload = {
-        #     'uid': group_id,
-        #     'members': {
-        #         'remove': app.config['ID_COLE'] + 'HOST_' + object['name']
-        #         }
-        #     }
-        # call = api.api_call('set-group', payload)
-
-        # check if used in more places than its group
-        if host.where_used > 1:
-            flash(u"L'equip pertany a més grups i no es pot eliminar")
-            return redirect(url_for(url_back))
-
-        host.delete_from_group('set-group', 'GRUP_GENERAL')
         host.delete()
-
-        # call for removing the host from the general group
-        # payload = {
-        #     'name': app.config['ID_COLE'] + 'GRUP_GENERAL',
-        #     'members': {
-        #         'remove': app.config['ID_COLE'] + 'HOST_' + object['name']
-        #         }
-        #     }
-        # api.api_call('set-group', payload)
-
-        # call for deleting the host
-        # payload = {'uid': object_uid}
-        # api.api_call('delete-host', payload)
 
         api.api_call('publish')
         flash('Equip eliminat')
@@ -304,15 +260,119 @@ def showAppGroupMembers(name, url_back):
             if element['name'] == appl['name']:
                 already_in_group = True
         if not already_in_group:
-            options.append((element['name'], element['name'][10:]))
+            options.append((element['name'][5:], element['name'][10:]))
     form_select_app.name.choices = options
 
     return render_template(
         'show-app-group-members.html',
         form_select_app=form_select_app,
         form_new_app=form_new_app,
-        member=members,
+        members=members,
         name=name,
+        url_back=url_back
+        )
+
+
+@app.route('/add-existing-application/<group_name>/<url_back>', methods=['POST'])
+@login_required
+def addExistingApplication(group_name, url_back):
+    '''
+    add existing application
+    ----------------------------------------------------------------
+    adds an existing host to a group
+
+    arguments:
+        host_id: the id of the host to be added to the group
+        group_id: the id of the group where the host has to be added
+
+    return: when POST adds the host to the group, if NO renders the
+        show groups page
+
+    '''
+    form = ApplicationSelectForm(request.form)
+
+    appl = ApplicationSite(form.name.data)
+    appl.add_to_group('set-application-site-group', group_name)
+
+    api.api_call('publish')
+    flash('URL afegida')
+    return redirect(url_for(url_back))
+
+
+@app.route('/add-application-site/<group_name>/<url_back>', methods=['POST'])
+@login_required
+def addApplicationSite(group_name, url_back):
+    '''
+    add application-site
+    --------------------------------------------------------------------------
+    add a new application-site inside a group
+
+    arguments:
+        group_id: the id number of the application-site groups
+
+    return: renders the show application-sites page
+
+    '''
+    form = ApplicationSiteForm(request.form)
+
+    if form.validate():
+
+        appl = ApplicationSite('APPL_' + form.name.data)
+        appl.add(
+            url_list=form.url_list.data,
+            primary_category='Custom_Application_Site'  #required
+            )
+        appl.add_to_group('set-application-site-group', group_name)
+        appl.add_to_group('set-application-site-group', 'APGR_GENERAL')
+        api.api_call('publish')
+        flash('URL afegida')
+        return redirect(url_for(url_back))
+
+    # I have to check what to do here
+    return redirect(url_for('blockURL'))
+
+
+@app.route(
+    '/delete-application-site/<name>/<group_name>/<url_back>',
+    methods=['GET', 'POST']
+    )
+@login_required
+def deleteApplicationSite(name, group_name, url_back):
+    '''
+    delete application-site
+    --------------------------------------------------------------------------
+    delete an existing application-site
+
+    arguments:
+        app_list: the id number of the application-site groups
+
+    return: renders the show application-sites page
+
+    '''
+    appl = ApplicationSite(name)
+    appl_to_delete = appl.show()
+
+    if request.method == 'POST':
+
+        appl.delete_from_group('set-application-site-group', group_name)
+
+        if appl.where_used() > 2:
+            api.api_call('publish')
+            flash(u"La URL pertany a més llistes i no s'eliminarà totalment")
+            return redirect(url_for(url_back))
+
+        appl.delete_from_group('set-application-site-group', 'APGR_GENERAL')
+
+        appl.delete()
+
+        api.api_call('publish')
+        flash(u'URL eliminada')
+        return redirect(url_for(url_back))
+
+    return render_template(
+        'delete-application-site.html',
+        group_name=group_name,
+        appl_to_delete=appl_to_delete,
         url_back=url_back
         )
 
@@ -504,158 +564,6 @@ def setHost(name, url_back):
             form=form,
             url_back=url_back
             )
-
-
-@app.route('/add-existing-application/<group_name>/<url_back>', methods=['POST'])
-@login_required
-def addExistingApplication(group_name, url_back):
-    '''
-    add existing application
-    ----------------------------------------------------------------
-    adds an existing host to a group
-
-    arguments:
-        host_id: the id of the host to be added to the group
-        group_id: the id of the group where the host has to be added
-
-    return: when POST adds the host to the group, if NO renders the
-        show groups page
-
-    '''
-    form = ApplicationSelectForm(request.form)
-    # call for adding the host to the group
-    payload = {
-        'uid': app_list,
-        'members': {
-            'add': form.name.data
-            }
-        }
-    api.api_call('set-application-site-group', payload)
-    api.api_call('publish')
-    flash('URL afegida')
-    return redirect(url_for(url_back))
-
-
-@app.route('/add-application-site/<group_name>/<url_back>', methods=['POST'])
-@login_required
-def addApplicationSite(group_name, url_back):
-    '''
-    add application-site
-    --------------------------------------------------------------------------
-    add a new application-site inside a group
-
-    arguments:
-        group_id: the id number of the application-site groups
-
-    return: renders the show application-sites page
-
-    '''
-    form = ApplicationSiteForm(request.form)
-    if form.validate():
-
-        # call for adding the application
-        payload = {
-            'name': app.config['ID_COLE'] + 'APPL_' + form.name.data,
-            'url-list': form.url_list.data,
-            'primary-category': 'Custom_Application_Site'  # required
-        }
-
-        api.api_call('add-application-site', payload)
-
-        # call for adding the application to the group
-        payload = {
-            'uid': app_list,
-            'members': {
-                'add': app.config['ID_COLE'] + 'APPL_' + form.name.data
-                }
-            }
-        api.api_call('set-application-site-group', payload)
-
-        # call for adding the application to general group
-        payload = {
-            'name': app.config['ID_COLE'] + 'APGR_GENERAL',
-            'members': {
-                'add': app.config['ID_COLE'] + 'APPL_' + form.name.data
-                }
-            }
-        api.api_call('set-application-site-group', payload)
-
-        api.api_call('publish')
-        flash(u'URL afegida')
-        return redirect(url_for(url_back))
-    else:
-        return render_template(
-            'new-application-site.html',
-            form=form,
-            app_list=app_list,
-            url_back=url_back
-            )
-
-
-@app.route(
-    '/delete-application-site/<app_list>/<object_uid>/<url_back>',
-    methods=['GET', 'POST']
-    )
-@login_required
-def deleteApplicationSite(app_list, object_uid, url_back):
-    '''
-    delete application-site
-    --------------------------------------------------------------------------
-    delete an existing application-site
-
-    arguments:
-        app_list: the id number of the application-site groups
-
-    return: renders the show application-sites page
-
-    '''
-    payload = {'uid': object_uid}
-    call = api.api_call('show-application-site', payload).data
-    object = {
-        'uid': call['uid'],
-        'name': call['name'][10:],
-        'url_list': call['url-list'][0],
-        }
-
-    if request.method == 'POST':
-
-        # call for removing the application from the application group
-        payload = {
-            'uid': app_list,
-            'members': {
-                'remove': app.config['ID_COLE'] + 'APPL_' + object['name']
-                }
-            }
-        api.api_call('set-application-site-group', payload)
-
-        # check if used in more places than its group and the general group
-        used = whereUsed(object_uid)
-        if used > 1:
-            flash(u"La URL pertany a més llistes i no s'eliminarà totalment")
-            return redirect(url_for(url_back))
-
-        # call for removing the application from the general group
-        payload = {
-            'name': app.config['ID_COLE'] + 'APGR_GENERAL',
-            'members': {
-                'remove': app.config['ID_COLE'] + 'APPL_' + object['name']
-                }
-            }
-        api.api_call('set-application-site-group', payload)
-
-        # call for deleting the application
-        payload = {'uid': object_uid}
-        api.api_call('delete-application-site', payload)
-        api.api_call('publish')
-        flash(u'URL eliminada')
-        return redirect(url_for(url_back))
-
-    return render_template(
-        'delete-application-site.html',
-        app_list=app_list,
-        object=object,
-        url_back=url_back
-        )
 
 
 @app.route(

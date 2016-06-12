@@ -1,15 +1,19 @@
 <!-- new host form -->
-<div class="form-member-title">... o afegir un equip nou</div>
+<div class="form-member-title">Afegir un equip nou</div>
 <div class="member">
     <form class="form-member" action="{{ url_for('addHost', group_name=group_name, url_back=url_back) }}" method="POST">
-    {%- for element in form_new_host -%}
-        <div class="cell medium-cell">{{ element (size=20) }}</div>
-        {%- if element.errors -%}
-            {%- for error in element.errors -%}
+        <div class="cell big-cell">{{ form.name (size=38) }}</div>
+        {%- if form.name.errors -%}
+            {%- for error in form.name.errors -%}
             <span class="error">{{ error }}</span>
             {%- endfor -%}
         {%- endif -%}
-    {%- endfor -%}
+        <div class="cell medium-cell">{{ form.ipv4_address (size=20) }}</div>
+        {%- if form.ipv4_address.errors -%}
+            {%- for error in form.ipv4.errors -%}
+            <span class="error">{{ error }}</span>
+            {%- endfor -%}
+        {%- endif -%}
         <div class="cell medium-cell center">
             <input type="submit" value="Afegir">
         </div>
@@ -17,7 +21,7 @@
     </form>
 </div>
 <div class="member-header">
-    <div class="cell medium-cell">Nom</div>
+    <div class="cell big-cell">Nom</div>
     <div class="cell medium-cell">Adreça IPv4</div>
     <div class="cell small-cell center">Editar</div>
     <div class="cell small-cell center">Esborrar</div>
@@ -27,7 +31,7 @@
 {%- if members -%}
 {%- for host in members -%}
 <div class="member">
-    <div class="cell medium-cell">{{ host.name[10:] }}</div>
+    <div class="cell big-cell">{{ host.name[10:] }}</div>
     <div class="cell medium-cell">{{ host.ipv4_address }}</div>
     <div class="cell small-cell center">
         <a href="{{ url_for('setHost', name=host.name, url_back=url_back) }}">

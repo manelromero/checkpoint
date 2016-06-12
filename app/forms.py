@@ -45,18 +45,18 @@ class ApplicationSiteForm(Form):
             message="Heu d'introduir un nom"
             ),
         validators.Length(
-            max=25,
-            message=u'El nom no pot tenir més de 25 lletres'
+            max=35,
+            message=u'El nom no pot tenir més de 35 lletres'
             )
         ])
 
     url_list = StringField(u'URL', [
         validators.InputRequired(
-            message=u"Heu d'introduir una descripció"
+            message=u"Heu d'introduir una URL"
             ),
         validators.Length(
-            max=25,
-            message=u'La descripció no pot tenir més de 25 caràcters'
+            max=35,
+            message=u'La URL no pot tenir més de 35 caràcters'
             )
         ])
 
@@ -75,8 +75,8 @@ class HostForm(Form):
             message="Heu d'introduir un nom"
             ),
         validators.Length(
-            max=25,
-            message=u'El nom no pot tenir més de 25 caràcters'
+            max=35,
+            message=u'El nom no pot tenir més de 35 caràcters'
             )
         ])
 

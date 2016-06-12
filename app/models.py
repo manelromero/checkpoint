@@ -107,3 +107,13 @@ class Host(APIObject):
         APIObject.__init__(self, name)
         self.kind = 'host'
 
+
+class ApplicationSite(APIObject):
+
+    #
+    # initialize class
+    #
+    def __init__(self, name):
+        APIObject.__init__(self, name)
+        self.kind = 'application-site'
+
