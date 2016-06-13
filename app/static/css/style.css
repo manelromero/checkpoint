@@ -507,14 +507,14 @@ input[type=submit]:focus {
 }
 
 .option-home {
-	width: 25%;
+	width: 20%;
 	height: 100%;
 	float: left;
 	text-align: center;
 }
 
 .option-icon {
-	height: 100%;
+	width: 75%;
 	opacity: 0.6;
 	transition: opacity 0.3s;
 }

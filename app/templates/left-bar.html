@@ -3,6 +3,11 @@
 <div class="menu">
 
     <div class="menu-option">
+        <a href="{{ url_for('manageGroups') }}">
+            <img class="option-icon" src="{{ url_for('static', filename='img/manage-groups.svg') }}" alt="">
+        </a>
+    </div>
+    <div class="menu-option">
         <a href="{{ url_for('blockIP') }}">
             <img class="option-icon" src="{{ url_for('static', filename='img/block-ip.svg') }}" alt="">
         </a>
@@ -18,7 +23,7 @@
         </a>
     </div>
     <div class="menu-option">
-        <a href="{{ url_for('smartview') }}">
+        <a href="{{ session['link'] }}" target="_blank">
             <img class="option-icon" src="{{ url_for('static', filename='img/smartview.svg') }}" alt="">
         </a>
     </div>

@@ -7,7 +7,12 @@
 		<img class="logo-top" src="{{ url_for('static', filename='img/logo-checkpoint.svg') }}" alt="">
 	</div>
 
-	<div class="row-home">
+	<div class="row-home center">
+		<div class="option-home">
+			<a href="{{ url_for('manageGroups') }}">
+				<img class="option-icon" src="{{ url_for('static', filename='img/manage-groups.svg') }}" alt="">
+			</a>
+		</div>
 		<div class="option-home">
 			<a href="{{ url_for('blockIP') }}">
 				<img class="option-icon" src="{{ url_for('static', filename='img/block-ip.svg') }}" alt="">
@@ -24,7 +29,7 @@
 			</a>
 		</div>
 		<div class="option-home">
-			<a href="{{ url_for('smartview') }}">
+			<a href="{{ session['link'] }}" target="_blank">
 				<img class="option-icon" src="{{ url_for('static', filename='img/smartview.svg') }}" alt="">
 			</a>
 		</div>

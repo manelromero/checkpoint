@@ -1,0 +1,33 @@
+{%- extends "layout.html" -%}
+{%- block content -%}
+
+<div class="wrapper-content">
+
+    <h1>Gestionar equips</h1>
+
+    <div class="table-header">
+        <div class="header-row">
+            <div class="cell tiny-cell"></div>
+            <div class="cell big-cell">Llistes d'equips</div>
+        </div>
+    </div>
+
+    <div class="table">
+
+        <div class="row group closed" data-group-name="{{ professors.name[5:] }}" data-route="show-group-members" data-url-back="{{ url_back }}">
+            <div class="cell tiny-cell arrow right"></div>
+            <div class="cell big-cell">{{ professors.name[10:] }}</div>
+        </div>
+        <div class="members" id="{{ professors.name[5:] }}"></div>
+
+        <div class="row group closed" data-group-name="{{ alumnes.name[5:] }}" data-route="show-group-members" data-url-back="{{ url_back }}">
+            <div class="cell tiny-cell arrow right"></div>
+            <div class="cell big-cell">{{ alumnes.name[10:] }}</div>
+        </div>
+        <div class="members" id="{{ alumnes.name[5:] }}"></div>
+
+    </div>
+
+</div>
+
+{%- endblock -%}

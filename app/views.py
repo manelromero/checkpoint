@@ -31,6 +31,7 @@ def login():
         if 'sid' in login.data:
             # store username in session for header and login_required
             session['username'] = form.username.data
+            session['link'] = 'https://' + app.config['SERVER'] + '/smartview/'
             return render_template('home.html', home=True)
         else:
             flash(u"Error d'inici de sessió, torneu a intentar-ho.")
@@ -97,6 +98,26 @@ def home():
 
     """
     return render_template('home.html', home=True)
+
+
+@app.route('/manage-groups')
+@login_required
+def manageGroups():
+    """
+    block access
+    --------------------------------------------------------------------------
+    shows the group and the application-site-group for blocking hosts and URLs
+
+    return: renders the block access page
+
+    """
+    professors = Group('GRUP_LlistaEquipsProfessors').show()
+    alumnes = Group('GRUP_LlistaEquipsAlumnes').show()
+    return render_template(
+        'manage-groups.html',
+        professors=professors,
+        alumnes=alumnes,
+        url_back='manageGroups')
 
 
 @app.route('/blockIP')
