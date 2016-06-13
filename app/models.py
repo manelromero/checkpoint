@@ -6,6 +6,7 @@ from cp_mgmt_api import APIClient
 # CheckpPoint library
 api = APIClient()
 
+
 # function for replacing - with _ in lists and dicts
 def underscore(data):
     if isinstance(data, list):
@@ -54,10 +55,13 @@ class APIObject:
         return self.order(call['members'])
 
     def order(self, list, field='name'):
-        return sorted(list, key = lambda element: (element[field]))
+        return sorted(list, key=lambda element: (element[field]))
 
-    def edit(self):
-        pass
+    def edit(self, **kwargs):
+        payload = {'name': self.name}
+        for element in kwargs:
+            payload[element.replace('_', '-')] = kwargs[element]
+        return api.api_call('set-' + self.kind, payload)
 
     def delete(self):
         payload = {'name': self.name}
@@ -116,4 +120,3 @@ class ApplicationSite(APIObject):
     def __init__(self, name):
         APIObject.__init__(self, name)
         self.kind = 'application-site'
-

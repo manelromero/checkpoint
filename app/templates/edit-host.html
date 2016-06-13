@@ -1,37 +1,35 @@
 {%- extends "layout.html" -%}
 {%- block content -%}
 
-<h1>Hosts</h1>
-<h2>Editar host: {{ object.name }}</h2>
+<div class="wrapper-content">
 
-<div class="wrapper-object">
+	<h1>Equips</h1>
+	<h2>Editar equip</h2>
 
-	{% if form %}
-	<form action="{{ url_for('setHost', object_uid=object.uid, url_back=url_back) }}" method="POST">
+	<form action="{{ url_for('setHost', name=host_to_edit.name[5:], url_back=url_back) }}" method="POST">
 
 		<ul>
 			<li>{{ form.name.label }}</li>
-			<li>{{ form.name (size=30, placeholder=object.name) }}</li>
-			{% if form.name.errors %}
-				{% for error in form.name.errors %}
+			<li>{{ form.name (size=30, placeholder=host_to_edit.name[10:]) }}</li>
+			{%- if form.name.errors -%}
+				{%- for error in form.name.errors -%}
 					<span class="error">{{ error }}</span>
-				{% endfor %}
-			{% endif %}
+				{%- endfor -%}
+			{%- endif -%}
 			<li>{{ form.ipv4_address.label }}</li>
-			<li>{{ form.ipv4_address (size=20, placeholder=object.ipv4_address) }}</li>
-			{% if form.ipv4_address.errors %}
-				{% for error in form.ipv4_address.errors %}
+			<li>{{ form.ipv4_address (size=20, placeholder=host_to_edit.ipv4_address) }}</li>
+			{%- if form.ipv4_address.errors -%}
+				{%- for error in form.ipv4_address.errors -%}
 					<span class="error">{{ error }}</span>
-				{% endfor %}
-			{% endif %}
+				{%- endfor -%}
+			{%- endif -%}
 		</ul>
-		<input type="submit" value="Enviar">
+		<input type="submit" value="Editar">
 
 	</form>
-	{% endif %}
 
     <a href="{{ url_for(url_back) }}"><button>Tornar</button></a>
 
 </div>
 
-{% endblock %}
+{%- endblock -%}

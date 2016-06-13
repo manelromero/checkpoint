@@ -248,7 +248,7 @@ nav {
 }
 
 .flash {
-	width: 200px;
+	width: 150px;
 	min-height: 50px;
 	position: absolute;
 	left: 0;
@@ -525,5 +525,10 @@ input[type=submit]:focus {
 
 .option-icon {
 	height: 100%;
+	opacity: 0.6;
+	transition: opacity 0.3s;
 }
 
+.option-icon:hover {
+	opacity: 1;
+}

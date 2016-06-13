@@ -34,7 +34,7 @@
     <div class="cell big-cell">{{ host.name[10:] }}</div>
     <div class="cell medium-cell">{{ host.ipv4_address }}</div>
     <div class="cell small-cell center">
-        <a href="{{ url_for('setHost', name=host.name, url_back=url_back) }}">
+        <a href="{{ url_for('setHost', name=host.name[5:], url_back=url_back) }}">
             <img src="{{ url_for('static', filename='img/edit.svg') }}" class="icon" alt="Edit">
         </a>
     </div>
