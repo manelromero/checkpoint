@@ -21,7 +21,7 @@
 <div class="member">
     <div class="cell big-cell">{{ appl.name }}</div>
     <div class="cell small-cell center">
-        <a href="{{ url_for('deleteApplicationSite', name=appl.name[5:], group_name=name, url_back=url_back) }}">
+        <a href="{{ url_for('deleteAppl', name=appl.name, group_name=name, url_back=url_back) }}">
             <img src="{{ url_for('static', filename='img/garbage.svg') }}" class="icon" alt="Delete">
         </a>
     </div>

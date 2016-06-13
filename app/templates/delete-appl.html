@@ -1,0 +1,21 @@
+{%- extends "layout.html" -%}
+{%- block content -%}
+
+<div class="wrapper-content">
+
+	<h1>Aplicacions</h1>
+	<h2>Eliminar aplicació</h2>
+
+	<form action="{{ url_for('deleteAppl', name=appl_to_delete.name, group_name=group_name, url_back=url_back) }}" method="POST">
+		<ul>
+			<li>
+				Voleu eliminar l'aplicació <span class="red">{{ appl_to_delete.name }}</span>?
+			</li>
+		</ul>
+		<input type="submit" value="Si">
+	</form>
+	<a href="{{ url_for(url_back) }}"><button>No</button></a>
+
+</div>
+
+{%- endblock -%}

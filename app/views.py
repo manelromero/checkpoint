@@ -398,8 +398,6 @@ def deleteApplicationSite(name, group_name, url_back):
 
         appl.delete_from_group('set-application-site-group', group_name)
 
-        print '\n\n\nUSED:', appl.where_used()
-
         if appl.where_used() >= 2:
             api.api_call('publish')
             flash(u"La URL pertany a més llistes, no s'elimina totalment")
@@ -425,7 +423,7 @@ def deleteApplicationSite(name, group_name, url_back):
 @login_required
 def setApplicationSite(name, url_back):
     """
-    edit host ************************** pending ******************************
+    edit host
     ---------------------------------------------------------------------------
     edits an existing host
 
@@ -435,24 +433,24 @@ def setApplicationSite(name, url_back):
     return: renders the show group members page
 
     """
-    form = HostForm(request.form)
+    form = ApplicationSiteForm(request.form)
 
-    host = Host(name)
-    host_to_edit = host.show()
+    appl = ApplicationSite(name)
+    appl_to_edit = appl.show()
 
     if request.method == 'POST' and form.validate():
-        host.edit(
-            new_name=app.config['ID_COLE'] + 'HOST_' + form.name.data,
-            ipv4_address=form.ipv4_address.data
+        appl.edit(
+            new_name=app.config['ID_COLE'] + 'APPL_' + form.name.data,
+            url_list=form.url_list.data
             )
         api.api_call('publish')
-        flash('Equip editat')
+        flash('URL editada')
         return redirect(url_for(url_back))
 
     return render_template(
-        'edit-host.html',
+        'edit-application-site.html',
         form=form,
-        host_to_edit=host_to_edit,
+        appl_to_edit=appl_to_edit,
         url_back=url_back
         )
 
@@ -557,7 +555,7 @@ def addExistingAppl(group_name, url_back):
 @login_required
 def deleteAppl(name, group_name, url_back):
     """
-    delete application-site **************** pending *************************
+    delete application-site
     --------------------------------------------------------------------------
     delete an existing application-site
 
@@ -568,29 +566,19 @@ def deleteAppl(name, group_name, url_back):
 
     """
     appl = ApplicationSite(name)
+    appl.name = appl.name[5:]
     appl_to_delete = appl.show()
 
     if request.method == 'POST':
 
         appl.delete_from_group('set-application-site-group', group_name)
 
-        print '\n\n\nUSED:', appl.where_used()
-
-        if appl.where_used() >= 2:
-            api.api_call('publish')
-            flash(u"La URL pertany a més llistes, no s'elimina totalment")
-            return redirect(url_for(url_back))
-
-        appl.delete_from_group('set-application-site-group', 'APGR_GENERAL')
-
-        appl.delete()
-
         api.api_call('publish')
-        flash(u'URL eliminada')
+        flash(u'Aplicació eliminada')
         return redirect(url_for(url_back))
 
     return render_template(
-        'delete-application-site.html',
+        'delete-appl.html',
         group_name=group_name,
         appl_to_delete=appl_to_delete,
         url_back=url_back
@@ -599,24 +587,19 @@ def deleteAppl(name, group_name, url_back):
 
 @app.route('/smartview')
 def smartview():
+    """
+    edit application-site
+    --------------------------------------------------------------------------
+    edit an existing application-site
 
-    # from selenium import webdriver
-    # from selenium.webdriver.common.keys import Keys
+    arguments:
+        group_id: the id number of the application-site groups
 
-    # driver = webdriver.Chrome()
-    # webdriver.Chrome().execute_script("window.open('','_blank');")
-    # driver.get('https://' + app.config['SERVER'] + '/smartview')
-    # assert "Python" in driver.title
-    # elem = driver.find_element_by_name("q")
-    # input1 = driver.find_element_by_tag_name('body')
-    # input1.send_keys("admin")
-    # elem.send_keys(Keys.TAB)
-    # elem.send_keys("developer")
-    # elem.send_keys(Keys.ENTER)
-    # assert "No results found." not in driver.page_source
-    # driver.close()
+    return: renders the show application-sites page
 
-    return redirect('https://' + app.config['SERVER'] + '/smartview')
+    """
+    webbrowser.open_new_tab('https://' + app.config['SERVER'] + '/smartview/')
+    return redirect(url_for('home'))
 
 
 @app.route('/install-policy')
@@ -638,4 +621,5 @@ def installPolicy():
         'targets': app.config['TARGETS']
         }
     api.api_call('install-policy', payload)
+    flash(u'Política instal·lada')
     return redirect(url_for('home'))
