@@ -383,6 +383,10 @@ input[type=submit]:focus {
 	color: #bf0000;
 }
 
+.show {
+	display: block;
+}
+
 .member {
 	width: 100%;
 	display: flex;

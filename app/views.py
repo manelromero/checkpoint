@@ -13,8 +13,9 @@ from forms import *
 def login():
     """
     login
-    ------------------------------------------------------------------
-    performs a login call to the server and stores username in session
+    ---------------------------------------------------------------------
+    performs a login call to the server, checks if any mistake and stores
+    username in session, it also stores the SmartView link
 
     return: renders home page if success or login page if error
 
@@ -37,7 +38,8 @@ def login():
         else:
             flash(u"Error d'inici de sessió, torneu a intentar-ho.")
 
-    return render_template('login.html', request=request, form=form)
+    # return render_template('login.html', request=request, form=form)
+    return render_template('login.html', form=form)
 
 
 def login_required(f):
