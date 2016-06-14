@@ -31,7 +31,8 @@ def login():
         if 'sid' in login.data:
             # store username in session for header and login_required
             session['username'] = form.username.data
-            session['link'] = 'https://' + app.config['SERVER'] + '/smartview/'
+            session['link'] = 'https://' + app.config['SERVER'] +\
+                '/smartview/#token=' + login.data['sid'].encode('base64')
             return render_template('home.html', home=True)
         else:
             flash(u"Error d'inici de sessió, torneu a intentar-ho.")

@@ -4,39 +4,45 @@
 <div class="container-home">
 
 	<div class="row-home">
-		<img class="logo-top" src="{{ url_for('static', filename='img/logo-checkpoint.svg') }}" alt="">
-	</div>
-
-	<div class="row-home center">
-		<div class="option-home">
-			<a href="{{ url_for('manageGroups') }}">
-				<img class="option-icon" src="{{ url_for('static', filename='img/manage-groups.svg') }}" alt="">
-			</a>
-		</div>
-		<div class="option-home">
-			<a href="{{ url_for('blockIP') }}">
-				<img class="option-icon" src="{{ url_for('static', filename='img/block-ip.svg') }}" alt="">
-			</a>
-		</div>
-		<div class="option-home">
-			<a href="{{ url_for('blockURL') }}">
-				<img class="option-icon" src="{{ url_for('static', filename='img/block-url.svg') }}" alt="">
-			</a>
-		</div>
-		<div class="option-home">
-			<a href="{{ url_for('blockAppl') }}">
-				<img class="option-icon" src="{{ url_for('static', filename='img/block-app.svg') }}" alt="">
-			</a>
-		</div>
-		<div class="option-home">
-			<a href="{{ session['link'] }}" target="_blank">
-				<img class="option-icon" src="{{ url_for('static', filename='img/smartview.svg') }}" alt="">
-			</a>
+		<div class="logo-home">
+			<img class="checkpoint-logo" src="{{ url_for('static', filename='img/logo-checkpoint.svg') }}" alt="">
 		</div>
 	</div>
 
 	<div class="row-home">
-		<img class="logo-bottom" src="{{ url_for('static', filename='img/logo-gencat.svg') }}" alt="">
+		<div class="option-icons">
+			<div class="option-home">
+				<a href="{{ url_for('manageGroups') }}">
+					<img class="option-icon" src="{{ url_for('static', filename='img/manage-groups.svg') }}" alt="">
+				</a>
+			</div>
+			<div class="option-home">
+				<a href="{{ url_for('blockIP') }}">
+					<img class="option-icon" src="{{ url_for('static', filename='img/block-ip.svg') }}" alt="">
+				</a>
+			</div>
+			<div class="option-home">
+				<a href="{{ url_for('blockURL') }}">
+					<img class="option-icon" src="{{ url_for('static', filename='img/block-url.svg') }}" alt="">
+				</a>
+			</div>
+			<div class="option-home">
+				<a href="{{ url_for('blockAppl') }}">
+					<img class="option-icon" src="{{ url_for('static', filename='img/block-app.svg') }}" alt="">
+				</a>
+			</div>
+			<div class="option-home">
+				<a href="{{ session['link'] }}" target="_blank">
+					<img class="option-icon" src="{{ url_for('static', filename='img/smartview.svg') }}" alt="">
+				</a>
+			</div>
+		</div>
+	</div>
+
+	<div class="row-home">
+		<div class="logo-home">
+			<img class="gencat-logo" src="{{ url_for('static', filename='img/logo-gencat.svg') }}" alt="">
+		</div>
 	</div>
 
 </div>
