@@ -5,7 +5,8 @@ from functools import wraps
 import webbrowser
 
 from . import app
-from models import api, Group, ApplicationGroup, Host, ApplicationSite
+from models import api, Group, ApplicationGroup, Host, ApplicationSite,\
+    EntityGroup, EntityApplicationGroup
 from forms import *
 
 
@@ -610,6 +611,7 @@ def deleteAppl(name, group_name, url_back):
 
 
 @app.route('/smartview')
+@login_required
 def smartview():
     """
     edit application-site
@@ -624,6 +626,143 @@ def smartview():
     """
     webbrowser.open_new_tab('https://' + app.config['SERVER'] + '/smartview/')
     return redirect(url_for('home'))
+
+
+@app.route('/create-entity', methods=['GET', 'POST'])
+@login_required
+def createEntity():
+    """
+    edit application-site
+    --------------------------------------------------------------------------
+    edit an existing application-site
+
+    arguments:
+        group_id: the id number of the application-site groups
+
+    return: renders the show application-sites page
+
+    """
+    form = EntityForm(request.form)
+
+    if request.method == 'POST' and form.validate():
+
+        id_entity = form.entity_code.data
+
+        app_groups = [
+            'APLICACIONS',
+            'GENERAL',
+            'LlistaNegraAplicacionsAlumnes',
+            'LlistaNegraAplicacionsProfessors',
+            'LlistaNegraAplicacionsTots',
+            'LlistaNegraURLsAlumnes',
+            'LlistaNegraURLsProfessors',
+            'LlistaNegraURLsTots'
+            ]
+        groups = [
+            'LlistaEquipsAlumnes',
+            'LlistaEquipsProfessors',
+            'LlistaNegraEquips'
+            ]
+
+        # create groups
+        for app_group in app_groups:
+            app_group_to_add = EntityApplicationGroup(id_entity + '_APGR_' + app_group)
+            app_group_to_add.add()
+
+        # create application site groups
+        for group in groups:
+            group_to_add = EntityGroup(id_entity + '_GRUP_' + group)
+            group_to_add.add()
+
+        # add-package
+        payload = {
+            'name': 'Escola_' + id_entity,
+            'comments': 'Escola ' + id_entity,
+            'color': 'green',
+            'threat-prevention': False,
+            'access': True
+            }
+        api.api_call('add-package', payload)
+
+        # set-access-layer
+        payload = {
+            'name': 'Escola_' + id_entity + ' Network',
+            'applications-and-url-filtering': True,
+            'show-parent-rule': False
+            }
+        api.api_call('set-access-layer', payload)
+
+        # set-access-rule
+        payload = {
+            'name': 'Cleanup rule',
+            'layer': 'Escola_' + id_entity + ' Network',
+            'action': 'Accept',
+            'track': 'Log'
+            }
+        api.api_call('set-access-rule', payload)
+
+        # add-access-section
+        payload = {
+            'layer': 'Escola_' + id_entity + ' Network',
+            'position': 'top',
+            'name': 'Regles definides per escola'
+            }
+        api.api_call('add-access-section', payload)
+
+        # add-access-rule
+        payload = {
+            'layer': 'Escola_' + id_entity + ' Network',
+            'position': 1,
+            'source': id_entity + '_GRUP_LlistaEquipsProfessors',
+            'service': id_entity + '_APGR_LlistaNegraAplicacionsProfessors',
+            'destination': 'Any',
+            'action': 'Drop',
+            'track': 'Log'
+            }
+        api.api_call('add-access-rule', payload)
+
+        # add-access-rule
+        payload = {
+            'layer': 'Escola_' + id_entity + ' Network',
+            'position': 1,
+            'source': id_entity + '_GRUP_LlistaEquipsAlumnes',
+            'service': id_entity + '_APGR_LlistaNegraAplicacionsAlumnes',
+            'destination': 'Any',
+            'action': 'Drop',
+            'track': 'Log'
+            }
+        api.api_call('add-access-rule', payload)
+
+        # add-access-rule
+        payload = {
+            'layer': 'Escola_' + id_entity + ' Network',
+            'position': 1,
+            'source': id_entity + '_GRUP_LlistaNegraEquips',
+            'service': 'Any',
+            'destination': 'Any',
+            'action': 'Drop',
+            'track': 'Log'
+            }
+        api.api_call('add-access-rule', payload)
+
+        # add-access-section
+        payload = {
+            'layer': 'Escola_' + id_entity + ' Network',
+            'position': 'bottom',
+            'name': 'Regles definides per administradors'
+            }
+        api.api_call('add-access-section', payload)
+
+        api.api_call('publish')
+        flash(u"Col·legi configurat")
+
+        return redirect(url_for('home', url_back='createEntity'))
+
+    return render_template(
+        'create-entity.html',
+        form=form,
+        url_back='manageGroups'
+        )
 
 
 @app.route('/install-policy')

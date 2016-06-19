@@ -120,3 +120,30 @@ class ApplicationSite(APIObject):
     def __init__(self, name):
         APIObject.__init__(self, name)
         self.kind = 'application-site'
+
+
+class EntityGroup(APIObject):
+
+    #
+    # initialize class
+    #
+    def __init__(self, name):
+        APIObject.__init__(self, name)
+        self.name = name
+        self.kind = 'group'
+
+
+class EntityApplicationGroup(APIObject):
+
+    #
+    # initialize class
+    #
+    def __init__(self, name):
+        APIObject.__init__(self, name)
+        self.name = name
+        self.kind = 'application-site-group'
+
+
+
+
+

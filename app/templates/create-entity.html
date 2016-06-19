@@ -1,0 +1,28 @@
+{%- extends "layout.html" -%}
+{%- block content -%}
+
+<div class="wrapper-content">
+
+	<h1>Col·legi</h1>
+	<h2>Afegir col·legi</h2>
+
+	<form action="{{ url_for('createEntity', url_back=url_back) }}" method="POST">
+
+		<ul>
+			<li>{{ form.entity_code.label }}</li>
+			<li>{{ form.entity_code (size=10) }}</li>
+			{%- if form.entity_code.errors -%}
+				{%- for error in form.entity_code.errors -%}
+					<span class="error">{{ error }}</span>
+				{%- endfor -%}
+			{%- endif -%}
+		</ul>
+		<input type="submit" value="Afegir">
+
+	</form>
+
+    <a href="{{ url_for(url_back) }}"><button>Tornar</button></a>
+
+</div>
+
+{%- endblock -%}

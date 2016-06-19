@@ -39,7 +39,7 @@ header {
 	position: fixed;
 	width: 100%;
 	background-color: #333;
-	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 	z-index: 10;
 }
 
@@ -81,26 +81,6 @@ header {
 	width: 100vw;
 	height: 100vh;
 	background-color: #ccc;
-}
-
-.modal {
-	position: absolute;
-	top: 20%;
-	left: 50%;
-	height: 200px;
-	width: 300px;
-	margin-left: -150px;
-	background-color: #fff;
-	padding: 1rem;
-	font: 600 1.3rem/2rem 'Open Sans', sans-serif;
-	border-radius: 2%;
-	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-}
-
-.modal button {
-	position: absolute;
-    bottom: 0;
-    right: 0;
 }
 
 footer {
@@ -257,14 +237,14 @@ nav {
 .table {
 	margin: 1rem auto;
 	border-collapse: collapse;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 }
 
 .table-header .header-row {
 	background-color: #333;
 	color: #fff;
 	font-weight: 600;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 	margin-top: 1rem;
 }
 
