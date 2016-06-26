@@ -5,8 +5,7 @@ from functools import wraps
 import webbrowser
 
 from . import app
-from models import api, Group, ApplicationGroup, Host, ApplicationSite,\
-    EntityGroup, EntityApplicationGroup
+from models import api, APIObject, EntityObject
 from forms import *
 
 
@@ -108,15 +107,15 @@ def home():
 @login_required
 def manageGroups():
     """
-    block access
-    --------------------------------------------------------------------------
-    shows the group and the application-site-group for blocking hosts and URLs
+    manage groups
+    ----------------------------------------------------------------------
+    shows the hosts groups detail and allows create, edit and delete hosts
 
-    return: renders the block access page
+    return: renders the manage groups page
 
     """
-    professors = Group('GRUP_LlistaEquipsProfessors').show()
-    alumnes = Group('GRUP_LlistaEquipsAlumnes').show()
+    professors = APIObject('GRUP_LlistaEquipsProfessors', 'group').show()
+    alumnes = APIObject('GRUP_LlistaEquipsAlumnes', 'group').show()
     return render_template(
         'manage-groups.html',
         professors=professors,
@@ -135,7 +134,7 @@ def blockIP():
     return: renders the block access page
 
     """
-    group = Group('GRUP_LlistaNegraEquips').show()
+    group = APIObject('GRUP_LlistaNegraEquips', 'group').show()
     return render_template('block-ip.html', group=group, url_back='blockIP')
 
 
@@ -156,7 +155,7 @@ def showGroupMembers(group_name, url_back):
     """
     form = HostForm(request.form)
 
-    members = Group(group_name).show_members()
+    members = APIObject(group_name, 'group').show_members()
 
     return render_template(
         'show-group-members.html',
@@ -186,7 +185,7 @@ def addHost(group_name, url_back):
 
     if form.validate():
 
-        host = Host('HOST_' + form.name.data)
+        host = APIObject('HOST_' + form.name.data, 'host')
         host.add(ipv4_address=form.ipv4_address.data)
         host.add_to_group('set-group', group_name)
         api.api_call('publish')
@@ -215,7 +214,7 @@ def deleteHost(name, group_name, url_back):
     return: if POST deletes the host, if GET renders the delete host page
 
     """
-    host = Host(name)
+    host = APIObject(name, 'host')
     host_to_delete = host.show()
 
     if request.method == 'POST':
@@ -251,7 +250,7 @@ def setHost(name, url_back):
     """
     form = HostForm(request.form)
 
-    host = Host(name)
+    host = APIObject(name, 'host')
     host_to_edit = host.show()
 
     if request.method == 'POST' and form.validate():
@@ -282,9 +281,18 @@ def blockURL():
     return: renders the show application-site groups page
 
     """
-    tots = ApplicationGroup('APGR_LlistaNegraURLsTots').show()
-    professors = ApplicationGroup('APGR_LlistaNegraURLsProfessors').show()
-    alumnes = ApplicationGroup('APGR_LlistaNegraURLsAlumnes').show()
+    tots = APIObject(
+        'APGR_LlistaNegraURLsTots',
+        'application-site-group'
+        ).show()
+    professors = APIObject(
+        'APGR_LlistaNegraURLsProfessors',
+        'application-site-group'
+        ).show()
+    alumnes = APIObject(
+        'APGR_LlistaNegraURLsAlumnes',
+        'application-site-group'
+        ).show()
 
     return render_template(
         'block-url.html',
@@ -314,8 +322,11 @@ def showAppGroupMembers(name, url_back):
     form_new_app = ApplicationSiteForm(request.form)
     form_select_app = ApplicationSelectForm(request.form)
 
-    members = ApplicationGroup(name).show_members()
-    choices = ApplicationGroup('APGR_GENERAL').show_members()
+    members = APIObject(name, 'application-site-group').show_members()
+    choices = APIObject(
+        'APGR_GENERAL',
+        'application-site-group'
+        ).show_members()
 
     options = [('', 'seleccionar')]
     for element in choices:
@@ -358,7 +369,7 @@ def addExistingApplication(group_name, url_back):
     """
     form = ApplicationSelectForm(request.form)
 
-    appl = ApplicationSite(form.name.data)
+    appl = APIObject(form.name.data, 'application-site')
     appl.add_to_group('set-application-site-group', group_name)
 
     api.api_call('publish')
@@ -384,7 +395,7 @@ def addApplicationSite(group_name, url_back):
 
     if form.validate():
 
-        appl = ApplicationSite('APPL_' + form.name.data)
+        appl = APIObject('APPL_' + form.name.data, 'application-site')
         appl.add(
             url_list=form.url_list.data,
             primary_category='Custom_Application_Site'  # required
@@ -416,7 +427,7 @@ def deleteApplicationSite(name, group_name, url_back):
     return: renders the show application-sites page
 
     """
-    appl = ApplicationSite(name)
+    appl = APIObject(name, 'application-site')
     appl_to_delete = appl.show()
 
     if request.method == 'POST':
@@ -460,7 +471,7 @@ def setApplicationSite(name, url_back):
     """
     form = ApplicationSiteForm(request.form)
 
-    appl = ApplicationSite(name)
+    appl = APIObject(name, 'application-site')
     appl_to_edit = appl.show()
 
     if request.method == 'POST' and form.validate():
@@ -491,11 +502,18 @@ def blockAppl():
     return: renders the block access page
 
     """
-    tots = ApplicationGroup('APGR_LlistaNegraAplicacionsTots').show()
-    professors = ApplicationGroup(
-        'APGR_LlistaNegraAplicacionsProfessors'
+    tots = APIObject(
+        'APGR_LlistaNegraAplicacionsTots',
+        'application-site-group'
         ).show()
-    alumnes = ApplicationGroup('APGR_LlistaNegraAplicacionsAlumnes').show()
+    professors = APIObject(
+        'APGR_LlistaNegraAplicacionsProfessors',
+        'application-site-group'
+        ).show()
+    alumnes = APIObject(
+        'APGR_LlistaNegraAplicacionsAlumnes',
+        'application-site-group'
+        ).show()
 
     return render_template(
         'block-appl.html',
@@ -524,8 +542,11 @@ def showApplGroupMembers(name, url_back):
     """
     form_select_app = ApplicationSelectForm(request.form)
 
-    members = ApplicationGroup(name).show_members()
-    choices = ApplicationGroup('APGR_APLICACIONS').show_members()
+    members = APIObject(name, 'application-site-group').show_members()
+    choices = APIObject(
+        'APGR_APLICACIONS',
+        'application-site-group'
+        ).show_members()
 
     options = [('', 'seleccionar')]
     for element in choices:
@@ -564,7 +585,7 @@ def addExistingAppl(group_name, url_back):
     """
     form = ApplicationSelectForm(request.form)
 
-    appl = ApplicationSite(form.name.data)
+    appl = APIObject(form.name.data, 'application-site')
     appl.name = appl.name[5:]
     appl.add_to_group('set-application-site-group', group_name)
 
@@ -590,7 +611,7 @@ def deleteAppl(name, group_name, url_back):
     return: renders the show application-sites page
 
     """
-    appl = ApplicationSite(name)
+    appl = APIObject(name, 'application-site')
     appl.name = appl.name[5:]
     appl_to_delete = appl.show()
 
@@ -632,12 +653,9 @@ def smartview():
 @login_required
 def createEntity():
     """
-    edit application-site
+    create entity
     --------------------------------------------------------------------------
-    edit an existing application-site
-
-    arguments:
-        group_id: the id number of the application-site groups
+    creates all needed groups and application groups for a new entity
 
     return: renders the show application-sites page
 
@@ -664,16 +682,17 @@ def createEntity():
             'LlistaNegraEquips'
             ]
 
-        # create groups
-        for app_group in app_groups:
-            app_group_to_add = EntityApplicationGroup(id_entity + '_APGR_' + app_group)
-            app_group_to_add.add()
-
         # create application site groups
+        for app_group in app_groups:
+            app_group_to_add = EntityObject(
+                id_entity + '_APGR_' + app_group,
+                'application-site-group'
+                )
+            app_group_to_add.add()
+        # create groups
         for group in groups:
-            group_to_add = EntityGroup(id_entity + '_GRUP_' + group)
+            group_to_add = EntityObject(id_entity + '_GRUP_' + group, 'group')
             group_to_add.add()
-
         # add-package
         payload = {
             'name': 'Escola_' + id_entity,

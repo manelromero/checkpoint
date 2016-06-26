@@ -20,14 +20,13 @@ def underscore(data):
 
 
 class APIObject:
-
     #
     # initialize class
     #
-    def __init__(self, name):
+    def __init__(self, name, kind=''):
         self.name = app.config['ID_COLE'] + name
+        self.kind = kind
         self.uid = None
-        self.kind = None
 
     def add(self, **kwargs):
         payload = {'name': self.name}
@@ -82,68 +81,11 @@ class APIObject:
         return call['used-directly']['total']
 
 
-class Group(APIObject):
-
+class EntityObject(APIObject):
     #
     # initialize class
     #
-    def __init__(self, name):
-        APIObject.__init__(self, name)
-        self.kind = 'group'
-
-
-class ApplicationGroup(APIObject):
-
-    #
-    # initialize class
-    #
-    def __init__(self, name):
-        APIObject.__init__(self, name)
-        self.kind = 'application-site-group'
-
-
-class Host(APIObject):
-
-    #
-    # initialize class
-    #
-    def __init__(self, name):
-        APIObject.__init__(self, name)
-        self.kind = 'host'
-
-
-class ApplicationSite(APIObject):
-
-    #
-    # initialize class
-    #
-    def __init__(self, name):
-        APIObject.__init__(self, name)
-        self.kind = 'application-site'
-
-
-class EntityGroup(APIObject):
-
-    #
-    # initialize class
-    #
-    def __init__(self, name):
-        APIObject.__init__(self, name)
+    def __init__(self, name, kind):
+        APIObject.__init__(self, name, kind)
         self.name = name
-        self.kind = 'group'
-
-
-class EntityApplicationGroup(APIObject):
-
-    #
-    # initialize class
-    #
-    def __init__(self, name):
-        APIObject.__init__(self, name)
-        self.name = name
-        self.kind = 'application-site-group'
-
-
-
-
-
+        self.kind = kind
