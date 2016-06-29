@@ -2,6 +2,8 @@ $(document).ready(function() {
 
     $('.flash').delay(3000).animate({left: '-200'});
 
+    $('.loading').hide();
+
     $('.row').mouseover(function() {
         $(this).css('background-color', 'rgba(191, 0, 0, 0.05');
     });
@@ -41,25 +43,33 @@ $(document).ready(function() {
     return '';
     };
 
+    function ajaxCall(url) {
+        return $.ajax({
+            url: url
+        })
+    }
+
     function openMenu(row) {
         var group_name = row.data('group-name'),
             route = row.data('route'),
             url_back = row.data('url-back'),
             child = row.children('.arrow')
 
-        $.ajax({
-            url: $SCRIPT_ROOT + '/' + route + '/' + group_name + '/' + url_back,
-            async: false,
-            success: function(data) {
-                $('#' + group_name).html(data);
-            }
-        });
+        $('.loading').show();
+        
+        var url = $SCRIPT_ROOT + '/' + route + '/' + group_name + '/' + url_back
 
-        row.removeClass('closed');
-        row.addClass('open');
-        child.removeClass('right');
-        child.addClass('down');
-        $('#' + group_name).slideDown(200);
+        $.when(ajaxCall(url)).done(function(data) {
+            $('#' + group_name).html(data);
+            row.removeClass('closed');
+            row.addClass('open');
+            child.removeClass('right');
+            child.addClass('down');
+            $('#' + group_name).slideDown(200);
+            $('.loading').hide();
+
+        })
+
     }
 
     function closeMenu(row) {

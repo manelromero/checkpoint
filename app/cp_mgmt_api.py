@@ -37,7 +37,7 @@ class APIClient:
         self.server = None                           # management server name or IP-address
         self.http_debug_level = http_debug_level     # debug level
         self.api_calls = []                          # an array with all the api calls (for debug purposes)
-        self.debug_file = "debug_file.txt"           # name of debug file. If left empty, debug data will not be saved to disk.
+        self.debug_file = "debug.txt"           # name of debug file. If left empty, debug data will not be saved to disk.
 
     def __enter__(self):
         return self

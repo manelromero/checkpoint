@@ -510,6 +510,23 @@ input[type=submit]:focus {
 	opacity: 1;
 }
 
+.loading {
+	display: none;
+	position: absolute;
+	top: 50px;
+	width: 100vw;
+	height: calc(100vh - 50px);
+	background-color: rgba(255, 255, 255, 0.8);
+	z-index: 100;
+}
+
+.loading-image {
+	position: relative;
+	top: 48%;
+	left: calc(48% - 150px);
+	width: 4%;
+}
+
 @media only screen and (min-width: 540px) {
 
 	.logo-home {
@@ -542,7 +559,18 @@ input[type=submit]:focus {
 
 @media only screen and (min-width: 768px) {}
 @media only screen and (min-width: 992px) {}
-@media only screen and (min-width: 1200px) {}
+@media only screen and (min-width: 1200px) {
+
+	.checkpoint-logo,
+	.gencat-logo {
+		width: 25%;
+	}
+
+	.option-home {
+		width: 12%;
+	}
+
+}
 
 
 
