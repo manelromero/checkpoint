@@ -1,5 +1,4 @@
 from . import app
-import api_response
 from cp_mgmt_api import APIClient
 
 
@@ -37,10 +36,7 @@ class APIObject:
     def add_to_group(self, action, group_name):
         payload = {
             'name': app.config['ID_COLE'] + group_name,
-            'members': {
-                'add': self.name
-                }
-            }
+            'members': {'add': self.name}}
         return api.api_call(action, payload)
 
     def show(self, details_level='standard'):
@@ -69,10 +65,7 @@ class APIObject:
     def delete_from_group(self, action, group_name):
         payload = {
             'name': app.config['ID_COLE'] + group_name,
-            'members': {
-                'remove': self.name
-                }
-            }
+            'members': {'remove': self.name}}
         return api.api_call(action, payload)
 
     def where_used(self):

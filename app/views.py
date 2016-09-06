@@ -26,8 +26,7 @@ def login():
         login = api.login(
             app.config['SERVER'],
             form.username.data,
-            form.password.data
-            )
+            form.password.data)
         # check login
         if 'sid' in login.data:
             # store username in session for header and login_required
@@ -162,8 +161,7 @@ def showGroupMembers(group_name, url_back):
         members=members,
         form=form,
         group_name=group_name,
-        url_back=url_back
-        )
+        url_back=url_back)
 
 
 @app.route('/add-host/<group_name>/<url_back>', methods=['GET', 'POST'])
@@ -198,8 +196,7 @@ def addHost(group_name, url_back):
 
 @app.route(
     '/delete-host/<name>/<group_name>/<url_back>',
-    methods=['GET', 'POST']
-    )
+    methods=['GET', 'POST'])
 @login_required
 def deleteHost(name, group_name, url_back):
     """
@@ -230,8 +227,7 @@ def deleteHost(name, group_name, url_back):
         'delete-host.html',
         group_name=group_name,
         host_to_delete=host_to_delete,
-        url_back=url_back
-        )
+        url_back=url_back)
 
 
 @app.route('/set-host/<name>/<url_back>', methods=['GET', 'POST'])
@@ -256,8 +252,7 @@ def setHost(name, url_back):
     if request.method == 'POST' and form.validate():
         host.edit(
             new_name=app.config['ID_COLE'] + 'HOST_' + form.name.data,
-            ipv4_address=form.ipv4_address.data
-            )
+            ipv4_address=form.ipv4_address.data)
         api.api_call('publish')
         flash('Equip editat')
         return redirect(url_for(url_back))
@@ -266,8 +261,7 @@ def setHost(name, url_back):
         'edit-host.html',
         form=form,
         host_to_edit=host_to_edit,
-        url_back=url_back
-        )
+        url_back=url_back)
 
 
 @app.route('/blockURL')
@@ -283,24 +277,20 @@ def blockURL():
     """
     tots = APIObject(
         'APGR_LlistaNegraURLsTots',
-        'application-site-group'
-        ).show()
+        'application-site-group').show()
     professors = APIObject(
         'APGR_LlistaNegraURLsProfessors',
-        'application-site-group'
-        ).show()
+        'application-site-group').show()
     alumnes = APIObject(
         'APGR_LlistaNegraURLsAlumnes',
-        'application-site-group'
-        ).show()
+        'application-site-group').show()
 
     return render_template(
         'block-url.html',
         tots=tots,
         professors=professors,
         alumnes=alumnes,
-        url_back='blockURL'
-        )
+        url_back='blockURL')
 
 
 @app.route('/show-app-group-members/<name>/<url_back>')
@@ -325,8 +315,7 @@ def showAppGroupMembers(name, url_back):
     members = APIObject(name, 'application-site-group').show_members()
     choices = APIObject(
         'APGR_GENERAL',
-        'application-site-group'
-        ).show_members()
+        'application-site-group').show_members()
 
     options = [('', 'seleccionar')]
     for element in choices:
@@ -344,14 +333,12 @@ def showAppGroupMembers(name, url_back):
         form_new_app=form_new_app,
         members=members,
         name=name,
-        url_back=url_back
-        )
+        url_back=url_back)
 
 
 @app.route(
     '/add-existing-application/<group_name>/<url_back>',
-    methods=['POST']
-    )
+    methods=['POST'])
 @login_required
 def addExistingApplication(group_name, url_back):
     """
@@ -398,8 +385,7 @@ def addApplicationSite(group_name, url_back):
         appl = APIObject('APPL_' + form.name.data, 'application-site')
         appl.add(
             url_list=form.url_list.data,
-            primary_category='Custom_Application_Site'  # required
-            )
+            primary_category='Custom_Application_Site')  # required
         appl.add_to_group('set-application-site-group', group_name)
         appl.add_to_group('set-application-site-group', 'APGR_GENERAL')
         api.api_call('publish')
@@ -412,8 +398,7 @@ def addApplicationSite(group_name, url_back):
 
 @app.route(
     '/delete-application-site/<name>/<group_name>/<url_back>',
-    methods=['GET', 'POST']
-    )
+    methods=['GET', 'POST'])
 @login_required
 def deleteApplicationSite(name, group_name, url_back):
     """
@@ -451,8 +436,7 @@ def deleteApplicationSite(name, group_name, url_back):
         'delete-application-site.html',
         group_name=group_name,
         appl_to_delete=appl_to_delete,
-        url_back=url_back
-        )
+        url_back=url_back)
 
 
 @app.route('/set-application-site/<name>/<url_back>', methods=['GET', 'POST'])
@@ -477,8 +461,7 @@ def setApplicationSite(name, url_back):
     if request.method == 'POST' and form.validate():
         appl.edit(
             new_name=app.config['ID_COLE'] + 'APPL_' + form.name.data,
-            url_list=form.url_list.data
-            )
+            url_list=form.url_list.data)
         api.api_call('publish')
         flash('URL editada')
         return redirect(url_for(url_back))
@@ -487,8 +470,7 @@ def setApplicationSite(name, url_back):
         'edit-application-site.html',
         form=form,
         appl_to_edit=appl_to_edit,
-        url_back=url_back
-        )
+        url_back=url_back)
 
 
 @app.route('/block-appl')
@@ -504,24 +486,20 @@ def blockAppl():
     """
     tots = APIObject(
         'APGR_LlistaNegraAplicacionsTots',
-        'application-site-group'
-        ).show()
+        'application-site-group').show()
     professors = APIObject(
         'APGR_LlistaNegraAplicacionsProfessors',
-        'application-site-group'
-        ).show()
+        'application-site-group').show()
     alumnes = APIObject(
         'APGR_LlistaNegraAplicacionsAlumnes',
-        'application-site-group'
-        ).show()
+        'application-site-group').show()
 
     return render_template(
         'block-appl.html',
         tots=tots,
         professors=professors,
         alumnes=alumnes,
-        url_back='blockAppl'
-        )
+        url_back='blockAppl')
 
 
 @app.route('/show-appl-group-members/<name>/<url_back>')
@@ -545,8 +523,7 @@ def showApplGroupMembers(name, url_back):
     members = APIObject(name, 'application-site-group').show_members()
     choices = APIObject(
         'APGR_APLICACIONS',
-        'application-site-group'
-        ).show_members()
+        'application-site-group').show_members()
 
     options = [('', 'seleccionar')]
     for element in choices:
@@ -563,8 +540,7 @@ def showApplGroupMembers(name, url_back):
         form_select_app=form_select_app,
         members=members,
         name=name,
-        url_back=url_back
-        )
+        url_back=url_back)
 
 
 @app.route('/add-existing-appl/<group_name>/<url_back>', methods=['POST'])
@@ -596,8 +572,7 @@ def addExistingAppl(group_name, url_back):
 
 @app.route(
     '/delete-appl/<name>/<group_name>/<url_back>',
-    methods=['GET', 'POST']
-    )
+    methods=['GET', 'POST'])
 @login_required
 def deleteAppl(name, group_name, url_back):
     """
@@ -627,8 +602,7 @@ def deleteAppl(name, group_name, url_back):
         'delete-appl.html',
         group_name=group_name,
         appl_to_delete=appl_to_delete,
-        url_back=url_back
-        )
+        url_back=url_back)
 
 
 @app.route('/smartview')
@@ -674,20 +648,17 @@ def createEntity():
             'LlistaNegraAplicacionsTots',
             'LlistaNegraURLsAlumnes',
             'LlistaNegraURLsProfessors',
-            'LlistaNegraURLsTots'
-            ]
+            'LlistaNegraURLsTots']
         groups = [
             'LlistaEquipsAlumnes',
             'LlistaEquipsProfessors',
-            'LlistaNegraEquips'
-            ]
+            'LlistaNegraEquips']
 
         # create application site groups
         for app_group in app_groups:
             app_group_to_add = EntityObject(
                 id_entity + '_APGR_' + app_group,
-                'application-site-group'
-                )
+                'application-site-group')
             app_group_to_add.add()
         # create groups
         for group in groups:
@@ -699,16 +670,14 @@ def createEntity():
             'comments': 'Escola ' + id_entity,
             'color': 'green',
             'threat-prevention': False,
-            'access': True
-            }
+            'access': True}
         api.api_call('add-package', payload)
 
         # set-access-layer
         payload = {
             'name': 'Escola_' + id_entity + ' Network',
             'applications-and-url-filtering': True,
-            'show-parent-rule': False
-            }
+            'show-parent-rule': False}
         api.api_call('set-access-layer', payload)
 
         # set-access-rule
@@ -716,16 +685,14 @@ def createEntity():
             'name': 'Cleanup rule',
             'layer': 'Escola_' + id_entity + ' Network',
             'action': 'Accept',
-            'track': 'Log'
-            }
+            'track': 'Log'}
         api.api_call('set-access-rule', payload)
 
         # add-access-section
         payload = {
             'layer': 'Escola_' + id_entity + ' Network',
             'position': 'top',
-            'name': 'Regles definides per escola'
-            }
+            'name': 'Regles definides per escola'}
         api.api_call('add-access-section', payload)
 
         # add-access-rule
@@ -736,8 +703,7 @@ def createEntity():
             'service': id_entity + '_APGR_LlistaNegraAplicacionsProfessors',
             'destination': 'Any',
             'action': 'Drop',
-            'track': 'Log'
-            }
+            'track': 'Log'}
         api.api_call('add-access-rule', payload)
 
         # add-access-rule
@@ -748,8 +714,7 @@ def createEntity():
             'service': id_entity + '_APGR_LlistaNegraAplicacionsAlumnes',
             'destination': 'Any',
             'action': 'Drop',
-            'track': 'Log'
-            }
+            'track': 'Log'}
         api.api_call('add-access-rule', payload)
 
         # add-access-rule
@@ -760,16 +725,14 @@ def createEntity():
             'service': 'Any',
             'destination': 'Any',
             'action': 'Drop',
-            'track': 'Log'
-            }
+            'track': 'Log'}
         api.api_call('add-access-rule', payload)
 
         # add-access-section
         payload = {
             'layer': 'Escola_' + id_entity + ' Network',
             'position': 'bottom',
-            'name': 'Regles definides per administradors'
-            }
+            'name': 'Regles definides per administradors'}
         api.api_call('add-access-section', payload)
 
         api.api_call('publish')
@@ -780,8 +743,7 @@ def createEntity():
     return render_template(
         'create-entity.html',
         form=form,
-        url_back='manageGroups'
-        )
+        url_back='manageGroups')
 
 
 @app.route('/install-policy')
@@ -800,8 +762,7 @@ def installPolicy():
     """
     payload = {
         'policy-package': 'standard',
-        'targets': app.config['TARGETS']
-        }
+        'targets': app.config['TARGETS']}
     api.api_call('install-policy', payload)
     flash(u'Política instal·lada')
     return redirect(url_for('home'))

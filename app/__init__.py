@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import os
 import jinja2
 import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from flask import Flask
-from flask_login import LoginManager
-from time import strftime
 from datetime import datetime
 
 
@@ -23,12 +20,11 @@ app.config.from_object('config')
 # config_file_path = app.instance_path + '/instance/config.py'
 # app.config.from_pyfile(config_file_path)
 
-
 import views
 
 
 def datetimeformat(value, format='%d/%m/%Y %H:%M'):
-    return datetime.fromtimestamp(int(value)/1000).strftime(format)
+    return datetime.fromtimestamp(int(value) / 1000).strftime(format)
 
 
 jinja2.filters.FILTERS['datetimeformat'] = datetimeformat
