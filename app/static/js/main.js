@@ -1,6 +1,7 @@
 $(document).ready(function() {
 
-    $('.flash').delay(3000).animate({left: '-200'});
+    // $('.wrapper-modal').delay(3000).animate({left: '-200'});
+    $('.wrapper-modal').delay(3000).slideToggle(200);
 
     $('.loading').hide();
 

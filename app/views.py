@@ -2,6 +2,7 @@
 
 from flask import request, render_template, redirect, url_for, flash, session
 from functools import wraps
+from datetime import datetime
 import webbrowser
 
 from . import app
@@ -11,46 +12,47 @@ from forms import *
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    """
-    login
-    ---------------------------------------------------------------------
-    performs a login call to the server, checks if any mistake and stores
-    username in session, it also stores the SmartView link
+    """login
 
-    return: renders home page if success or login page if error
+    Perform a login call to the server, check if any mistake and store username
+    in session, also store the SmartView link
+
+    return: render home page if success or login page if error
 
     """
     form = LoginForm(request.form)
-
+    # check login is correct
     if request.method == 'POST' and form.validate():
         login = api.login(
             app.config['SERVER'],
             form.username.data,
             form.password.data)
-        # check login
         if 'sid' in login.data:
             # store username in session for header and login_required
             session['username'] = form.username.data
+            # link for SmartView
             session['link'] = 'https://' + app.config['SERVER'] +\
                 '/smartview/#token=' + login.data['sid'].encode('base64')
+            posix = int(login.data['last-login-was-at']['posix']) / 1000
+            last_login = datetime.fromtimestamp(posix)
+            #.strftime('%Y-%m-%d %H:%M:%S')
+            flash(u"La vostra última connexió va ser el: %s" % last_login)
             return render_template('home.html', home=True)
         else:
             flash(u"Error d'inici de sessió, torneu a intentar-ho.")
-
-    # return render_template('login.html', request=request, form=form)
+    # login is not correct
     return render_template('login.html', form=form)
 
 
 def login_required(f):
-    """
-    login requred
-    ---------------------------------------------------------------
-    wraps the functions that need the user to be logged in to run
+    """login required
+
+    Wrap the functions that need the user to be logged in to run
 
     arguments:
         f: the wrapped function itself
 
-    return: renders home page if success or login page if error
+    return: render home page if success or login page if error
 
     """
     @wraps(f)

@@ -5,61 +5,51 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>CheckPoint SmartConsole</title>
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+	<link rel="stylesheet" href="{{url_for('static', filename='css/login.css')}}">
 </head>
 <body>
-
 	<div class="container">
 		<div class="form-window">
 			<div class="form-left">
 				<div class="logo-up">
-					<img src="{{ url_for('static', filename='img/logo-smartconsole.svg') }}" alt="SmartConsole">
+					<img src="{{url_for('static', filename='img/logo-smartconsole.svg')}}" alt="SmartConsole">
 				</div>
 				<div class="logo-down">
-					<img src="{{ url_for('static', filename='img/logo-checkpoint.svg') }}" alt="CheciPoint">
+					<img src="{{url_for('static', filename='img/logo-checkpoint.svg')}}" alt="CheciPoint">
 				</div>
 			</div>
 			<div class="form-right">
-				<form action="{{ url_for('login') }}" method="POST">
+				<form action="{{url_for('login')}}" method="POST">
 					<div class="data">
 						<div class="input">
 							<div class="left-image">
-								<img src="{{ url_for('static', filename='img/user.svg') }}">
+								<img src="{{url_for('static', filename='img/user.svg')}}">
 							</div>
-							{{ form.username (placeholder='Usuari', autofocus='autofocus') }}
+							{{form.username (placeholder='Usuari', autofocus='autofocus')}}
 						</div>
 							{%- if form.username.errors -%}
 								{%- for error in form.username.errors -%}
-									<span class="error">{{ error }}</span>
+									<span class="error">{{error}}</span>
 								{%- endfor -%}
 							{%- endif -%}
 						<div class="input">
 							<div class="left-image">
-								<img src="{{ url_for('static', filename='img/password.svg') }}">
+								<img src="{{url_for('static', filename='img/password.svg')}}">
 							</div>
-							{{ form.password (size=15, placeholder='Contrasenya') }}
+							{{form.password (size=15, placeholder='Contrasenya')}}
 						</div>
 							{%- if form.password.errors -%}
 								{%- for error in form.password.errors -%}
-									<span class="error">{{ error }}</span>
+									<span class="error">{{error}}</span>
 								{%- endfor -%}
 							{%- endif -%}
 					</div>
 					<div class="submit">
-					    <!-- get flash messages -->
-					    {%- with messages = get_flashed_messages() -%}
-						    {%- if messages -%}
-							    {%- for message in messages -%}
-							        <span class="error">{{ message }}</span>
-							    {%- endfor -%}
-						    {%- endif -%}
-					    {%- endwith -%}
 						<input type="submit" id="submit" value="LOGIN">
 					</div>
 				</form>
 			</div>
 		</div>
 	</div>
-
 </body>
 </html>

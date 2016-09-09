@@ -1,14 +1,11 @@
 {%- extends "layout.html" -%}
 {%- block content -%}
-
 <div class="container-home">
-
 	<div class="row-home">
 		<div class="logo-home">
 			<img class="checkpoint-logo" src="{{ url_for('static', filename='img/logo-checkpoint.svg') }}" alt="">
 		</div>
 	</div>
-
 	<div class="row-home">
 		<div class="option-icons">
 			<div class="option-home">
@@ -38,13 +35,22 @@
 			</div>
 		</div>
 	</div>
-
 	<div class="row-home">
 		<div class="logo-home">
 			<img class="gencat-logo" src="{{ url_for('static', filename='img/logo-gencat.svg') }}" alt="">
 		</div>
 	</div>
-
+	<!-- get flash messages -->
+	{%- with messages = get_flashed_messages() -%}
+	{%- if messages -%}
+	{%- for message in messages -%}
+	<div class="wrapper-modal">
+		<div class="flash">
+			<div class="flash-message">{{message}}</div>
+		</div>
+	</div>
+	{%- endfor -%}
+	{%- endif -%}
+	{%- endwith -%}
 </div>
-
 {%- endblock -%}

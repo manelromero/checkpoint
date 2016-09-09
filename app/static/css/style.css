@@ -76,13 +76,6 @@ header {
 	padding: 70px 1rem 1rem 1rem;
 }
 
-.wrapper-modal {
-	position: relative;
-	width: 100vw;
-	height: 100vh;
-	background-color: #ccc;
-}
-
 footer {
 	width: 100%;
 	background-color: #efefef;
@@ -218,19 +211,31 @@ nav {
 	color: #bf0000;
 }
 
-.flash {
-	width: 150px;
-	min-height: 50px;
+.wrapper-modal {
 	position: absolute;
+	top: 0;
 	left: 0;
-	margin-top: 1rem;
-	padding: 1rem 0.5rem;
-	background-color: #bf0000;
-	z-index: 5;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(120, 120, 120, 0);
+}
+
+.flash {
+    width: 400px;
+    height: 120px;
+    position: absolute;
+    left: calc(50% - 200px);
+    top: calc(30% - 60px);
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: #bf0000;
+    box-shadow: 0 1px 20px rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    z-index: 10;
 }
 
 .flash-message {
-	font: 600 0.9rem 'Open Sans', sans-serif;
+	font: 600 1rem 'Open Sans', sans-serif;
 	color: #fff;
 }
 
