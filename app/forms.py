@@ -52,10 +52,10 @@ class ApplicationSelectForm(Form):
 class HostForm(Form):
     name = StringField('Nom', [
         validators.InputRequired(
-            message="Heu d'introduir un nom"),
+            message=u"Heu d'introduir un nom per l'equip"),
         validators.Length(
             max=35,
-            message=u'El nom no pot tenir més de 35 caràcters')])
+            message=u"El nom de l'equip no pot tenir més de 35 caràcters")])
     ipv4_address = StringField(u'Adreça IPv4', [
         validators.InputRequired(
             message=u"Heu d'introduir una adreça IPv4"),

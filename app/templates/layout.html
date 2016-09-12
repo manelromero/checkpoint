@@ -6,19 +6,16 @@
 	<title>Checkpoint</title>
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-	<script src="{{ url_for('static', filename='js/main.js') }}"></script>
-	<script>var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};</script>
+	<link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+	<script src="{{url_for('static', filename='js/main.js')}}"></script>
+	<script>var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};</script>
 </head>
 <body>
-
 	<header>
 		{%- include "header.html" -%}
 		{%- block header -%}{%- endblock -%}
 	</header>
-
 		<div class="container">
-
 			{%- if not home -%}
 				<div class="left-bar">
 					{%- include "left-bar.html" -%}
@@ -28,10 +25,7 @@
 			<div class="wrapper">
 				{%- block content -%}{%- endblock -%}
 			</div>
-
 		</div>
-
 	<footer></footer>
-
 </body>
 </html>

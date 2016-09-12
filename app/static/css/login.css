@@ -37,7 +37,7 @@ html, body {
 .form-right {
 	float: right;
 	width: 385px;
-	height: 2800px;
+	height: 280px;
 }
 
 .logo-up,
@@ -48,11 +48,21 @@ html, body {
 }
 
 .logo-up {
-	padding: 50px 66px 0 66px;
+	padding: 50px 66px 0;
+}
+
+.logo-up img {
+	with: 148px;
+	height: 86px;
 }
 
 .logo-down {
-	padding: 84px 74px 0 74px;
+	padding: 84px 74px 0;
+}
+
+.logo-down img {
+	with: 132px;
+	height: 25px;
 }
 
 .data,

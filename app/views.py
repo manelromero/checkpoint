@@ -7,7 +7,12 @@ import webbrowser
 
 from . import app
 from models import api, APIObject, EntityObject
-from forms import *
+from forms import (
+    LoginForm,
+    ApplicationSiteForm,
+    ApplicationSelectForm,
+    HostForm,
+    EntityForm)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -17,8 +22,7 @@ def login():
     Perform a login call to the server, check if any mistake and store username
     in session, also store the SmartView link
 
-    return: render home page if success or login page if error
-
+    Return: render home page if success or login page if error
     """
     form = LoginForm(request.form)
     # check login is correct
@@ -34,9 +38,9 @@ def login():
             session['link'] = 'https://' + app.config['SERVER'] +\
                 '/smartview/#token=' + login.data['sid'].encode('base64')
             posix = int(login.data['last-login-was-at']['posix']) / 1000
-            last_login = datetime.fromtimestamp(posix)
-            #.strftime('%Y-%m-%d %H:%M:%S')
-            flash(u"La vostra última connexió va ser el: %s" % last_login)
+            last_login = datetime.fromtimestamp(posix).strftime(
+                'dia %d/%m/%Y a les %H:%M')
+            flash(u"La vostra última connexió va ser el %s" % last_login)
             return render_template('home.html', home=True)
         else:
             flash(u"Error d'inici de sessió, torneu a intentar-ho.")
@@ -47,13 +51,12 @@ def login():
 def login_required(f):
     """login required
 
-    Wrap the functions that need the user to be logged in to run
+    Wrap the functions that need the user to be logged in to work
 
-    arguments:
-        f: the wrapped function itself
+    Arguments:
+        f - the wrapped function itself
 
-    return: render home page if success or login page if error
-
+    Return: the function wrapped
     """
     @wraps(f)
     def wrap(*args, **kwargs):
@@ -70,20 +73,18 @@ def login_required(f):
             # any status_code at all, probably expired, let's clear the session
             session.clear()
             return render_template('session-expired.html')
-        # We don't have a session username, so let's get one
+        # we don't have a session username, so let's get one
         return redirect(url_for('login'))
     return wrap
 
 
 @app.route('/logout')
 def logout():
-    """
-    logout
-    -----------------------------------------------------------
-    performs a logout call to the server and clears the session
+    """logout
 
-    return: redirect to home
+    Perform a logout call to the server and clear the session
 
+    Return: redirect to home
     """
     api.api_call('logout')
     session.clear()
@@ -93,13 +94,11 @@ def logout():
 @app.route('/')
 @login_required
 def home():
-    """
-    home
-    ------------------------------------------------------------------
-    performs a login call to the server and stores username in session
+    """home
 
-    return: renders home page if success or login page if error
+    Home page for the application
 
+    Return: render home page
     """
     return render_template('home.html', home=True)
 
@@ -107,13 +106,11 @@ def home():
 @app.route('/manage-groups')
 @login_required
 def manageGroups():
-    """
-    manage groups
-    ----------------------------------------------------------------------
-    shows the hosts groups detail and allows create, edit and delete hosts
+    """manage groups
 
-    return: renders the manage groups page
+    Show the hosts groups detail and allow create, edit and delete them
 
+    Return: render the manage groups page
     """
     professors = APIObject('GRUP_LlistaEquipsProfessors', 'group').show()
     alumnes = APIObject('GRUP_LlistaEquipsAlumnes', 'group').show()
@@ -142,22 +139,18 @@ def blockIP():
 @app.route('/show-group-members/<group_name>/<url_back>')
 @login_required
 def showGroupMembers(group_name, url_back):
-    """
-    show groups members
-    --------------------------------------------------------------------------
-    shows the hosts of each group, allows the user to add a new host or net to
-    the group, either selecting it from the list or creating a new one
+    """show group members
 
-    arguments:
-        group_id: the id number of the group
+    Shows the hosts of each group, allow the user to add a new host to the
+    group
 
-    return: renders the show group members page
+    Arguments:
+        group_id - the id number of the group
 
+    Return: render the show group members page
     """
     form = HostForm(request.form)
-
     members = APIObject(group_name, 'group').show_members()
-
     return render_template(
         'show-group-members.html',
         members=members,
@@ -169,31 +162,28 @@ def showGroupMembers(group_name, url_back):
 @app.route('/add-host/<group_name>/<url_back>', methods=['GET', 'POST'])
 @login_required
 def addHost(group_name, url_back):
-    """
-    add host
-    ---------------------------------------------------------------------------
-    adds a new host inside a group
+    """add host
+    Adds a new host inside a group
 
-    arguments:
-        group_id: the id number of the group where the host has to be added
+    Arguments:
+        group_id - the id number of the group where the host has to be added
 
-    return: if YES creates the host and adds it to the group, if NO renders the
-        show groups page
-
+    Return: if form validates, create the host and add it to the group, if
+        doesn't render the show group members page
     """
     form = HostForm(request.form)
-
-    if form.validate():
-
+    if request.method == 'POST' and form.validate():
         host = APIObject('HOST_' + form.name.data, 'host')
         host.add(ipv4_address=form.ipv4_address.data)
         host.add_to_group('set-group', group_name)
         api.api_call('publish')
         flash('Equip afegit')
         return redirect(url_for(url_back))
-
-    # I have to check what to do here
-    return redirect(url_for('blockIP'))
+    else:
+        return render_template(
+            'form-errors.html',
+            form=form,
+            url_back=url_back)
 
 
 @app.route(

@@ -217,21 +217,34 @@ nav {
 	left: 0;
 	width: 100vw;
 	height: 100vh;
-	background-color: rgba(120, 120, 120, 0);
+	background-color: rgba(255, 255, 255, 0.6);
 }
 
 .flash {
     width: 400px;
-    height: 120px;
+    height: 100px;
     position: absolute;
     left: calc(50% - 200px);
-    top: calc(30% - 60px);
+    top: 40px;
     margin-top: 1rem;
     padding: 1rem;
     background-color: #bf0000;
-    box-shadow: 0 1px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 1px 20px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
     z-index: 10;
+}
+
+.close-window {
+	position: absolute;
+    top: 6px;
+    right: 8px;
+    text-align: right;
+    color: #f1b1bc;
+}
+
+.close-window:hover {
+	cursor: pointer;
+    color: #fff;
 }
 
 .flash-message {

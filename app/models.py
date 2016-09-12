@@ -6,12 +6,14 @@ from cp_mgmt_api import APIClient
 api = APIClient()
 
 
-# function for replacing - with _ in lists and dicts
+# function for replacing '-' with '_' in lists and dictionaries
 def underscore(data):
+    # if is a list
     if isinstance(data, list):
         for element in data:
             for key, value in element.iteritems():
                 element[key.replace('-', '_')] = element.pop(key)
+    # if is a dictionary
     if isinstance(data, dict):
         for key, value in data.iteritems():
             data[key.replace('-', '_')] = data.pop(key)
