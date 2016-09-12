@@ -1,6 +1,6 @@
 <!-- new host form -->
 <div class="form-member-title">Afegir un equip nou</div>
-<div class="member">
+<div class="member-form">
     <form class="form-member" action="{{url_for('addHost', group_name=group_name, url_back=url_back)}}" method="POST">
         <div class="cell big-cell">{{form.name (size=38)}}</div>
         <div class="cell medium-cell">{{form.ipv4_address (size=20)}}</div>

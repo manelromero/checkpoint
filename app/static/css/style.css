@@ -218,6 +218,7 @@ nav {
 	width: 100vw;
 	height: 100vh;
 	background-color: rgba(255, 255, 255, 0.6);
+	z-index: 20;
 }
 
 .flash {
@@ -229,7 +230,7 @@ nav {
     margin-top: 1rem;
     padding: 1rem;
     background-color: #bf0000;
-    box-shadow: 0 1px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
     border-radius: 5px;
     z-index: 10;
 }
@@ -369,7 +370,7 @@ input[type=submit]:focus {
 }
 
 .error-message {
-	padding: 0.5rem 1rem;
+	padding: 0.5rem 0;
 	font: 600 1.2rem 'Open Sans', sans-serif;
 	color: #bf0000;
 }
@@ -385,13 +386,13 @@ input[type=submit]:focus {
 	display: block;
 }
 
-.member {
+.member,
+.member-form {
 	width: 100%;
 	display: flex;
 	align-items: center;
 	padding: 0.5rem;
 	border-top: 1px solid #fff;
-
 }
 
 .member-header {

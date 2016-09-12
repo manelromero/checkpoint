@@ -174,10 +174,20 @@ def addHost(group_name, url_back):
     form = HostForm(request.form)
     if request.method == 'POST' and form.validate():
         host = APIObject('HOST_' + form.name.data, 'host')
-        host.add(ipv4_address=form.ipv4_address.data)
-        host.add_to_group('set-group', group_name)
-        api.api_call('publish')
-        flash('Equip afegit')
+        add = host.add(ipv4_address=form.ipv4_address.data)
+        if not add.success:
+            if 'errors' in add.res_obj['data']:
+                message = add.res_obj['data']['errors'][0]['message']
+                if message[:26] == 'More than one object named':
+                    flash('Ja existeix un equip amb aquest nom')
+            if 'warnings' in add.res_obj['data']:
+                message = add.res_obj['data']['warnings'][0]['message']
+                if message[:37] == 'More than one object have the same IP':
+                    flash('Ja existeix un equip amb aquesta IP')
+        else:
+            host.add_to_group('set-group', group_name)
+            api.api_call('publish')
+            flash('Equip afegit')
         return redirect(url_for(url_back))
     else:
         return render_template(

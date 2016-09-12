@@ -1,8 +1,8 @@
 $(document).ready(function() {
     // wait for 3 seconds and close the modal window if opened
-    setTimeout(function() {
-        upModal();
-    }, 3000);
+    // setTimeout(function() {
+    //     upModal();
+    // }, 3000);
     // close the modal window on window click
     $('.wrapper-modal').click(function() {
         upModal();
