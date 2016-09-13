@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    // hide animation gif
+    $('.loading').hide();
     // wait for 3 seconds and close the modal window if opened
     // setTimeout(function() {
     //     upModal();
@@ -11,8 +13,12 @@ $(document).ready(function() {
     $('.close-window').click(function() {
         upModal();
     });
-    // hide animation gif
-    $('.loading').hide();
+    //
+    $('.waiting').click(function() {
+        setTimeout(function() {
+            $('.loading').show();
+        }, 400);
+    });
     //
     $('.row').mouseover(function() {
         $(this).css('background-color', 'rgba(191, 0, 0, 0.05');

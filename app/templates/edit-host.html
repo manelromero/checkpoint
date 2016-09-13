@@ -1,35 +1,27 @@
 {%- extends "layout.html" -%}
 {%- block content -%}
-
 <div class="wrapper-content">
-
 	<h1>Equips</h1>
 	<h2>Editar equip</h2>
-
-	<form action="{{ url_for('setHost', name=host_to_edit.name[5:], url_back=url_back) }}" method="POST">
-
+	<form action="{{url_for('setHost', name=host_to_edit.name[5:], url_back=url_back)}}" method="POST">
 		<ul>
-			<li>{{ form.name.label }}</li>
-			<li>{{ form.name (size=30, placeholder=host_to_edit.name[10:]) }}</li>
+			<li>{{form.name.label}}</li>
+			<li>{{form.name (size=30, placeholder=host_to_edit.name[10:])}}</li>
 			{%- if form.name.errors -%}
 				{%- for error in form.name.errors -%}
-					<span class="error">{{ error }}</span>
+					<span class="error">{{error}}</span>
 				{%- endfor -%}
 			{%- endif -%}
-			<li>{{ form.ipv4_address.label }}</li>
-			<li>{{ form.ipv4_address (size=20, placeholder=host_to_edit.ipv4_address) }}</li>
+			<li>{{form.ipv4_address.label}}</li>
+			<li>{{form.ipv4_address (size=20, placeholder=host_to_edit.ipv4_address)}}</li>
 			{%- if form.ipv4_address.errors -%}
 				{%- for error in form.ipv4_address.errors -%}
-					<span class="error">{{ error }}</span>
+					<span class="error">{{error}}</span>
 				{%- endfor -%}
 			{%- endif -%}
 		</ul>
-		<input type="submit" value="Editar">
-
+		<input type="submit" class="waiting" value="Editar">
 	</form>
-
-    <a href="{{ url_for(url_back) }}"><button>Tornar</button></a>
-
+    <a href="{{url_for(url_back)}}" class="waiting"><button>Tornar</button></a>
 </div>
-
 {%- endblock -%}

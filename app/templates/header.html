@@ -1,4 +1,7 @@
 {%- block header -%}
+<div class="loading">
+    <img src="{{url_for('static', filename='img/loading.gif')}}" alt="Loading">
+</div>
 <nav>
 	<div class="nav-home">
 		{%- if not home -%}

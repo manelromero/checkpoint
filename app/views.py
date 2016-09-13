@@ -124,13 +124,11 @@ def manageGroups():
 @app.route('/blockIP')
 @login_required
 def blockIP():
-    """
-    block access
-    --------------------------------------------------------------------------
-    shows the group and the application-site-group for blocking hosts and URLs
+    """block access
 
-    return: renders the block access page
+    Shows the group and the application-site-group for blocking hosts and URLs
 
+    Return: render the block access page
     """
     group = APIObject('GRUP_LlistaNegraEquips', 'group').show()
     return render_template('block-ip.html', group=group, url_back='blockIP')
@@ -141,11 +139,11 @@ def blockIP():
 def showGroupMembers(group_name, url_back):
     """show group members
 
-    Shows the hosts of each group, allow the user to add a new host to the
-    group
+    Show the hosts of each group, allow the user to add a new host to the group
 
     Arguments:
-        group_id - the id number of the group
+        group_name - the group's name
+        url_back - url for redirecting when finished
 
     Return: render the show group members page
     """
@@ -163,13 +161,14 @@ def showGroupMembers(group_name, url_back):
 @login_required
 def addHost(group_name, url_back):
     """add host
-    Adds a new host inside a group
+    Add a new host inside a group
 
     Arguments:
-        group_id - the id number of the group where the host has to be added
+        group_nam - the name of the group where the host has to be added
+        url_back - url for redirecting when finished
 
     Return: if form validates, create the host and add it to the group, if
-        doesn't render the show group members page
+        doesn't render a page with the errors
     """
     form = HostForm(request.form)
     if request.method == 'POST' and form.validate():
@@ -201,23 +200,21 @@ def addHost(group_name, url_back):
     methods=['GET', 'POST'])
 @login_required
 def deleteHost(name, group_name, url_back):
-    """
-    delete host
-    ---------------------------------------------------------------------
-    deletes an existing host
+    """delete host
 
-    arguments:
-        group_id: the id number of the group where the host belongs
-        object_uid: the uid number of the host
+    Delete an existing host
 
-    return: if POST deletes the host, if GET renders the delete host page
+    Arguments:
+        name - the name of the host to be deleted
+        group_name - the name of the group where the host belongs
+        url_back - url for redirecting when finished
 
+    Return: if POST delete the host, if GET render the delete host page
     """
     host = APIObject(name, 'host')
     host_to_delete = host.show()
 
     if request.method == 'POST':
-
         host.delete_from_group('set-group', group_name)
         host.delete()
 
@@ -235,16 +232,16 @@ def deleteHost(name, group_name, url_back):
 @app.route('/set-host/<name>/<url_back>', methods=['GET', 'POST'])
 @login_required
 def setHost(name, url_back):
-    """
-    edit host (to be continued)
-    ---------------------------------------------------------------------------
-    edits an existing host
+    """edit host
 
-    arguments:
-        object_uid:
+    Edit an existing host
 
-    return: renders the show group members page
+    Arguments:
+        name - name of the host to be edited
+        url_back - url for redirecting when finished
 
+    Return: if form validates edit the host, if doesn't show a page with the
+        errors
     """
     form = HostForm(request.form)
 
@@ -271,11 +268,10 @@ def setHost(name, url_back):
 def blockURL():
     """
     show application-site groups
-    ------------------------------------
+
     show the application-site groups
 
     return: renders the show application-site groups page
-
     """
     tots = APIObject(
         'APGR_LlistaNegraURLsTots',
@@ -300,7 +296,7 @@ def blockURL():
 def showAppGroupMembers(name, url_back):
     """
     show application-site group content
-    -----------------------------------------------------------------------
+
     shows application group content when selecting a source in the dropdown
     menu while adding a new rule
 
@@ -309,7 +305,6 @@ def showAppGroupMembers(name, url_back):
 
     return: renders the show application group content page just below the
         select
-
     """
     form_new_app = ApplicationSiteForm(request.form)
     form_select_app = ApplicationSelectForm(request.form)
@@ -345,7 +340,7 @@ def showAppGroupMembers(name, url_back):
 def addExistingApplication(group_name, url_back):
     """
     add existing application
-    ----------------------------------------------------------------
+
     adds an existing host to a group
 
     arguments:
@@ -354,7 +349,6 @@ def addExistingApplication(group_name, url_back):
 
     return: when POST adds the host to the group, if NO renders the
         show groups page
-
     """
     form = ApplicationSelectForm(request.form)
 
@@ -371,14 +365,13 @@ def addExistingApplication(group_name, url_back):
 def addApplicationSite(group_name, url_back):
     """
     add application-site
-    --------------------------------------------------------------------------
+
     add a new application-site inside a group
 
     arguments:
         group_id: the id number of the application-site groups
 
     return: renders the show application-sites page
-
     """
     form = ApplicationSiteForm(request.form)
 
@@ -405,14 +398,13 @@ def addApplicationSite(group_name, url_back):
 def deleteApplicationSite(name, group_name, url_back):
     """
     delete application-site
-    --------------------------------------------------------------------------
+
     delete an existing application-site
 
     arguments:
         app_list: the id number of the application-site groups
 
     return: renders the show application-sites page
-
     """
     appl = APIObject(name, 'application-site')
     appl_to_delete = appl.show()
@@ -446,14 +438,13 @@ def deleteApplicationSite(name, group_name, url_back):
 def setApplicationSite(name, url_back):
     """
     edit host
-    ---------------------------------------------------------------------------
+
     edits an existing host
 
     arguments:
         object_uid:
 
     return: renders the show group members page
-
     """
     form = ApplicationSiteForm(request.form)
 
@@ -480,11 +471,10 @@ def setApplicationSite(name, url_back):
 def blockAppl():
     """
     block access
-    --------------------------------------------------------------------------
+
     shows the group and the application-site-group for blocking hosts and URLs
 
     return: renders the block access page
-
     """
     tots = APIObject(
         'APGR_LlistaNegraAplicacionsTots',
@@ -509,7 +499,7 @@ def blockAppl():
 def showApplGroupMembers(name, url_back):
     """
     show application-site group content
-    -----------------------------------------------------------------------
+
     shows application group content when selecting a source in the dropdown
     menu while adding a new rule
 
@@ -518,7 +508,6 @@ def showApplGroupMembers(name, url_back):
 
     return: renders the show application group content page just below the
         select
-
     """
     form_select_app = ApplicationSelectForm(request.form)
 
@@ -550,7 +539,7 @@ def showApplGroupMembers(name, url_back):
 def addExistingAppl(group_name, url_back):
     """
     add existing application
-    ----------------------------------------------------------------
+
     adds an existing host to a group
 
     arguments:
@@ -559,7 +548,6 @@ def addExistingAppl(group_name, url_back):
 
     return: when POST adds the host to the group, if NO renders the
         show groups page
-
     """
     form = ApplicationSelectForm(request.form)
 
@@ -579,14 +567,13 @@ def addExistingAppl(group_name, url_back):
 def deleteAppl(name, group_name, url_back):
     """
     delete application-site
-    --------------------------------------------------------------------------
+
     delete an existing application-site
 
     arguments:
         app_list: the id number of the application-site groups
 
     return: renders the show application-sites page
-
     """
     appl = APIObject(name, 'application-site')
     appl.name = appl.name[5:]
@@ -612,14 +599,13 @@ def deleteAppl(name, group_name, url_back):
 def smartview():
     """
     edit application-site
-    --------------------------------------------------------------------------
+
     edit an existing application-site
 
     arguments:
         group_id: the id number of the application-site groups
 
     return: renders the show application-sites page
-
     """
     webbrowser.open_new_tab('https://' + app.config['SERVER'] + '/smartview/')
     return redirect(url_for('home'))
@@ -630,11 +616,10 @@ def smartview():
 def createEntity():
     """
     create entity
-    --------------------------------------------------------------------------
+
     creates all needed groups and application groups for a new entity
 
     return: renders the show application-sites page
-
     """
     form = EntityForm(request.form)
 
@@ -753,14 +738,13 @@ def createEntity():
 def installPolicy():
     """
     edit application-site
-    --------------------------------------------------------------------------
+
     edit an existing application-site
 
     arguments:
         group_id: the id number of the application-site groups
 
     return: renders the show application-sites page
-
     """
     payload = {
         'policy-package': 'standard',

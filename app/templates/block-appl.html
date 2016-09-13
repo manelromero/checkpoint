@@ -1,43 +1,29 @@
 {%- extends "layout.html" -%}
 {%- block content -%}
-
-<div class="loading">
-    <img src="{{url_for('static', filename='img/loading.gif')}}" class="loading-image" alt="Loading">
-</div>
-
 <div class="wrapper-content">
-
     <h1>Bloquejar accés per aplicació</h1>
-
     <div class="table-header">
         <div class="header-row">
             <div class="cell tiny-cell"></div>
             <div class="cell big-cell">Llistes d'aplicacions bloquejades</div>
         </div>
     </div>
-
     <div class="table">
-
-        <div class="row group closed" data-group-name="{{ tots.name[5:] }}" data-route="show-appl-group-members" data-url-back="{{ url_back }}">
+        <div class="row group closed" data-group-name="{{tots.name[5:]}}" data-route="show-appl-group-members" data-url-back="{{url_back}}">
             <div class="cell tiny-cell arrow right"></div>
-            <div class="cell big-cell">{{ tots.name[10:] }}</div>
+            <div class="cell big-cell">{{tots.name[10:]}}</div>
         </div>
-        <div class="members" id="{{ tots.name[5:] }}"></div>
-
-        <div class="row group closed" data-group-name="{{ professors.name[5:] }}" data-route="show-appl-group-members" data-url-back="{{ url_back }}">
+        <div class="members" id="{{tots.name[5:]}}"></div>
+        <div class="row group closed" data-group-name="{{professors.name[5:]}}" data-route="show-appl-group-members" data-url-back="{{url_back}}">
             <div class="cell tiny-cell arrow right"></div>
-            <div class="cell big-cell">{{ professors.name[10:] }}</div>
+            <div class="cell big-cell">{{professors.name[10:]}}</div>
         </div>
-        <div class="members" id="{{ professors.name[5:] }}"></div>
-
-        <div class="row group closed" data-group-name="{{ alumnes.name[5:] }}" data-route="show-appl-group-members" data-url-back="{{ url_back }}">
+        <div class="members" id="{{professors.name[5:]}}"></div>
+        <div class="row group closed" data-group-name="{{alumnes.name[5:]}}" data-route="show-appl-group-members" data-url-back="{{url_back}}">
             <div class="cell tiny-cell arrow right"></div>
-            <div class="cell big-cell">{{ alumnes.name[10:] }}</div>
+            <div class="cell big-cell">{{alumnes.name[10:]}}</div>
         </div>
-        <div class="members" id={{ alumnes.name[5:] }}></div>
-
+        <div class="members" id={{alumnes.name[5:]}}></div>
     </div>
-
 </div>
-
 {%- endblock -%}
