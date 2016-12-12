@@ -25,12 +25,12 @@
             <img class="option-icon" src="{{url_for('static', filename='img/smartview.svg')}}" alt="">
         </a>
     </div>
-    <div class="menu-option">
+<!--     <div class="menu-option">
         <a href="{{url_for('createEntity')}}">
             <img class="option-icon waiting" src="{{url_for('static', filename='img/create-entity.svg')}}" alt="">
         </a>
     </div>
-    <!-- get flash messages -->
+ -->    <!-- get flash messages -->
     {%- with messages = get_flashed_messages() -%}
     {%- if messages -%}
     {%- for message in messages -%}
